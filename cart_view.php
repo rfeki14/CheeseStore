@@ -30,17 +30,20 @@
 	        			</div>
 	        		</div>
 	        		<?php
-	        			if(isset($_SESSION['user'])){
-	        				echo "
-	        					<div id='paypal-button'></div>
-	        				";
-	        			}
-	        			else{
-	        				echo "
-	        					<h4>You need to <a href='login.php'>Login</a> to checkout.</h4>
-	        				";
-	        			}
-	        		?>
+if (isset($_SESSION['user'])) {
+    echo "
+        <form action='checkout.php' method='POST'>
+            <input type='hidden' name='total' id='total' value=getTotal()>
+            <button type='submit' class='btn btn-primary btn-lg'>Proceed to Checkout</button>
+        </form>
+    ";
+} else {
+    echo "
+        <h4>You need to <a href='login.php'>Login</a> to checkout.</h4>
+    ";
+}
+?>
+
 	        	</div>
 	        	<div class="col-sm-3">
 	        		<?php include 'includes/sidebar.php'; ?>
@@ -75,6 +78,7 @@ $(function(){
 			}
 		});
 	});
+
 
 	$(document).on('click', '.minus', function(e){
 		e.preventDefault();
@@ -150,50 +154,10 @@ function getTotal(){
 		dataType: 'json',
 		success:function(response){
 			total = response;
+			$('#total').val(total);
 		}
 	});
 }
-</script>
-<!-- Paypal Express -->
-<script>
-paypal.Button.render({
-    env: 'sandbox', // change for production if app is live,
-
-	client: {
-        sandbox:    'AEfYxns5l1tnCle5stC4-vpS0mg4ABwESySCOSq9CsW7wff3Ehr5LeGA',
-        //production: 'AaBHKJFEej4V6yaArjzSx9cuf-UYesQYKqynQVCdBlKuZKawDDzFyuQdidPOBSGEhWaNQnnvfzuFB9SM'
-    },
-
-    commit: true, // Show a 'Pay Now' button
-
-    style: {
-    	color: 'gold',
-    	size: 'small'
-    },
-
-    payment: function(data, actions) {
-        return actions.payment.create({
-            payment: {
-                transactions: [
-                    {
-                    	//total purchase
-                        amount: { 
-                        	total: total, 
-                        	currency: 'USD' 
-                        }
-                    }
-                ]
-            }
-        });
-    },
-
-    onAuthorize: function(data, actions) {
-        return actions.payment.execute().then(function(payment) {
-			window.location = 'sales.php?pay='+payment.id;
-        });
-    },
-
-}, '#paypal-button');
 </script>
 </body>
 </html>
