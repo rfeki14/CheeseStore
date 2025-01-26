@@ -9,6 +9,7 @@
 		$price = $_POST['price'];
 		$description = $_POST['description'];
 		$filename = $_FILES['photo']['name'];
+		$qtty=$_POST["qtty"];
 
 		$conn = $pdo->open();
 
@@ -30,9 +31,9 @@
 			}
 
 			try{
-				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, price, photo) VALUES (:category, :name, :description, :slug, :price, :photo)");
-				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'price'=>$price, 'photo'=>$new_filename]);
-				$_SESSION['success'] = 'User added successfully';
+				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, price,qtty, photo) VALUES (:category, :name, :description, :slug, :price, :qtty, :photo)");
+				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'price'=>$price,'qtty'=>$qtty, 'photo'=>$new_filename]);
+				$_SESSION['success'] = 'Product added successfully';
 
 			}
 			catch(PDOException $e){

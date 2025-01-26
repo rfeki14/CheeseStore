@@ -1,10 +1,10 @@
 <?php include 'includes/session.php'; ?>
 <?php
-  $where = '';
-  if(isset($_GET['category'])){
-    $catid = $_GET['category'];
-    $where = 'WHERE category_id ='.$catid;
-  }
+$where = '';
+if (isset($_GET['category'])) {
+  $catid = $_GET['category'];
+  $where = 'WHERE category_id =' . $catid;
+}
 
 ?>
 <?php include 'includes/header.php'; ?>
@@ -31,26 +31,26 @@
     <!-- Main content -->
     <section class="content">
       <?php
-        if(isset($_SESSION['error'])){
-          echo "
+      if (isset($_SESSION['error'])) {
+        echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
-              ".$_SESSION['error']."
+              " . $_SESSION['error'] . '
             </div>
-          ";
-          unset($_SESSION['error']);
-        }
-        if(isset($_SESSION['success'])){
-          echo "
+          ';
+        unset($_SESSION['error']);
+      }
+      if (isset($_SESSION['success'])) {
+        echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
-              ".$_SESSION['success']."
+              " . $_SESSION['success'] . '
             </div>
-          ";
-          unset($_SESSION['success']);
-        }
+          ';
+        unset($_SESSION['success']);
+      }
       ?>
       <div class="row">
         <div class="col-xs-12">
@@ -64,19 +64,19 @@
                     <select class="form-control input-sm" id="select_category">
                       <option value="0">ALL</option>
                       <?php
-                        $conn = $pdo->open();
+                      $conn = $pdo->open();
 
-                        $stmt = $conn->prepare("SELECT * FROM category");
-                        $stmt->execute();
+                      $stmt = $conn->prepare('SELECT * FROM category');
+                      $stmt->execute();
 
-                        foreach($stmt as $crow){
-                          $selected = ($crow['id'] == $catid) ? 'selected' : ''; 
-                          echo "
-                            <option value='".$crow['id']."' ".$selected.">".$crow['name']."</option>
-                          ";
-                        }
+                      foreach ($stmt as $crow) {
+                        $selected = ($crow['id'] == $catid) ? 'selected' : '';
+                        echo "
+                            <option value='" . $crow['id'] . "' " . $selected . '>' . $crow['name'] . '</option>
+                          ';
+                      }
 
-                        $pdo->close();
+                      $pdo->close();
                       ?>
                     </select>
                   </div>
@@ -90,43 +90,44 @@
                   <th>Photo</th>
                   <th>Description</th>
                   <th>Price</th>
+                  <th>Quantity</th>
                   <th>Views Today</th>
                   <th>Tools</th>
                 </thead>
                 <tbody>
                   <?php
-                    $conn = $pdo->open();
+                  $conn = $pdo->open();
 
-                    try{
-                      $now = date('Y-m-d');
-                      $stmt = $conn->prepare("SELECT * FROM products $where");
-                      $stmt->execute();
-                      foreach($stmt as $row){
-                        $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/noimage.jpg';
-                        $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
-                        echo "
+                  try {
+                    $now = date('Y-m-d');
+                    $stmt = $conn->prepare("SELECT * FROM products $where");
+                    $stmt->execute();
+                    foreach ($stmt as $row) {
+                      $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
+                      $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
+                      echo '
                           <tr>
-                            <td>".$row['name']."</td>
+                            <td>' . $row['name'] . "</td>
                             <td>
-                              <img src='".$image."' height='30px' width='30px'>
-                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='".$row['id']."'><i class='fa fa-edit'></i></a></span>
+                              <img src='" . $image . "' height='30px' width='30px'>
+                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='" . $row['id'] . "'><i class='fa fa-edit'></i></a></span>
                             </td>
-                            <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='".$row['id']."'><i class='fa fa-search'></i> View</a></td>
-                            <td>&#36; ".number_format($row['price'], 2)."</td>
-                            <td>".$counter."</td>
+                            <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='" . $row['id'] . "'><i class='fa fa-search'></i> View</a></td>
+                            <td>&#36; " . number_format($row['price'], 3) . '</td>
+                            <td>' . number_format($row['qtty'], 2) . '</td>
+                            <td>' . $counter . "</td>
                             <td>
-                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row['id']."'><i class='fa fa-edit'></i> Edit</button>
-                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row['id']."'><i class='fa fa-trash'></i> Delete</button>
+                              <button class='btn btn-success btn-sm edit btn-flat' data-id='" . $row['id'] . "'><i class='fa fa-edit'></i> Edit</button>
+                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='" . $row['id'] . "'><i class='fa fa-trash'></i> Delete</button>
                             </td>
                           </tr>
                         ";
-                      }
                     }
-                    catch(PDOException $e){
-                      echo $e->getMessage();
-                    }
+                  } catch (PDOException $e) {
+                    echo $e->getMessage();
+                  }
 
-                    $pdo->close();
+                  $pdo->close();
                   ?>
                 </tbody>
               </table>
@@ -211,6 +212,7 @@ function getRow(id){
       $('#edit_name').val(response.prodname);
       $('#catselected').val(response.category_id).html(response.catname);
       $('#edit_price').val(response.price);
+      $('#edit_qtty').val(response.qtty);
       CKEDITOR.instances["editor2"].setData(response.description);
       getCategory();
     }

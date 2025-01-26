@@ -57,6 +57,11 @@
                   <div class="col-sm-5">
                     <input type="text" class="form-control" id="edit_price" name="price">
                   </div>
+                  <label for="edit_qtty" class="col-sm-1 control-label">Quantity</label>
+
+                  <div class="col-sm-5">
+                    <input type="text" class="form-control" id="edit_qtty" name="qtty">
+                  </div>
                 </div>
                 <p><b>Description</b></p>
                 <div class="form-group">
