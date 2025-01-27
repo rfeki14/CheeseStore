@@ -6,6 +6,10 @@
 	$conn = $pdo->open();
 
 	$output = array('list'=>'');
+	$stmt = $conn->prepare("SELECT firstname, lastname FROM sales, users WHERE users.id=sales.user_id AND sales.id=:id");
+	$stmt->execute(['id'=>$id]);
+	$row = $stmt->fetch();
+	$output['buyer'] = $row['firstname'].' '.$row['lastname'];
 
 	$stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id LEFT JOIN sales ON sales.id=details.sales_id WHERE details.sales_id=:id");
 	$stmt->execute(['id'=>$id]);
@@ -14,6 +18,7 @@
 	foreach($stmt as $row){
 		$output['transaction'] = $row['id'];
 		$output['date'] = date('M d, Y', strtotime($row['sales_date']));
+		$output['confirmed'] = $row['confirmed'] ? 'Confirmed' : 'Pending';
 		$subtotal = $row['price']*$row['quantity'];
 		$total += $subtotal;
 		$output['list'] .= "

@@ -10,7 +10,11 @@
             <div class="modal-body">
               <p>
                 Date: <span id="date"></span>
-                <span class="pull-right">Transaction#: <span id="transid"></span></span> 
+                <span class="pull-right">Transaction#: <span id="transid"></span></span>
+                <br>
+                Buyer: <span id="buyer"></span>
+                <span class="pull-right" id="confirmed">Status:</span>
+                 
               </p>
               <table class="table table-bordered">
                 <thead>

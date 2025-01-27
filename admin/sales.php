@@ -45,6 +45,7 @@
                   <th>Buyer Name</th>
                   <th>Transaction#</th>
                   <th>Amount</th>
+                  <th>Status</th>
                   <th>Full Details</th>
                 </thead>
                 <tbody>
@@ -63,15 +64,23 @@
                           $total += $subtotal;
                         }
                         echo "
-                          <tr>
-                            <td class='hidden'></td>
-                            <td>".date('M d, Y', strtotime($row['sales_date']))."</td>
-                            <td>".$row['firstname'].' '.$row['lastname']."</td>
-                            <td>".$row['id']."</td>
-                            <td>&#36; ".number_format($total, 2)."</td>
-                            <td><button type='button' class='btn btn-info btn-sm btn-flat transact' data-id='".$row['salesid']."'><i class='fa fa-search'></i> View</button></td>
-                          </tr>
-                        ";
+  <tr>
+    <td class='hidden'></td>
+    <td>".date('M d, Y', strtotime($row['sales_date']))."</td>
+    <td>".$row['firstname'].' '.$row['lastname']."</td>
+    <td>".$row['salesid']."</td>
+    <td>&#36; ".number_format($total, 2)."</td>
+    <td>".($row['confirmed'] ? "Confirmed" : "Pending")."</td>
+    <td>
+      <button type='button' class='btn btn-info btn-sm btn-flat transact' data-id='".$row['salesid']."'>
+        <i class='fa fa-search'></i> View
+      </button>
+      <button type='button' class='btn btn-info btn-sm btn-flat confirm' data-id='".$row['salesid']."'>
+        <i class='fa fa-check'></i> Confirm
+      </button>
+    </td>
+  </tr>
+";
                       }
                     }
                     catch(PDOException $e){
@@ -140,6 +149,35 @@ $(function(){
 });
 </script>
 <script>
+  $(function () {
+  $(document).on('click', '.confirm', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+
+    if (!id) {
+      alert('Invalid sales ID.');
+      return;
+    }
+    if (!confirm('Are you sure you want to confirm this sale?')) {
+      return;
+    }
+    console.log('Confirming sale with ID:', id); // Debugging
+
+    $.ajax({
+      type: 'POST',
+      url: 'salesconfirm.php',
+      data: { id: id },
+      success: function (response) {
+        console.log('Server Response:', response); // Debugging
+        location.reload(); // Reload page
+      },
+      error: function (xhr, status, error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      },
+    });
+  });
+});
 $(function(){
   $(document).on('click', '.transact', function(e){
     e.preventDefault();
@@ -152,6 +190,8 @@ $(function(){
       dataType: 'json',
       success:function(response){
         $('#date').html(response.date);
+        $('#buyer').html(response.buyer);
+        $('#confirmed').html(response.confirmed);
         $('#transid').html(response.transaction);
         $('#detail').prepend(response.list);
         $('#total').html(response.total);
