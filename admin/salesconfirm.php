@@ -1,4 +1,5 @@
 <?php
+
 if (isset($_POST['id'])) {
     // Sanitize input
     $id = intval($_POST['id']); // Ensure `id` is an integer
@@ -26,4 +27,3 @@ if (isset($_POST['id'])) {
 } else {
     echo "No sale ID provided.";
 }
-?>

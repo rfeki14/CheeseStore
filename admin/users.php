@@ -22,27 +22,27 @@
     <!-- Main content -->
     <section class="content">
       <?php
-        if(isset($_SESSION['error'])){
-          echo "
+        if (isset($_SESSION['error'])) {
+            echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
               ".$_SESSION['error']."
             </div>
           ";
-          unset($_SESSION['error']);
+            unset($_SESSION['error']);
         }
-        if(isset($_SESSION['success'])){
-          echo "
+if (isset($_SESSION['success'])) {
+    echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
               ".$_SESSION['success']."
             </div>
           ";
-          unset($_SESSION['success']);
-        }
-      ?>
+    unset($_SESSION['success']);
+}
+?>
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
@@ -61,16 +61,16 @@
                 </thead>
                 <tbody>
                   <?php
-                    $conn = $pdo->open();
+              $conn = $pdo->open();
 
-                    try{
-                      $stmt = $conn->prepare("SELECT * FROM users WHERE type=:type");
-                      $stmt->execute(['type'=>0]);
-                      foreach($stmt as $row){
-                        $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/profile.jpg';
-                        $status = ($row['status']) ? '<span class="label label-success">active</span>' : '<span class="label label-danger">not verified</span>';
-                        $active = (!$row['status']) ? '<span class="pull-right"><a href="#activate" class="status" data-toggle="modal" data-id="'.$row['id'].'"><i class="fa fa-check-square-o"></i></a></span>' : '';
-                        echo "
+try {
+    $stmt = $conn->prepare("SELECT * FROM users WHERE type=:type");
+    $stmt->execute(['type' => 0]);
+    foreach ($stmt as $row) {
+        $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/profile.jpg';
+        $status = ($row['status']) ? '<span class="label label-success">active</span>' : '<span class="label label-danger">not verified</span>';
+        $active = (!$row['status']) ? '<span class="pull-right"><a href="#activate" class="status" data-toggle="modal" data-id="'.$row['id'].'"><i class="fa fa-check-square-o"></i></a></span>' : '';
+        echo "
                           <tr>
                             <td>
                               <img src='".$image."' height='30px' width='30px'>
@@ -90,14 +90,13 @@
                             </td>
                           </tr>
                         ";
-                      }
-                    }
-                    catch(PDOException $e){
-                      echo $e->getMessage();
-                    }
+    }
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
 
-                    $pdo->close();
-                  ?>
+$pdo->close();
+?>
                 </tbody>
               </table>
             </div>

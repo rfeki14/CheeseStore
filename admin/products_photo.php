@@ -1,37 +1,35 @@
 <?php
-	include 'includes/session.php';
 
-	if(isset($_POST['upload'])){
-		$id = $_POST['id'];
-		$filename = $_FILES['photo']['name'];
+include 'includes/session.php';
 
-		$conn = $pdo->open();
+if (isset($_POST['upload'])) {
+    $id = $_POST['id'];
+    $filename = $_FILES['photo']['name'];
 
-		$stmt = $conn->prepare("SELECT * FROM products WHERE id=:id");
-		$stmt->execute(['id'=>$id]);
-		$row = $stmt->fetch();
+    $conn = $pdo->open();
 
-		if(!empty($filename)){
-			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			$new_filename = $row['slug'].'_'.time().'.'.$ext;
-			move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$new_filename);	
-		}
-		
-		try{
-			$stmt = $conn->prepare("UPDATE products SET photo=:photo WHERE id=:id");
-			$stmt->execute(['photo'=>$new_filename, 'id'=>$id]);
-			$_SESSION['success'] = 'Product photo updated successfully';
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
+    $stmt = $conn->prepare("SELECT * FROM products WHERE id=:id");
+    $stmt->execute(['id' => $id]);
+    $row = $stmt->fetch();
 
-		$pdo->close();
+    if (!empty($filename)) {
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $new_filename = $row['slug'].'_'.time().'.'.$ext;
+        move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$new_filename);
+    }
 
-	}
-	else{
-		$_SESSION['error'] = 'Select product to update photo first';
-	}
+    try {
+        $stmt = $conn->prepare("UPDATE products SET photo=:photo WHERE id=:id");
+        $stmt->execute(['photo' => $new_filename, 'id' => $id]);
+        $_SESSION['success'] = 'Product photo updated successfully';
+    } catch (PDOException $e) {
+        $_SESSION['error'] = $e->getMessage();
+    }
 
-	header('location: products.php');
-?>
+    $pdo->close();
+
+} else {
+    $_SESSION['error'] = 'Select product to update photo first';
+}
+
+header('location: products.php');

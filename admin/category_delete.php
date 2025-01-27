@@ -1,27 +1,24 @@
 <?php
-	include 'includes/session.php';
 
-	if(isset($_POST['delete'])){
-		$id = $_POST['id'];
-		
-		$conn = $pdo->open();
+include 'includes/session.php';
 
-		try{
-			$stmt = $conn->prepare("DELETE FROM category WHERE id=:id");
-			$stmt->execute(['id'=>$id]);
+if (isset($_POST['delete'])) {
+    $id = $_POST['id'];
 
-			$_SESSION['success'] = 'Category deleted successfully';
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
+    $conn = $pdo->open();
 
-		$pdo->close();
-	}
-	else{
-		$_SESSION['error'] = 'Select category to delete first';
-	}
+    try {
+        $stmt = $conn->prepare("DELETE FROM category WHERE id=:id");
+        $stmt->execute(['id' => $id]);
 
-	header('location: category.php');
-	
-?>
+        $_SESSION['success'] = 'Category deleted successfully';
+    } catch (PDOException $e) {
+        $_SESSION['error'] = $e->getMessage();
+    }
+
+    $pdo->close();
+} else {
+    $_SESSION['error'] = 'Select category to delete first';
+}
+
+header('location: category.php');

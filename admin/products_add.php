@@ -1,52 +1,47 @@
 <?php
-	include 'includes/session.php';
-	include 'includes/slugify.php';
 
-	if(isset($_POST['add'])){
-		$name = $_POST['name'];
-		$slug = slugify($name);
-		$category = $_POST['category'];
-		$price = $_POST['price'];
-		$description = $_POST['description'];
-		$filename = $_FILES['photo']['name'];
-		$qtty=$_POST["qtty"];
+include 'includes/session.php';
+include 'includes/slugify.php';
 
-		$conn = $pdo->open();
+if (isset($_POST['add'])) {
+    $name = $_POST['name'];
+    $slug = slugify($name);
+    $category = $_POST['category'];
+    $price = $_POST['price'];
+    $description = $_POST['description'];
+    $filename = $_FILES['photo']['name'];
+    $qtty = $_POST["qtty"];
 
-		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products WHERE slug=:slug");
-		$stmt->execute(['slug'=>$slug]);
-		$row = $stmt->fetch();
+    $conn = $pdo->open();
 
-		if($row['numrows'] > 0){
-			$_SESSION['error'] = 'Product already exist';
-		}
-		else{
-			if(!empty($filename)){
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				$new_filename = $slug.'.'.$ext;
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$new_filename);	
-			}
-			else{
-				$new_filename = '';
-			}
+    $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products WHERE slug=:slug");
+    $stmt->execute(['slug' => $slug]);
+    $row = $stmt->fetch();
 
-			try{
-				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, price,qtty, photo) VALUES (:category, :name, :description, :slug, :price, :qtty, :photo)");
-				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'price'=>$price,'qtty'=>$qtty, 'photo'=>$new_filename]);
-				$_SESSION['success'] = 'Product added successfully';
+    if ($row['numrows'] > 0) {
+        $_SESSION['error'] = 'Product already exist';
+    } else {
+        if (!empty($filename)) {
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            $new_filename = $slug.'.'.$ext;
+            move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$new_filename);
+        } else {
+            $new_filename = '';
+        }
 
-			}
-			catch(PDOException $e){
-				$_SESSION['error'] = $e->getMessage();
-			}
-		}
+        try {
+            $stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, price,qtty, photo) VALUES (:category, :name, :description, :slug, :price, :qtty, :photo)");
+            $stmt->execute(['category' => $category, 'name' => $name, 'description' => $description, 'slug' => $slug, 'price' => $price,'qtty' => $qtty, 'photo' => $new_filename]);
+            $_SESSION['success'] = 'Product added successfully';
 
-		$pdo->close();
-	}
-	else{
-		$_SESSION['error'] = 'Fill up product form first';
-	}
+        } catch (PDOException $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+    }
 
-	header('location: products.php');
+    $pdo->close();
+} else {
+    $_SESSION['error'] = 'Fill up product form first';
+}
 
-?>
+header('location: products.php');

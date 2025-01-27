@@ -1,25 +1,23 @@
 <?php
-	include 'includes/session.php';
 
-	if(isset($_POST['delete'])){
-		$userid = $_POST['userid'];
-		$cartid = $_POST['cartid'];
-		
-		$conn = $pdo->open();
+include 'includes/session.php';
 
-		try{
-			$stmt = $conn->prepare("DELETE FROM cart WHERE id=:id");
-			$stmt->execute(['id'=>$cartid]);
+if (isset($_POST['delete'])) {
+    $userid = $_POST['userid'];
+    $cartid = $_POST['cartid'];
 
-			$_SESSION['success'] = 'Product deleted from cart';
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
-		
-		$pdo->close();
+    $conn = $pdo->open();
 
-		header('location: cart.php?user='.$userid);
-	}
+    try {
+        $stmt = $conn->prepare("DELETE FROM cart WHERE id=:id");
+        $stmt->execute(['id' => $cartid]);
 
-?>
+        $_SESSION['success'] = 'Product deleted from cart';
+    } catch (PDOException $e) {
+        $_SESSION['error'] = $e->getMessage();
+    }
+
+    $pdo->close();
+
+    header('location: cart.php?user='.$userid);
+}

@@ -1,20 +1,20 @@
 <?php
-	include 'includes/session.php';
 
-	if(isset($_SESSION['user'])){
-		$conn = $pdo->open();
+include 'includes/session.php';
 
-		$stmt = $conn->prepare("SELECT * FROM cart LEFT JOIN products on products.id=cart.product_id WHERE user_id=:user_id");
-		$stmt->execute(['user_id'=>$user['id']]);
+if (isset($_SESSION['user'])) {
+    $conn = $pdo->open();
 
-		$total = 0;
-		foreach($stmt as $row){
-			$subtotal = $row['price'] * $row['quantity'];
-			$total += $subtotal;
-		}
+    $stmt = $conn->prepare("SELECT * FROM cart LEFT JOIN products on products.id=cart.product_id WHERE user_id=:user_id");
+    $stmt->execute(['user_id' => $user['id']]);
 
-		$pdo->close();
+    $total = 0;
+    foreach ($stmt as $row) {
+        $subtotal = $row['price'] * $row['quantity'];
+        $total += $subtotal;
+    }
 
-		echo json_encode($total);
-	}
-?>
+    $pdo->close();
+
+    echo json_encode($total);
+}

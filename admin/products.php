@@ -2,8 +2,8 @@
 <?php
 $where = '';
 if (isset($_GET['category'])) {
-  $catid = $_GET['category'];
-  $where = 'WHERE category_id =' . $catid;
+    $catid = $_GET['category'];
+    $where = 'WHERE category_id =' . $catid;
 }
 
 ?>
@@ -32,26 +32,26 @@ if (isset($_GET['category'])) {
     <section class="content">
       <?php
       if (isset($_SESSION['error'])) {
-        echo "
+          echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
               " . $_SESSION['error'] . '
             </div>
           ';
-        unset($_SESSION['error']);
+          unset($_SESSION['error']);
       }
-      if (isset($_SESSION['success'])) {
-        echo "
+if (isset($_SESSION['success'])) {
+    echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
               " . $_SESSION['success'] . '
             </div>
           ';
-        unset($_SESSION['success']);
-      }
-      ?>
+    unset($_SESSION['success']);
+}
+?>
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
@@ -64,20 +64,20 @@ if (isset($_GET['category'])) {
                     <select class="form-control input-sm" id="select_category">
                       <option value="0">ALL</option>
                       <?php
-                      $conn = $pdo->open();
+                $conn = $pdo->open();
 
-                      $stmt = $conn->prepare('SELECT * FROM category');
-                      $stmt->execute();
+$stmt = $conn->prepare('SELECT * FROM category');
+$stmt->execute();
 
-                      foreach ($stmt as $crow) {
-                        $selected = ($crow['id'] == $catid) ? 'selected' : '';
-                        echo "
+foreach ($stmt as $crow) {
+    $selected = ($crow['id'] == $catid) ? 'selected' : '';
+    echo "
                             <option value='" . $crow['id'] . "' " . $selected . '>' . $crow['name'] . '</option>
                           ';
-                      }
+}
 
-                      $pdo->close();
-                      ?>
+$pdo->close();
+?>
                     </select>
                   </div>
                 </form>
@@ -98,14 +98,14 @@ if (isset($_GET['category'])) {
                   <?php
                   $conn = $pdo->open();
 
-                  try {
-                    $now = date('Y-m-d');
-                    $stmt = $conn->prepare("SELECT * FROM products $where");
-                    $stmt->execute();
-                    foreach ($stmt as $row) {
-                      $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
-                      $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
-                      echo '
+try {
+    $now = date('Y-m-d');
+    $stmt = $conn->prepare("SELECT * FROM products $where");
+    $stmt->execute();
+    foreach ($stmt as $row) {
+        $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
+        $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
+        echo '
                           <tr>
                             <td>' . $row['name'] . "</td>
                             <td>
@@ -122,13 +122,13 @@ if (isset($_GET['category'])) {
                             </td>
                           </tr>
                         ";
-                    }
-                  } catch (PDOException $e) {
-                    echo $e->getMessage();
-                  }
+    }
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
 
-                  $pdo->close();
-                  ?>
+$pdo->close();
+?>
                 </tbody>
               </table>
             </div>

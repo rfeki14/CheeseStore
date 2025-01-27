@@ -1,20 +1,19 @@
 <?php include 'includes/session.php'; ?>
 <?php
-	$slug = $_GET['category'];
+$slug = $_GET['category'];
 
-	$conn = $pdo->open();
+$conn = $pdo->open();
 
-	try{
-		$stmt = $conn->prepare("SELECT * FROM category WHERE cat_slug = :slug");
-		$stmt->execute(['slug' => $slug]);
-		$cat = $stmt->fetch();
-		$catid = $cat['id'];
-	}
-	catch(PDOException $e){
-		echo "There is some problem in connection: " . $e->getMessage();
-	}
+try {
+    $stmt = $conn->prepare("SELECT * FROM category WHERE cat_slug = :slug");
+    $stmt->execute(['slug' => $slug]);
+    $cat = $stmt->fetch();
+    $catid = $cat['id'];
+} catch (PDOException $e) {
+    echo "There is some problem in connection: " . $e->getMessage();
+}
 
-	$pdo->close();
+$pdo->close();
 
 ?>
 <?php include 'includes/header.php'; ?>
@@ -32,18 +31,20 @@
 	        	<div class="col-sm-9">
 		            <h1 class="page-header"><?php echo $cat['name']; ?></h1>
 		       		<?php
-		       			
-		       			$conn = $pdo->open();
 
-		       			try{
-		       			 	$inc = 3;	
-						    $stmt = $conn->prepare("SELECT * FROM products WHERE category_id = :catid");
-						    $stmt->execute(['catid' => $catid]);
-						    foreach ($stmt as $row) {
-						    	$image = (!empty($row['photo'])) ? 'images/'.$row['photo'] : 'images/noimage.jpg';
-						    	$inc = ($inc == 3) ? 1 : $inc + 1;
-	       						if($inc == 1) echo "<div class='row'>";
-	       						echo "
+                           $conn = $pdo->open();
+
+try {
+    $inc = 3;
+    $stmt = $conn->prepare("SELECT * FROM products WHERE category_id = :catid");
+    $stmt->execute(['catid' => $catid]);
+    foreach ($stmt as $row) {
+        $image = (!empty($row['photo'])) ? 'images/'.$row['photo'] : 'images/noimage.jpg';
+        $inc = ($inc == 3) ? 1 : $inc + 1;
+        if ($inc == 1) {
+            echo "<div class='row'>";
+        }
+        echo "
 	       							<div class='col-sm-4'>
 	       								<div class='box box-solid'>
 		       								<div class='box-body prod-body'>
@@ -56,18 +57,23 @@
 	       								</div>
 	       							</div>
 	       						";
-	       						if($inc == 3) echo "</div>";
-						    }
-						    if($inc == 1) echo "<div class='col-sm-4'></div><div class='col-sm-4'></div></div>"; 
-							if($inc == 2) echo "<div class='col-sm-4'></div></div>";
-						}
-						catch(PDOException $e){
-							echo "There is some problem in connection: " . $e->getMessage();
-						}
+        if ($inc == 3) {
+            echo "</div>";
+        }
+    }
+    if ($inc == 1) {
+        echo "<div class='col-sm-4'></div><div class='col-sm-4'></div></div>";
+    }
+    if ($inc == 2) {
+        echo "<div class='col-sm-4'></div></div>";
+    }
+} catch (PDOException $e) {
+    echo "There is some problem in connection: " . $e->getMessage();
+}
 
-						$pdo->close();
+$pdo->close();
 
-		       		?> 
+?> 
 	        	</div>
 	        	<div class="col-sm-3">
 	        		<?php include 'includes/sidebar.php'; ?>

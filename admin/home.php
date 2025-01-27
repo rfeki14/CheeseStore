@@ -1,15 +1,15 @@
-<?php 
-  include 'includes/session.php';
-  include 'includes/format.php'; 
+<?php
+include 'includes/session.php';
+include 'includes/format.php';
 ?>
-<?php 
-  $today = date('Y-m-d');
-  $year = date('Y');
-  if(isset($_GET['year'])){
+<?php
+$today = date('Y-m-d');
+$year = date('Y');
+if (isset($_GET['year'])) {
     $year = $_GET['year'];
-  }
+}
 
-  $conn = $pdo->open();
+$conn = $pdo->open();
 ?>
 <?php include 'includes/header.php'; ?>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -34,27 +34,27 @@
     <!-- Main content -->
     <section class="content">
       <?php
-        if(isset($_SESSION['error'])){
-          echo "
+        if (isset($_SESSION['error'])) {
+            echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
               ".$_SESSION['error']."
             </div>
           ";
-          unset($_SESSION['error']);
+            unset($_SESSION['error']);
         }
-        if(isset($_SESSION['success'])){
-          echo "
+if (isset($_SESSION['success'])) {
+    echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
               ".$_SESSION['success']."
             </div>
           ";
-          unset($_SESSION['success']);
-        }
-      ?>
+    unset($_SESSION['success']);
+}
+?>
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-xs-6">
@@ -62,17 +62,17 @@
           <div class="small-box bg-aqua">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id");
-                $stmt->execute();
+          $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id");
+$stmt->execute();
 
-                $total = 0;
-                foreach($stmt as $srow){
-                  $subtotal = $srow['price']*$srow['quantity'];
-                  $total += $subtotal;
-                }
+$total = 0;
+foreach ($stmt as $srow) {
+    $subtotal = $srow['price'] * $srow['quantity'];
+    $total += $subtotal;
+}
 
-                echo "<h3>&#36; ".number_format_short($total, 2)."</h3>";
-              ?>
+echo "<h3>&#36; ".number_format_short($total, 2)."</h3>";
+?>
               <p>Total Sales</p>
             </div>
             <div class="icon">
@@ -87,12 +87,12 @@
           <div class="small-box bg-green">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products");
-                $stmt->execute();
-                $prow =  $stmt->fetch();
+  $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products");
+$stmt->execute();
+$prow =  $stmt->fetch();
 
-                echo "<h3>".$prow['numrows']."</h3>";
-              ?>
+echo "<h3>".$prow['numrows']."</h3>";
+?>
           
               <p>Number of Products</p>
             </div>
@@ -108,12 +108,12 @@
           <div class="small-box bg-yellow">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM users");
-                $stmt->execute();
-                $urow =  $stmt->fetch();
+  $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM users");
+$stmt->execute();
+$urow =  $stmt->fetch();
 
-                echo "<h3>".$urow['numrows']."</h3>";
-              ?>
+echo "<h3>".$urow['numrows']."</h3>";
+?>
              
               <p>Number of Users</p>
             </div>
@@ -129,18 +129,18 @@
           <div class="small-box bg-red">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products ON products.id=details.product_id WHERE sales_date=:sales_date");
-                $stmt->execute(['sales_date'=>$today]);
+  $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products ON products.id=details.product_id WHERE sales_date=:sales_date");
+$stmt->execute(['sales_date' => $today]);
 
-                $total = 0;
-                foreach($stmt as $trow){
-                  $subtotal = $trow['price']*$trow['quantity'];
-                  $total += $subtotal;
-                }
+$total = 0;
+foreach ($stmt as $trow) {
+    $subtotal = $trow['price'] * $trow['quantity'];
+    $total += $subtotal;
+}
 
-                echo "<h3>&#36; ".number_format_short($total, 2)."</h3>";
-                
-              ?>
+echo "<h3>&#36; ".number_format_short($total, 2)."</h3>";
+
+?>
 
               <p>Sales Today</p>
             </div>
@@ -164,13 +164,13 @@
                     <label>Select Year: </label>
                     <select class="form-control input-sm" id="select_year">
                       <?php
-                        for($i=2015; $i<=2065; $i++){
-                          $selected = ($i==$year)?'selected':'';
-                          echo "
+          for ($i = 2015; $i <= 2065; $i++) {
+              $selected = ($i == $year) ? 'selected' : '';
+              echo "
                             <option value='".$i."' ".$selected.">".$i."</option>
                           ";
-                        }
-                      ?>
+          }
+?>
                     </select>
                   </div>
                 </form>
@@ -198,29 +198,28 @@
 <!-- Chart Data -->
 <?php
   $months = array();
-  $sales = array();
-  for( $m = 1; $m <= 12; $m++ ) {
-    try{
-      $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products ON products.id=details.product_id WHERE MONTH(sales_date)=:month AND YEAR(sales_date)=:year");
-      $stmt->execute(['month'=>$m, 'year'=>$year]);
-      $total = 0;
-      foreach($stmt as $srow){
-        $subtotal = $srow['price']*$srow['quantity'];
-        $total += $subtotal;    
-      }
-      array_push($sales, round($total, 2));
-    }
-    catch(PDOException $e){
-      echo $e->getMessage();
+$sales = array();
+for ($m = 1; $m <= 12; $m++) {
+    try {
+        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products ON products.id=details.product_id WHERE MONTH(sales_date)=:month AND YEAR(sales_date)=:year");
+        $stmt->execute(['month' => $m, 'year' => $year]);
+        $total = 0;
+        foreach ($stmt as $srow) {
+            $subtotal = $srow['price'] * $srow['quantity'];
+            $total += $subtotal;
+        }
+        array_push($sales, round($total, 2));
+    } catch (PDOException $e) {
+        echo $e->getMessage();
     }
 
-    $num = str_pad( $m, 2, 0, STR_PAD_LEFT );
+    $num = str_pad($m, 2, 0, STR_PAD_LEFT);
     $month =  date('M', mktime(0, 0, 0, $m, 1));
     array_push($months, $month);
-  }
+}
 
-  $months = json_encode($months);
-  $sales = json_encode($sales);
+$months = json_encode($months);
+$sales = json_encode($sales);
 
 ?>
 <!-- End Chart Data -->

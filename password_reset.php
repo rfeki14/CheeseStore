@@ -1,23 +1,23 @@
 <?php include 'includes/session.php'; ?>
 <?php
-  if(!isset($_GET['code']) OR !isset($_GET['user'])){
+if (!isset($_GET['code']) or !isset($_GET['user'])) {
     header('location: index.php');
-    exit(); 
-  }
+    exit();
+}
 ?>
 <?php include 'includes/header.php'; ?>
 <body class="hold-transition login-page">
 <div class="login-box">
   	<?php
-      if(isset($_SESSION['error'])){
-        echo "
+      if (isset($_SESSION['error'])) {
+          echo "
           <div class='callout callout-danger text-center'>
             <p>".$_SESSION['error']."</p> 
           </div>
         ";
-        unset($_SESSION['error']);
+          unset($_SESSION['error']);
       }
-    ?>
+?>
   	<div class="login-box-body">
     	<p class="login-box-msg">Enter new password</p>
 

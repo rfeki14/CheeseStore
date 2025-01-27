@@ -52,18 +52,18 @@
                   <?php
                     $conn = $pdo->open();
 
-                    try{
-                      $stmt = $conn->prepare("SELECT *, sales.id AS salesid FROM sales LEFT JOIN users ON users.id=sales.user_id ORDER BY sales_date DESC");
-                      $stmt->execute();
-                      foreach($stmt as $row){
-                        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id WHERE details.sales_id=:id");
-                        $stmt->execute(['id'=>$row['salesid']]);
-                        $total = 0;
-                        foreach($stmt as $details){
-                          $subtotal = $details['price']*$details['quantity'];
-                          $total += $subtotal;
-                        }
-                        echo "
+try {
+    $stmt = $conn->prepare("SELECT *, sales.id AS salesid FROM sales LEFT JOIN users ON users.id=sales.user_id ORDER BY sales_date DESC");
+    $stmt->execute();
+    foreach ($stmt as $row) {
+        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id WHERE details.sales_id=:id");
+        $stmt->execute(['id' => $row['salesid']]);
+        $total = 0;
+        foreach ($stmt as $details) {
+            $subtotal = $details['price'] * $details['quantity'];
+            $total += $subtotal;
+        }
+        echo "
   <tr>
     <td class='hidden'></td>
     <td>".date('M d, Y', strtotime($row['sales_date']))."</td>
@@ -81,14 +81,13 @@
     </td>
   </tr>
 ";
-                      }
-                    }
-                    catch(PDOException $e){
-                      echo $e->getMessage();
-                    }
+    }
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
 
-                    $pdo->close();
-                  ?>
+$pdo->close();
+?>
                 </tbody>
               </table>
             </div>
