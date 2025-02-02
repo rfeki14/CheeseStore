@@ -1,0 +1,139 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1c252c; /* Dark background */
+    color: #e0e0e0; /* Light text for readability */
+}
+
+/* Navbar */
+.navbar {
+    background: #1c252c; /* Dark navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Add Space Between Navbar and Content */
+.content-wrapper {
+    margin-top: 100px;
+}
+
+/* Cart Header */
+.page-header {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffffff; /* White text */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Cart Table */
+.table {
+    width: 100%;
+    background: #2d363d; /* Darker table background */
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: #3c4850;
+    color: #ffffff;
+}
+
+.table th, .table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Cart Item Image */
+.table img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+}
+
+/* Quantity Input */
+.table input[type="text"] {
+    width: 60px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background: #2d363d;
+    color: white;
+}
+
+/* Quantity Buttons */
+.quantity-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.quantity-btn:hover {
+    background: #cc0000;
+}
+
+/* Delete Button */
+.cart_delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.cart_delete:hover {
+    background: #c82333;
+}
+
+/* Checkout Button */
+.btn-primary {
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    width: 100%;
+    background: #c82333;
+    color: white;
+    border: none;
+    transition: 0.3s;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background: #c82333;
+}
+
+/* Login Notice */
+h4 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+h4 a {
+    color: #cc0000;
+    text-decoration: none;
+}
+
+h4 a:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar */
+.sidebar {
+    background: #2d363d;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}

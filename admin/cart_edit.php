@@ -1,24 +1,26 @@
 <?php
+	include 'includes/session.php';
 
-include 'includes/session.php';
+	if(isset($_POST['edit'])){
+		$userid = $_POST['userid'];
+		$cartid = $_POST['cartid'];
+		$quantity = $_POST['quantity'];
 
-if (isset($_POST['edit'])) {
-    $userid = $_POST['userid'];
-    $cartid = $_POST['cartid'];
-    $quantity = $_POST['quantity'];
+		$conn = $pdo->open();
 
-    $conn = $pdo->open();
+		try{
+			$stmt = $conn->prepare("UPDATE cart SET quantity=:quantity WHERE id=:id");
+			$stmt->execute(['quantity'=>$quantity, 'id'=>$cartid]);
 
-    try {
-        $stmt = $conn->prepare("UPDATE cart SET quantity=:quantity WHERE id=:id");
-        $stmt->execute(['quantity' => $quantity, 'id' => $cartid]);
+			$_SESSION['success'] = 'Quantity updated successfully';
+		}
+		catch(PDOException $e){
+			$_SESSION['error'] = $e->getMessage();
+		}
+		
+		$pdo->close();
 
-        $_SESSION['success'] = 'Quantity updated successfully';
-    } catch (PDOException $e) {
-        $_SESSION['error'] = $e->getMessage();
-    }
+		header('location: cart.php?user='.$userid);
+	}
 
-    $pdo->close();
-
-    header('location: cart.php?user='.$userid);
-}
+?>

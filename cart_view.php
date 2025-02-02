@@ -1,5 +1,7 @@
 <?php include 'includes/session.php'; ?>
 <?php include 'includes/header.php'; ?>
+<link rel="stylesheet" href="dist/css/cart_view.css">
+
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 
@@ -10,8 +12,6 @@
 
 	      <!-- Main content -->
 	      <section class="content">
-	        <div class="row">
-	        	<div class="col-sm-9">
 	        		<h1 class="page-header">YOUR CART</h1>
 	        		<div class="box box-solid">
 	        			<div class="box-body">
@@ -44,11 +44,7 @@ if (isset($_SESSION['user'])) {
 }
 ?>
 
-	        	</div>
-	        	<div class="col-sm-3">
-	        		<?php include 'includes/sidebar.php'; ?>
-	        	</div>
-	        </div>
+	        	
 	      </section>
 	     
 	    </div>

@@ -1,0 +1,51 @@
+.navbar-black {
+  background-color: #000;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.navbar-black .navbar-nav > li > a {
+  color: #fff;
+}
+
+.navbar-black .navbar-nav > li > a:hover {
+  background-color: #333;
+}
+
+/* Transition pour les boutons et les liens */
+.navbar a, .dropdown-menu a {
+  transition: all 0.3s ease;
+}
+
+/* Effet de survol pour les boutons */
+.navbar a:hover, .dropdown-menu a:hover {
+  opacity: 0.8;
+}
+
+/* Ombre portée pour la navbar */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Bordures subtiles pour les sections */
+.user-header {
+  border-bottom: 1px solid #eee;
+}
+
+/* Espacement et typographie */
+.user-header p {
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .logo-lg {
+    font-size: 18px;
+  }
+  .user-image {
+    width: 30px;
+    height: 30px;
+  }
+}

@@ -1,0 +1,90 @@
+/* Navbar Styling */
+.navbar {
+  background: #1c252c; /* Dark gray/black background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slightly stronger shadow */
+}
+
+/* Navbar Brand */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+}
+.navbar-brand img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  margin-right: 10px; /* Spacing between logo and text */
+}
+
+/* Navbar Links */
+.navbar-nav .nav-link {
+  color: #e0e0e0 !important; /* Light gray text */
+  font-weight: 500;
+  padding: 10px 15px;
+  transition: 0.3s ease-in-out;
+}
+.navbar-nav .nav-link:hover {
+  background: rgba(255, 255, 255, 0.1); /* Subtle hover effect */
+  border-radius: 5px;
+}
+
+/* Search Bar */
+.input-group {
+  max-width: 250px;
+}
+.form-control {
+  border-radius: 50px;
+  padding: 8px 15px;
+  background: #2d363d; /* Darker background for input */
+  border: none;
+  color: white;
+}
+.form-control::placeholder {
+  color: #b0b0b0; /* Lighter placeholder text */
+}
+.btn-light {
+  border-radius: 50px;
+  background: #3c4850; /* Dark button */
+  color: white;
+}
+
+/* Cart Notification Badge */
+.cart_count {
+  font-size: 0.75rem;
+  padding: 5px 7px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #28a745; /* Green for visibility */
+  color: white;
+  border-radius: 50%;
+}
+
+/* Dropdown Menu Animation */
+.dropdown-menu {
+  background: #2c3a42; /* Darker background for dropdown */
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.dropdown-menu .dropdown-item {
+  color: #ffffff;
+}
+.dropdown-menu .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* User Avatar */
+.navbar .dropdown-toggle img {
+  border: 2px solid #fff;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

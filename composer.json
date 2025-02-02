@@ -1,0 +1,19 @@
+{
+    "name": "moutiasaad/cheese-store",
+    "description": "cheese-store",
+    "autoload": {
+        "psr-4": {
+            "Moutiasaad\\CheeseStore\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "moutiasaad",
+            "email": "moutiasaad481@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "tecnickcom/tcpdf": "^6.8"
+    }
+}

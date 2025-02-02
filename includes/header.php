@@ -1,97 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  	<meta charset="utf-8">
-  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<title>Ecommerce Site using PHP</title>
-  	<!-- Tell the browser to be responsive to screen width -->
-  	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  	<!-- Bootstrap 3.3.7 -->
-  	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-  	<!-- DataTables -->
-    <link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-  	<!-- Font Awesome -->
-  	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
-  	<!-- Theme style -->
-  	<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-  	<!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  	<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-    <!-- Magnify -->
-    <link rel="stylesheet" href="magnify/magnify.min.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Ecommerce Site | ShopMate</title>
 
-  	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  	<!--[if lt IE 9]>
-  	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  	<![endif]-->
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
-  	<!-- Google Font -->
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.4.2/css/all.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Paypal Express -->
-    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-    <!-- Google Recaptcha -->
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700&display=swap">
 
-  	<!-- Custom CSS -->
-    <style type="text/css">
-    /* Small devices (tablets, 768px and up) */
-    @media (min-width: 768px){ 
-      #navbar-search-input{ 
-        width: 60px; 
-      }
-      #navbar-search-input:focus{ 
-        width: 100px; 
-      }
-    }
+    <!-- Custom CSS -->
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
 
-    /* Medium devices (desktops, 992px and up) */
-    @media (min-width: 992px){ 
-      #navbar-search-input{ 
-        width: 150px; 
-      }
-      #navbar-search-input:focus{ 
-        width: 250px; 
-      } 
-    }
+        /* Navbar */
+        .navbar {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .word-wrap{
-      overflow-wrap: break-word;
-    }
-    .prod-body{
-      height:300px;
-    }
+        /* Ensure space below the navbar on all pages */
+        .content-wrapper, .main-content {
+            margin-top: 120px; /* Adjust this value as needed */
+        }
 
-    .box:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
-    .register-box{
-      margin-top:20px;
-    }
-
-    #trending{
-      list-style: none;
-      padding:10px 5px 10px 15px;
-    }
-    #trending li {
-      padding-left: 1.3em;
-    }
-    #trending li:before {
-      content: "\f046";
-      font-family: FontAwesome;
-      display: inline-block;
-      margin-left: -1.3em; 
-      width: 1.3em;
-    }
-
-    /*Magnify*/
-    .magnify > .magnify-lens {
-      width: 100px;
-      height: 100px;
-    }
-
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .content-wrapper, .main-content {
+                margin-top: 80px; /* Smaller spacing on mobile */
+            }
+        }
     </style>
 
+    <!-- jQuery (Optional if needed) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+<body>

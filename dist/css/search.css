@@ -1,0 +1,86 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1c252c; /* Dark background */
+    color: #e0e0e0; /* Light text for readability */
+}
+
+/* Navbar */
+.navbar {
+    background: #1c252c; /* Dark navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Add Space Between Navbar and Content */
+.content-wrapper {
+    margin-top: 100px;
+}
+
+/* Search Page Header */
+.page-header {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff; /* White text */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Search Results */
+.prod-body {
+    background: #2d363d; /* Darker card background */
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.prod-body:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Product Image */
+.thumbnail {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+}
+
+/* Product Title */
+.prod-body h5 a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff; /* White text */
+    text-decoration: none;
+}
+
+.prod-body h5 a:hover {
+    color: #3caef8;
+}
+
+/* Product Price */
+.box-footer {
+    background: rgba(255, 255, 255, 0.1);
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+    padding: 10px;
+    border-radius: 0 0 12px 12px;
+}
+
+/* Highlighted Text in Search */
+b {
+    color: #f8c10d; /* Yellow highlight */
+}
+
+/* Sidebar */
+.sidebar {
+    background: #2d363d;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}

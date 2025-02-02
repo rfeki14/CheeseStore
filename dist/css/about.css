@@ -1,0 +1,88 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1d232a; /* Dark background similar to navbar */
+    color: #e0e0e0; /* Light gray text for readability */
+    margin: 0;
+    padding: 0;
+}
+
+/* Centering the About Title */
+.title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffb400; /* Highlight color similar to navbar logo */
+    margin-top: 50px; /* Adds spacing from the navbar */
+    margin-bottom: 30px;
+}
+
+/* About Section */
+.about-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 0; /* Added spacing */
+}
+
+/* About Container */
+.about-container {
+    display: flex;
+    max-width: 1200px;
+    width: 90%;
+    align-items: center;
+    gap: 40px;
+}
+
+/* Left Side: Image */
+.about-image img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1); /* Light shadow */
+}
+
+/* Right Side: Content */
+.about-content {
+    max-width: 600px;
+}
+
+/* Title Styling */
+.about-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffb400; /* Highlight color similar to navbar logo */
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Paragraph Styling */
+.about-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #d1d1d1; /* Light gray text */
+}
+
+/* Navbar Link Styling */
+.navbar {
+    background-color: #12181e !important; /* Dark navbar */
+    color: white;
+}
+
+/* Navbar Links */
+.navbar-nav .nav-link {
+    color: white !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-title {
+        text-align: center;
+    }
+}

@@ -2,10 +2,9 @@
 <?php
 $where = '';
 if (isset($_GET['category'])) {
-    $catid = $_GET['category'];
-    $where = 'WHERE category_id =' . $catid;
+  $catid = intval($_GET['category']);
+  $where = 'WHERE products.category_id =' . $catid;
 }
-
 ?>
 <?php include 'includes/header.php'; ?>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -32,31 +31,33 @@ if (isset($_GET['category'])) {
     <section class="content">
       <?php
       if (isset($_SESSION['error'])) {
-          echo "
+        echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
               " . $_SESSION['error'] . '
             </div>
           ';
-          unset($_SESSION['error']);
+        unset($_SESSION['error']);
       }
-if (isset($_SESSION['success'])) {
-    echo "
+      if (isset($_SESSION['success'])) {
+        echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
               " . $_SESSION['success'] . '
             </div>
           ';
-    unset($_SESSION['success']);
-}
-?>
+        unset($_SESSION['success']);
+      }
+      ?>
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="#addnew" data-toggle="modal" class="btn btn-primary btn-sm btn-flat" id="addproduct"><i class="fa fa-plus"></i> New</a>
+              <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm rounded-pill" id="addproduct">
+                <i class="fa fa-plus"></i> New Product
+              </a>
               <div class="pull-right">
                 <form class="form-inline">
                   <div class="form-group">
@@ -64,20 +65,20 @@ if (isset($_SESSION['success'])) {
                     <select class="form-control input-sm" id="select_category">
                       <option value="0">ALL</option>
                       <?php
-                $conn = $pdo->open();
+                      $conn = $pdo->open();
 
-$stmt = $conn->prepare('SELECT * FROM category');
-$stmt->execute();
+                      $stmt = $conn->prepare('SELECT * FROM category');
+                      $stmt->execute();
 
-foreach ($stmt as $crow) {
-    $selected = ($crow['id'] == $catid) ? 'selected' : '';
-    echo "
+                      foreach ($stmt as $crow) {
+                        $selected = ($crow['id'] == $catid) ? 'selected' : '';
+                        echo "
                             <option value='" . $crow['id'] . "' " . $selected . '>' . $crow['name'] . '</option>
                           ';
-}
+                      }
 
-$pdo->close();
-?>
+                      $pdo->close();
+                      ?>
                     </select>
                   </div>
                 </form>
@@ -87,6 +88,7 @@ $pdo->close();
               <table id="example1" class="table table-bordered">
                 <thead>
                   <th>Name</th>
+                  <th>Category</th>
                   <th>Photo</th>
                   <th>Description</th>
                   <th>Price</th>
@@ -98,37 +100,48 @@ $pdo->close();
                   <?php
                   $conn = $pdo->open();
 
-try {
-    $now = date('Y-m-d');
-    $stmt = $conn->prepare("SELECT * FROM products $where");
-    $stmt->execute();
-    foreach ($stmt as $row) {
-        $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
-        $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
-        echo '
+                  try {
+                    $now = date('Y-m-d');
+                    $stmt = $conn->prepare("SELECT products.*, category.name AS catname FROM products LEFT JOIN category ON category.id=products.category_id $where");
+                    $stmt->execute();
+                    foreach ($stmt as $row) {
+                      $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
+                      $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
+                      echo '
                           <tr>
-                            <td>' . $row['name'] . "</td>
+                            <td>' . htmlspecialchars($row['name']) . "</td>
+                            <td>" . htmlspecialchars($row['catname']) . "</td>
                             <td>
-                              <img src='" . $image . "' height='30px' width='30px'>
+                              <img src='" . htmlspecialchars($image) . "' height='30px' width='30px'>
                               <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='" . $row['id'] . "'><i class='fa fa-edit'></i></a></span>
                             </td>
-                            <td><a href='#description' data-toggle='modal' class='btn btn-info btn-sm btn-flat desc' data-id='" . $row['id'] . "'><i class='fa fa-search'></i> View</a></td>
-                            <td>&#36; " . number_format($row['price'], 3) . '</td>
+                            <td>
+                              <a href='#description' data-toggle='modal' class='btn btn-info btn-sm rounded-pill desc' data-id='" . $row['id'] . "'>
+                                <i class='fa fa-search'></i> View
+                              </a>
+                            </td>
+                            <td>&#36; " . number_format($row['price'], 2) . '</td>
                             <td>' . number_format($row['qtty'], 2) . '</td>
                             <td>' . $counter . "</td>
                             <td>
-                              <button class='btn btn-success btn-sm edit btn-flat' data-id='" . $row['id'] . "'><i class='fa fa-edit'></i> Edit</button>
-                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='" . $row['id'] . "'><i class='fa fa-trash'></i> Delete</button>
+                              <div class='btn-group'>
+                                <button class='btn btn-primary btn-sm edit rounded-pill' data-id='" . $row['id'] . "'>
+                                  <i class='fa fa-edit'></i> Edit
+                                </button>
+                                <button class='btn btn-danger btn-sm delete rounded-pill ms-2' data-id='" . $row['id'] . "'>
+                                  <i class='fa fa-trash'></i> Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ";
-    }
-} catch (PDOException $e) {
-    echo $e->getMessage();
-}
+                    }
+                  } catch (PDOException $e) {
+                    echo $e->getMessage();
+                  }
 
-$pdo->close();
-?>
+                  $pdo->close();
+                  ?>
                 </tbody>
               </table>
             </div>
@@ -167,7 +180,7 @@ $(function(){
     var id = $(this).data('id');
     getRow(id);
   });
-
+  
   $(document).on('click', '.desc', function(e){
     e.preventDefault();
     var id = $(this).data('id');
@@ -199,36 +212,140 @@ $(function(){
 
 });
 
-function getRow(id){
-  $.ajax({
-    type: 'POST',
-    url: 'products_row.php',
-    data: {id:id},
-    dataType: 'json',
-    success: function(response){
-      $('#desc').html(response.description);
-      $('.name').html(response.prodname);
-      $('.prodid').val(response.prodid);
-      $('#edit_name').val(response.prodname);
-      $('#catselected').val(response.category_id).html(response.catname);
-      $('#edit_price').val(response.price);
-      $('#edit_qtty').val(response.qtty);
-      CKEDITOR.instances["editor2"].setData(response.description);
-      getCategory();
-    }
-  });
+function getRow(id) {
+    console.log("Fetching product details for ID:", id); // Debugging Log
+
+    $.ajax({
+        type: 'POST',
+        url: 'products_row.php',
+        data: { id: id },
+        dataType: 'json',
+        success: function(response) {
+            console.log("Product Data Received:", response); // Debugging Log
+
+            if (response) {
+                // Update hidden ID input field
+                $('.prodid').val(response.prodid);
+
+                // Update View and Edit Modals with Product Details
+                $('.name').html("ID: " + response.prodid + " - " + response.prodname);
+                $('#edit_name').val(response.prodname);
+                $('#edit_price').val(response.price);
+                $('#edit_quantity').val(response.qtty);
+
+                // Load category options and select the correct one
+                getCategory(response.category_id);
+
+                // Load old image preview using correct path
+                if (response.photo && response.photo !== "../images/") {
+                    $('#old_photo_preview').attr('src', response.photo).show();
+                } else {
+                    $('#old_photo_preview').attr('src', '../images/noimage.jpg').show();
+                }
+
+                // Populate View Modal (`#description`)
+                $('#desc').html(`
+                    <strong>Name:</strong> ${response.prodname}<br>
+                    <strong>Category:</strong> ${response.category_name}<br>
+                    <strong>Price:</strong> $${response.price}<br>
+                    <strong>Quantity:</strong> ${response.qtty}<br>
+                    <strong>Description:</strong> ${response.description}<br>
+                    <img src="${response.photo}" width="150px" style="margin-top: 10px;">
+                `);
+
+                // Load product description in CKEditor
+                if (CKEDITOR.instances["edit_description"]) {
+                    CKEDITOR.instances["edit_description"].setData(response.description);
+                } else {
+                    CKEDITOR.replace('edit_description');
+                    CKEDITOR.instances["edit_description"].setData(response.description);
+                }
+            } else {
+                console.error("Invalid response:", response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", error);
+        }
+    });
 }
-function getCategory(){
-  $.ajax({
-    type: 'POST',
-    url: 'category_fetch.php',
-    dataType: 'json',
-    success:function(response){
-      $('#category').append(response);
-      $('#edit_category').append(response);
-    }
-  });
+
+
+
+function getCategory(selectedCategoryId = null) {
+    $.ajax({
+        type: 'POST',
+        url: 'category_fetch.php', // Fetch categories from the database
+        dataType: 'json',
+        success: function(response) {
+            console.log("Category Data Received:", response); // Debugging Log
+
+            if (Array.isArray(response)) {
+                let categoryOptions = '<option value="">Select Category</option>';
+                response.forEach(function(category) {
+                    categoryOptions += `<option value="${category.id}">${category.name}</option>`;
+                });
+
+                // Populate both Add and Edit dropdowns
+                $('#category').html(categoryOptions);
+                $('#edit_category').html(categoryOptions);
+
+                // Set the selected category AFTER options are populated
+                if (selectedCategoryId) {
+                    $('#edit_category').val(selectedCategoryId);
+                }
+            } else {
+                console.error("Invalid response format:", response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error (Categories):", error);
+        }
+    });
 }
+
+
+
 </script>
+<style>
+.btn {
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-group {
+    gap: 8px;
+}
+
+.rounded-pill {
+    border-radius: 50px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+</style>
 </body>
 </html>

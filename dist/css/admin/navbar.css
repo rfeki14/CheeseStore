@@ -1,0 +1,39 @@
+/* Navbar */
+.custom-navbar {
+  background: #12181e;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  font-size: 20px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: white;
+}
+
+/* User Dropdown */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: #2d363d;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.user-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}

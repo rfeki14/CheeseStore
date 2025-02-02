@@ -1,19 +1,16 @@
 <?php
-
 include 'includes/session.php';
-
-$output = '';
-
 $conn = $pdo->open();
 
-$stmt = $conn->prepare("SELECT * FROM category");
-$stmt->execute();
+try {
+    $stmt = $conn->prepare("SELECT * FROM category ORDER BY name ASC");
+    $stmt->execute();
+    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-foreach ($stmt as $row) {
-    $output .= "
-			<option value='".$row['id']."' class='append_items'>".$row['name']."</option>
-		";
+    echo json_encode($categories); // Ensure valid JSON response
+} catch (PDOException $e) {
+    echo json_encode(["error" => $e->getMessage()]);
 }
 
 $pdo->close();
-echo json_encode($output);
+?>

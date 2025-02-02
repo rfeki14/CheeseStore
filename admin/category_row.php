@@ -1,17 +1,17 @@
-<?php
+<?php 
+	include 'includes/session.php';
 
-include 'includes/session.php';
+	if(isset($_POST['id'])){
+		$id = $_POST['id'];
+		
+		$conn = $pdo->open();
 
-if (isset($_POST['id'])) {
-    $id = $_POST['id'];
+		$stmt = $conn->prepare("SELECT * FROM category WHERE id=:id");
+		$stmt->execute(['id'=>$id]);
+		$row = $stmt->fetch();
+		
+		$pdo->close();
 
-    $conn = $pdo->open();
-
-    $stmt = $conn->prepare("SELECT * FROM category WHERE id=:id");
-    $stmt->execute(['id' => $id]);
-    $row = $stmt->fetch();
-
-    $pdo->close();
-
-    echo json_encode($row);
-}
+		echo json_encode($row);
+	}
+?>

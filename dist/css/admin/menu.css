@@ -1,0 +1,74 @@
+/* Sidebar Styling */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #1c252c;
+  transition: width 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.sidebar-collapsed .sidebar {
+  width: 60px;
+}
+
+/* Sidebar Links */
+.sidebar-menu li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.sidebar-menu li a:hover {
+  background: #3a4750;
+}
+
+/* Treeview Menu */
+.treeview-menu {
+  display: none;
+  padding-left: 20px;
+}
+
+.treeview.active .treeview-menu {
+  display: block;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  color: white;
+  font-size: 18px;
+  padding: 10px 15px;
+  text-transform: uppercase;
+}
+
+/* Sidebar User Panel */
+.user-panel {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #12181e;
+}
+
+.user-image img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.user-info {
+  margin-left: 10px;
+  color: white;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background: green;
+  border-radius: 50%;
+  display: inline-block;
+}

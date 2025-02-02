@@ -3,13 +3,13 @@
 <head>
   	<meta charset="utf-8">
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<title>Ecommerce Site using PHP</title>
-  	<!-- Tell the browser to be responsive to screen width -->
+  	<title>Coeur Blanc</title>
+  	<!-- Tell urur the browser to be responsive to screen width -->
   	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   	<!-- Bootstrap 3.3.7 -->
   	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
   	<!-- Font Awesome -->
-  	<link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Select2 -->
     <link rel="stylesheet" href="../bower_components/select2/dist/css/select2.min.css">
   	<!-- Theme style -->
@@ -25,6 +25,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="css/styles.css">
   	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   	<!--[if lt IE 9]>
@@ -41,6 +42,55 @@
   		}
       .bold{
         font-weight:bold;
+      }
+
+      /* Navbar custom styles */
+      .navbar-static-top {
+        background-color: #2c3e50 !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .btn-link.text-secondary {
+        color: #6c757d;
+        transition: color 0.3s ease;
+      }
+
+      .btn-link.text-secondary:hover {
+        color: #343a40;
+        text-decoration: none;
+      }
+
+      .btn-link.text-danger {
+        color: #dc3545;
+        transition: color 0.3s ease;
+      }
+
+      .btn-link.text-danger:hover {
+        color: #c82333;
+        text-decoration: none;
+      }
+
+      .user-footer {
+        background-color: #f8f9fa !important;
+        padding: 10px;
+      }
+
+      /* Styles pour les icônes */
+      .btn-link .fas {
+        padding: 8px;
+      }
+      
+      .btn-link:hover .fas {
+        transform: scale(1.2);
+      }
+      
+      .btn-link {
+        padding: 5px;
+        border-radius: 50%;
+      }
+      
+      .btn-link:hover {
+        background-color: rgba(0,0,0,0.05);
       }
 
       /*chart style*/

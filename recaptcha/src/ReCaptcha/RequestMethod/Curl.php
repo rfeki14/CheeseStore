@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This is a PHP library that handles calling reCAPTCHA.
  *
@@ -40,6 +39,7 @@ namespace ReCaptcha\RequestMethod;
  */
 class Curl
 {
+
     /**
      * @see http://php.net/curl_init
      * @param string $url

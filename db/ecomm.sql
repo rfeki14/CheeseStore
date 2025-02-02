@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2025 at 10:51 AM
+-- Generation Time: Jan 26, 2025 at 09:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -151,21 +151,20 @@ CREATE TABLE `sales` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `total` varchar(50) NOT NULL,
-  `sales_date` date NOT NULL,
-  `confirmed` tinyint(1) NOT NULL DEFAULT 0
+  `sales_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `sales`
 --
 
-INSERT INTO `sales` (`id`, `user_id`, `total`, `sales_date`, `confirmed`) VALUES
-(9, 9, 'PAY-1RT494832H294925RLLZ7TZA', '2018-05-10', 0),
-(10, 9, 'PAY-21700797GV667562HLLZ7ZVY', '2018-05-10', 0),
-(11, 11, 'getTotal()', '2025-01-26', 1),
-(12, 11, 'getTotal()', '2025-01-26', 1),
-(13, 11, '2298.98', '2025-01-26', 1),
-(14, 11, '2298.98', '2025-01-26', 1);
+INSERT INTO `sales` (`id`, `user_id`, `total`, `sales_date`) VALUES
+(9, 9, 'PAY-1RT494832H294925RLLZ7TZA', '2018-05-10'),
+(10, 9, 'PAY-21700797GV667562HLLZ7ZVY', '2018-05-10'),
+(11, 11, 'getTotal()', '2025-01-26'),
+(12, 11, 'getTotal()', '2025-01-26'),
+(13, 11, '2298.98', '2025-01-26'),
+(14, 11, '2298.98', '2025-01-26');
 
 -- --------------------------------------------------------
 

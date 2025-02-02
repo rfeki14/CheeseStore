@@ -1,0 +1,133 @@
+/* General Page Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1c252c;
+    color: #e0e0e0;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contact Container */
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    max-width: 1200px;
+    background: #2d363d;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Contact Form */
+.contact-form {
+    width: 50%;
+}
+
+.contact-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.contact-description {
+    font-size: 16px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #555;
+    background: #1c252c;
+    color: #e0e0e0;
+}
+
+.form-control:focus {
+    border-color: #ffb400;
+    box-shadow: 0 0 10px rgba(255, 180, 0, 0.3);
+}
+
+/* Button */
+.btn-primary {
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    background: #ffb400;
+    color: #1c252c;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: #d89d00;
+}
+
+/* Contact Details */
+.contact-details {
+    width: 40%;
+    color: #ffffff;
+}
+
+.contact-details h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #ffb400;
+}
+
+.contact-details p {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.contact-details i {
+    margin-right: 10px;
+    color: #ffb400;
+}
+
+/* Social Links */
+.social-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.social-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-facebook { background-color: #1877f2; color: white; }
+.btn-twitter { background-color: #1da1f2; color: white; }
+.btn-instagram { background-color: #e4405f; color: white; }
+
+/* Google Map */
+.map-container {
+    margin-top: 40px;
+    width: 100%;
+}

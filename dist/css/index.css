@@ -1,0 +1,395 @@
+/* General Styling */
+:root {
+    --primary-color: #e63946;
+    --secondary-color: #2d363d;
+    --text-light: #f8f9fa;
+    --hover-color: #ff4d5a;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1c252c 0%, #2d363d 100%);
+    color: var(--text-light);
+}
+
+/* Navbar Enhancement */
+.navbar {
+    background: rgba(28, 37, 44, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Add Space Between Navbar and Content */
+.content-wrapper {
+    margin-top: 100px;
+}
+
+/* Enhanced Carousel */
+.carousel-item img {
+    height: 600px;
+    object-fit: cover;
+    border-radius: 15px;
+    filter: brightness(0.9);
+    transition: var(--transition);
+}
+
+.carousel-item:hover img {
+    filter: brightness(1);
+    transform: scale(1.01);
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Monthly Top Sellers Section */
+.product-card {
+    background: linear-gradient(145deg, #2d363d, #252d33);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+.product-card:hover .product-actions {
+    opacity: 1;
+}
+
+.product-card .card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.product-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+.product-image {
+    position: relative;
+}
+
+.product-actions {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 15px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 25px;
+}
+
+.product-card:hover .product-actions {
+    opacity: 1;
+}
+
+.product-title {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: block;
+    margin: 15px 0;
+}
+
+.product-title:hover {
+    color: #3caef8; /* Light blue hover */
+}
+
+.price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-shadow: 0 0 10px rgba(230, 57, 70, 0.3);
+}
+
+.sold-info {
+    font-size: 14px;
+    color: #b0b0b0; /* Lighter text */
+}
+
+/* Enhanced Buttons */
+.btn-primary {
+    border-radius: 30px;
+    font-size: 14px;
+    padding: 10px 25px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+}
+
+/* Enhanced Map Section */
+.map-section {
+    width: 100%;
+    margin-top: 50px;
+    padding: 60px 0;
+    background: linear-gradient(180deg, #2c3a42 0%, #1c252c 100%);
+    text-align: center;
+}
+
+.map-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, #e63946, #ff4d5a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+}
+
+.map-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    transform: perspective(1000px) rotateX(5deg);
+    transition: var(--transition);
+}
+
+.map-container:hover {
+    transform: perspective(1000px) rotateX(0deg);
+}
+
+iframe {
+    width: 100%;
+    height: 450px;
+    border: 0;
+}
+/* Monthly Top Sellers Title */
+.text-primary {
+    color: #e63946 !important; /* Red color */
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Icons Section */
+/* Enhanced Info Section */
+.info-section {
+    background: linear-gradient(135deg, #2d363d 0%, #1c252c 100%);
+    padding: 70px 0;
+    text-align: center;
+}
+
+/* Info Container */
+.info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+/* Info Box */
+.info-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    transition: transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Change Icon Colors to Red */
+.info-box i {
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, #e63946, #ff4d5a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+
+/* Text Styling */
+.info-box p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-top: 5px;
+}
+/* Carousel container styling */
+#topSellersCarousel {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Product Card Styling */
+.product-card {
+    background: linear-gradient(145deg, #2d363d, #252d33);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Product Image */
+.product-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+/* Carousel Buttons */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 10px;
+}
+
+/* Section Headers */
+.section-header h2 {
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-header h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--bs-primary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 300px;
+    }
+    
+    .info-box {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .product-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.product-card, .info-box, .map-container {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #e63946; /* Rouge pour les icônes */
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.action-btn:hover {
+    background: #e63946; /* Fond rouge au survol */
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(230, 57, 70, 0.5);
+}
+
+.product-info h5 a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.product-info h5 a:hover {
+    color: #e63946;
+    text-decoration: none;
+}
+
+.product-info .price {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 10px 0;
+}

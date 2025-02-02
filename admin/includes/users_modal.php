@@ -185,34 +185,59 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
 
-
-<!-- Activate -->
-<div class="modal fade" id="activate">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title"><b>Activating...</b></h4>
-            </div>
-            <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="users_activate.php">
-                <input type="hidden" class="userid" name="id">
-                <div class="text-center">
-                    <p>ACTIVATE USER</p>
-                    <h2 class="bold fullname"></h2>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-              <button type="submit" class="btn btn-success btn-flat" name="activate"><i class="fa fa-check"></i> Activate</button>
-              </form>
-            </div>
-        </div>
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmDeactivateModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeactivateLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeactivateLabel">Confirm Deactivation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to deactivate this user?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="confirmDeactivate">Deactivate</button>
+      </div>
     </div>
-</div> 
+  </div>
+</div>
 
+<script>
+  $(document).ready(function(){
+    var userId;
+    $('.status-toggle').change(function(){
+      if(!$(this).is(':checked')){
+        userId = $(this).data('id');
+        if(!$('#confirmDeactivateModal').hasClass('show')){
+          $('#confirmDeactivateModal').modal('show');
+        }
+      }
+    });
 
-     
+    $('#confirmDeactivate').click(function(){
+      // Perform the deactivation action here
+      // For example, you can make an AJAX request to deactivate the user
+      $.ajax({
+        url: 'deactivate_user.php',
+        type: 'POST',
+        data: {id: userId},
+        success: function(response){
+          // Handle the response
+          location.reload();
+        }
+      });
+      $('#confirmDeactivateModal').modal('hide');
+    });
+
+    $('#confirmDeactivateModal').on('hidden.bs.modal', function () {
+      $('.status-toggle[data-id="'+userId+'"]').prop('checked', true);
+    });
+  });
+</script>
+

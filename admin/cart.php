@@ -1,17 +1,18 @@
 <?php include 'includes/session.php'; ?>
 <?php
-if (!isset($_GET['user'])) {
+  if(!isset($_GET['user'])){
     header('location: users.php');
     exit();
-} else {
+  }
+  else{
     $conn = $pdo->open();
 
     $stmt = $conn->prepare("SELECT * FROM users WHERE id=:id");
-    $stmt->execute(['id' => $_GET['user']]);
+    $stmt->execute(['id'=>$_GET['user']]);
     $user = $stmt->fetch();
 
     $pdo->close();
-}
+  }
 
 ?>
 <?php include 'includes/header.php'; ?>
@@ -38,27 +39,27 @@ if (!isset($_GET['user'])) {
     <!-- Main content -->
     <section class="content">
       <?php
-        if (isset($_SESSION['error'])) {
-            echo "
+        if(isset($_SESSION['error'])){
+          echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-warning'></i> Error!</h4>
               ".$_SESSION['error']."
             </div>
           ";
-            unset($_SESSION['error']);
+          unset($_SESSION['error']);
         }
-if (isset($_SESSION['success'])) {
-    echo "
+        if(isset($_SESSION['success'])){
+          echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-check'></i> Success!</h4>
               ".$_SESSION['success']."
             </div>
           ";
-    unset($_SESSION['success']);
-}
-?>
+          unset($_SESSION['success']);
+        }
+      ?>
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
@@ -75,13 +76,13 @@ if (isset($_SESSION['success'])) {
                 </thead>
                 <tbody>
                   <?php
-              $conn = $pdo->open();
+                    $conn = $pdo->open();
 
-try {
-    $stmt = $conn->prepare("SELECT *, cart.id AS cartid FROM cart LEFT JOIN products ON products.id=cart.product_id WHERE user_id=:user_id");
-    $stmt->execute(['user_id' => $user['id']]);
-    foreach ($stmt as $row) {
-        echo "
+                    try{
+                      $stmt = $conn->prepare("SELECT *, cart.id AS cartid FROM cart LEFT JOIN products ON products.id=cart.product_id WHERE user_id=:user_id");
+                      $stmt->execute(['user_id'=>$user['id']]);
+                      foreach($stmt as $row){
+                        echo "
                           <tr>
                             <td>".$row['name']."</td>
                             <td>".$row['quantity']."</td>
@@ -91,13 +92,14 @@ try {
                             </td>
                           </tr>
                         ";
-    }
-} catch (PDOException $e) {
-    echo $e->getMessage();
-}
+                      }
+                    }
+                    catch(PDOException $e){
+                      echo $e->getMessage();
+                    }
 
-$pdo->close();
-?>
+                    $pdo->close();
+                  ?>
                 </tbody>
               </table>
             </div>

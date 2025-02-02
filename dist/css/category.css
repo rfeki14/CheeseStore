@@ -1,0 +1,86 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1c252c; /* Dark background */
+    color: #e0e0e0; /* Light text for readability */
+}
+
+/* Navbar */
+.navbar {
+    background: #1c252c; /* Dark navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Add Space Between Navbar and Content */
+.content-wrapper {
+    margin-top: 100px;
+}
+
+/* Category Header */
+.category-header {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff; /* White text */
+    margin-bottom: 30px;
+}
+
+/* Product Grid */
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Product Card */
+.product-card {
+    background: #2d363d; /* Darker card background */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    width: 300px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Product Image */
+.product-image {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Product Title */
+.product-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #ffffff; /* White text */
+    text-decoration: none;
+}
+
+.product-title:hover {
+    color: #3caef8; /* Light blue hover */
+}
+
+/* Product Price */
+.product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffb400; /* Warm Gold to match the theme */
+    margin-bottom: 10px;
+}
+/* No Products Message */
+.no-products {
+    text-align: center;
+    font-size: 18px;
+    color: #b0b0b0; /* Lighter text for contrast */
+    margin-top: 20px;
+}

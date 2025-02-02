@@ -1,0 +1,107 @@
+/* Sidebar Styling */
+.sidebar-card {
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: #2d363d; /* Darker sidebar background */
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    color: #e0e0e0;
+}
+
+.sidebar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Sidebar Header */
+/* Sidebar Title */
+.sidebar-title {
+    color: #e63946 !important; /* Red color */
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+/* List Group */
+.list-group-item {
+    font-size: 15px;
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    transition: background 0.3s, color 0.3s;
+}
+
+.list-group-item a {
+    text-decoration: none;
+    color: #e0e0e0; /* Light text */
+    font-weight: 500;
+    transition: color 0.3s ease-in-out;
+}
+
+.list-group-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.list-group-item a:hover {
+    color: #3caef8;
+    font-weight: bold;
+}
+
+/* Subscription Form */
+.sidebar-card .input-group {
+    max-width: 100%;
+    margin: auto;
+}
+
+.form-control {
+    border-radius: 30px;
+    padding: 10px 15px;
+    border: 1px solid #555; /* Darker border */
+    background: #2d363d; /* Dark input background */
+    color: white;
+    transition: 0.3s;
+}
+
+.form-control::placeholder {
+    color: #b0b0b0; /* Light placeholder text */
+}
+
+.form-control:focus {
+    border-color: #3caef8;
+    box-shadow: 0 0 5px rgba(60, 174, 248, 0.5);
+}
+
+/* Social Media Buttons */
+.social-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.social-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.social-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Social Media Colors */
+.btn-facebook { background-color: #1877f2; color: white; }
+.btn-twitter { background-color: #1da1f2; color: white; }
+.btn-instagram { background-color: #e4405f; color: white; }
+.btn-google { background-color: #db4437; color: white; }
+.btn-linkedin { background-color: #0077b5; color: white; }
