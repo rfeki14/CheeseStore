@@ -1,9 +1,14 @@
 <?php include 'includes/session.php'; ?>
 <?php
 $where = '';
+$catid = 0;
 if (isset($_GET['category'])) {
   $catid = intval($_GET['category']);
-  $where = 'WHERE products.category_id =' . $catid;
+  if ($catid == -1) {
+    $where = 'WHERE products.category_id IS NULL';
+  } else {
+    $where = 'WHERE products.category_id =' . $catid;
+  }
 }
 ?>
 <?php include 'includes/header.php'; ?>
@@ -63,7 +68,8 @@ if (isset($_GET['category'])) {
                   <div class="form-group">
                     <label>Category: </label>
                     <select class="form-control input-sm" id="select_category">
-                      <option value="0">ALL</option>
+                    <option value="0" <?php echo ($catid == 0) ? 'selected' : ''; ?>>ALL</option>
+                    <option value="-1" <?php echo ($catid == -1) ? 'selected' : ''; ?>>None</option>
                       <?php
                       $conn = $pdo->open();
 
@@ -100,45 +106,47 @@ if (isset($_GET['category'])) {
                   <?php
                   $conn = $pdo->open();
 
-                  try {
-                    $now = date('Y-m-d');
-                    $stmt = $conn->prepare("SELECT products.*, category.name AS catname FROM products LEFT JOIN category ON category.id=products.category_id $where");
-                    $stmt->execute();
-                    foreach ($stmt as $row) {
-                      $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
-                      $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
-                      echo '
-                          <tr>
-                            <td>' . htmlspecialchars($row['name']) . "</td>
-                            <td>" . htmlspecialchars($row['catname']) . "</td>
-                            <td>
-                              <img src='" . htmlspecialchars($image) . "' height='30px' width='30px'>
-                              <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='" . $row['id'] . "'><i class='fa fa-edit'></i></a></span>
-                            </td>
-                            <td>
-                              <a href='#description' data-toggle='modal' class='btn btn-info btn-sm rounded-pill desc' data-id='" . $row['id'] . "'>
-                                <i class='fa fa-search'></i> View
-                              </a>
-                            </td>
-                            <td>&#36; " . number_format($row['price'], 2) . '</td>
-                            <td>' . number_format($row['qtty'], 2) . '</td>
-                            <td>' . $counter . "</td>
-                            <td>
-                              <div class='btn-group'>
-                                <button class='btn btn-primary btn-sm edit rounded-pill' data-id='" . $row['id'] . "'>
-                                  <i class='fa fa-edit'></i> Edit
-                                </button>
-                                <button class='btn btn-danger btn-sm delete rounded-pill ms-2' data-id='" . $row['id'] . "'>
-                                  <i class='fa fa-trash'></i> Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ";
+                 
+                    try {
+                      $now = date('Y-m-d');
+                      $stmt = $conn->prepare("SELECT products.*, category.name AS catname FROM products LEFT JOIN category ON category.id=products.category_id $where");
+                      $stmt->execute();
+                      foreach ($stmt as $row) {
+                        $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
+                        $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
+                        $category = (!empty($row['catname'])) ? htmlspecialchars($row['catname']) : 'None';
+                        echo "
+                            <tr>
+                              <td>" . htmlspecialchars($row['name']) . "</td>
+                              <td>" . $category . "</td>
+                              <td>
+                                <img src='" . htmlspecialchars($image) . "' height='30px' width='30px'>
+                                <span class='pull-right'><a href='#edit_photo' class='photo' data-toggle='modal' data-id='" . $row['id'] . "'><i class='fa fa-edit'></i></a></span>
+                              </td>
+                              <td>
+                                <a href='#description' data-toggle='modal' class='btn btn-info btn-sm rounded-pill desc' data-id='" . $row['id'] . "'>
+                                  <i class='fa fa-search'></i> View
+                                </a>
+                              </td>
+                              <td>&#36; " . number_format($row['price'], 2) . '</td>
+                              <td>' . number_format($row['qtty'], 2) . '</td>
+                              <td>' . $counter . "</td>
+                              <td>
+                                <div class='btn-group'>
+                                  <button class='btn btn-primary btn-sm edit rounded-pill' data-id='" . $row['id'] . "'>
+                                    <i class='fa fa-edit'></i> Edit
+                                  </button>
+                                  <button class='btn btn-danger btn-sm delete rounded-pill ms-2' data-id='" . $row['id'] . "'>
+                                    <i class='fa fa-trash'></i> Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ";
+                      }
+                    } catch (PDOException $e) {
+                      echo $e->getMessage();
                     }
-                  } catch (PDOException $e) {
-                    echo $e->getMessage();
-                  }
 
                   $pdo->close();
                   ?>
@@ -192,6 +200,9 @@ $(function(){
     if(val == 0){
       window.location = 'products.php';
     }
+    else if(val == -1){
+    window.location = 'products.php?category=-1';
+  }
     else{
       window.location = 'products.php?category='+val;
     }
