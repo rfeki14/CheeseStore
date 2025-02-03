@@ -4,7 +4,14 @@
 	$conn = $pdo->open();
 
 	$output = array('error'=>false);
-	$id = $_POST['id'];
+	if(isset($_POST['id'])){
+		$id = $_POST['id'];
+	} else {
+		$output['error'] = true;
+		$output['message'] = 'ID not set';
+		echo json_encode($output);
+		exit();
+	}
 
 	if(isset($_SESSION['user'])){
 		try{
@@ -18,11 +25,17 @@
 		}
 	}
 	else{
+		$productFound = false;
 		foreach($_SESSION['cart'] as $key => $row){
 			if($row['productid'] == $id){
 				unset($_SESSION['cart'][$key]);
 				$output['message'] = 'Deleted';
+				$productFound = true;
+				break;
 			}
+		}
+		if (!$productFound) {
+			$output['message'] = 'Product not found in cart';
 		}
 	}
 

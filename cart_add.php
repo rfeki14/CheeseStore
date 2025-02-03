@@ -22,14 +22,14 @@
 	    $row = $stmt->fetch();
 	    
 	    // Récupérer le prix de base du produit
-	    $stmt = $conn->prepare("SELECT price FROM products WHERE id=:id");
+	    $stmt = $conn->prepare("SELECT priceU FROM products WHERE id=:id");
 	    $stmt->execute(['id' => $id]);
 	    $product = $stmt->fetch();
-	    $basePrice = $product['price']; // Prix par kg
+	    $basePrice = $product['priceU']; // Prix par kg
 	    
 	    if(!$row){
 	        try{
-	            $stmt = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity, price_per_unit) VALUES (:user_id, :product_id, :quantity, :price)");
+	            $stmt = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity, price) VALUES (:user_id, :product_id, :quantity, :price)");
 	            $stmt->execute([
 	                'user_id' => $user['id'],
 	                'product_id' => $id,
@@ -78,10 +78,10 @@
 	else{
 	    // Pour les utilisateurs non connectés
 	    // Récupérer le prix de base du produit
-	    $stmt = $conn->prepare("SELECT price FROM products WHERE id=:id");
+	    $stmt = $conn->prepare("SELECT priceu FROM products WHERE id=:id");
 	    $stmt->execute(['id' => $id]);
 	    $product = $stmt->fetch();
-	    $basePrice = $product['price']; // Prix par kg
+	    $basePrice = $product['priceu']; // Prix par kg
 
 	    if(!isset($_SESSION['cart'])){
 	        $_SESSION['cart'] = array();
@@ -103,7 +103,7 @@
 	    else{
 	        $_SESSION['cart'][$id] = array(
 	            'quantity' => $quantity,
-	            'price_per_unit' => $basePrice // Prix par kg constant
+	            'price' => $basePrice // Prix par kg constant
 	        );
 	        $output['message'] = $quantity . 'g added to cart';
 	    }

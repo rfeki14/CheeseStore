@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h1 class="product-title"><?php echo $product['prodname']; ?></h1>
-                                    <h3 class="product-price">&#36; <?php echo number_format($product['price'], 2); ?></h3>
+                                    <h3 class="product-price">&#36; <?php echo number_format($product['priceU'], 2); ?></h3>
                                     <p><b>Category:</b> 
                                         <a href="category.php?category=<?php echo $product['cat_slug']; ?>" class="category-link">
                                             <?php echo $product['catname']; ?>
@@ -64,7 +64,7 @@
                                                 
                                                 <input type="number" name="quantity" id="quantity" class="form-control text-center" 
                                                        value="1000" min="100" max="5000" step="100" 
-                                                       data-base-price="<?php echo $product['price']; ?>">
+                                                       data-base-price="<?php echo $product['priceU']; ?>">
                                                 
                                                 <div class="quantity-buttons-right">
                                                     <button type="button" class="quantity-btn" data-value="100">+100g</button>
@@ -74,7 +74,7 @@
                                             </div>
                                             <div class="price-display">
                                                 <span>Prix: </span>
-                                                <span id="calculated-price"><?php echo number_format(($product['price'] * 0.1), 3); ?></span>
+                                                <span id="calculated-price"><?php echo number_format(($product['priceU'] * 0.1), 3); ?></span>
                                                 <span> DT</span>
                                             </div>
                                             <input type="hidden" value="<?php echo $product['prodid']; ?>" name="id">

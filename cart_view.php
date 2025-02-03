@@ -35,7 +35,7 @@
                                         $total = 0;
                                         if(isset($_SESSION['user'])){
                                             $stmt = $conn->prepare("
-                                                SELECT *, cart.quantity as cart_quantity, cart.price_per_unit as cart_price 
+                                                SELECT *, cart.quantity as cart_quantity, cart.price as cart_price 
                                                 FROM cart 
                                                 LEFT JOIN products ON products.id=cart.product_id 
                                                 WHERE user_id=:user_id");
@@ -137,7 +137,7 @@ $(function(){
             dataType: 'json',
             success: function(response){
                 if(!response.error){
-                    location.reload();
+                    alert(response.message);
                 }
                 else{
                     alert(response.message);
