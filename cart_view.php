@@ -1,159 +1,156 @@
 <?php include 'includes/session.php'; ?>
 <?php include 'includes/header.php'; ?>
-<link rel="stylesheet" href="dist/css/cart_view.css">
 
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
-
-	<?php include 'includes/navbar.php'; ?>
-	 
-	  <div class="content-wrapper">
-	    <div class="container">
-
-	      <!-- Main content -->
-	      <section class="content">
-	        		<h1 class="page-header">YOUR CART</h1>
-	        		<div class="box box-solid">
-	        			<div class="box-body">
-		        		<table class="table table-bordered">
-		        			<thead>
-		        				<th></th>
-		        				<th>Photo</th>
-		        				<th>Name</th>
-		        				<th>Price</th>
-		        				<th width="20%">Quantity</th>
-		        				<th>Subtotal</th>
-		        			</thead>
-		        			<tbody id="tbody">
-		        			</tbody>
-		        		</table>
-	        			</div>
-	        		</div>
-	        		<?php
-if (isset($_SESSION['user'])) {
-    echo "
-        <form action='checkout.php' method='POST'>
-            <input type='hidden' name='total' id='total' value=getTotal()>
-            <button type='submit' class='btn btn-primary btn-lg'>Proceed to Checkout</button>
-        </form>
-    ";
-} else {
-    echo "
-        <h4>You need to <a href='login.php'>Login</a> to checkout.</h4>
-    ";
-}
-?>
-
-	        	
-	      </section>
-	     
-	    </div>
-	  </div>
-  	<?php $pdo->close(); ?>
-  	<?php include 'includes/footer.php'; ?>
+    <?php include 'includes/navbar.php'; ?>
+    
+    <div class="content-wrapper">
+        <div class="container">
+            <section class="content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1>Shopping Cart</h1>
+                        <?php
+                        if(isset($_SESSION['error'])){
+                            echo "<div class='alert alert-danger'>".$_SESSION['error']."</div>";
+                            unset($_SESSION['error']);
+                        }
+                        ?>
+                        <div class="box box-solid">
+                            <div class="box-body">
+                                <table class="table table-bordered" id="cart_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Name</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Subtotal</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $total = 0;
+                                        if(isset($_SESSION['user'])){
+                                            $stmt = $conn->prepare("
+                                                SELECT *, cart.quantity as cart_quantity, cart.price_per_unit as cart_price 
+                                                FROM cart 
+                                                LEFT JOIN products ON products.id=cart.product_id 
+                                                WHERE user_id=:user_id");
+                                            $stmt->execute(['user_id'=>$user['id']]);
+                                            foreach($stmt as $row){
+                                                $image = !empty($row['photo']) ? 'images/'.$row['photo'] : 'images/noimage.jpg';
+                                                // Calcul du sous-total (prix par kg * quantité en kg)
+                                                $subtotal = $row['cart_price'] * ($row['cart_quantity']/1000);
+                                                $total += $subtotal;
+                                                ?>
+                                                <tr>
+                                                    <td><img src='<?php echo $image ?>' width='50px' height='50px'></td>
+                                                    <td><?php echo $row['name']; ?></td>
+                                                    <td><?php echo number_format($row['cart_price'], 2); ?> DT/kg</td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <input type="number" class="form-control quantity" 
+                                                                data-id="<?php echo $row['product_id']; ?>"
+                                                                value="<?php echo $row['cart_quantity']; ?>"
+                                                                min="100" max="5000" step="100"
+                                                            >
+                                                            <span class="input-group-text">g</span>
+                                                        </div>
+                                                    </td>
+                                                    <td><?php echo number_format($subtotal, 2); ?> DT</td>
+                                                    <td>
+                                                        <button class="btn btn-danger btn-sm cart_delete" data-id="<?php echo $row['product_id']; ?>">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" align="right"><b>Total</b></td>
+                                            <td><b><?php echo number_format($total, 2); ?> DT</b></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <?php if($total > 0): ?>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <button class="btn btn-success btn-lg btn-flat" id="checkout">
+                                                <i class="fa fa-shopping-cart"></i> Checkout
+                                            </button>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 </div>
 
 <?php include 'includes/scripts.php'; ?>
 <script>
-var total = 0;
 $(function(){
-	$(document).on('click', '.cart_delete', function(e){
-		e.preventDefault();
-		var id = $(this).data('id');
-		$.ajax({
-			type: 'POST',
-			url: 'cart_delete.php',
-			data: {id:id},
-			dataType: 'json',
-			success: function(response){
-				if(!response.error){
-					getDetails();
-					getCart();
-					getTotal();
-				}
-			}
-		});
-	});
+    $(document).on('change', '.quantity', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+        var qty = $(this).val();
+        
+        $.ajax({
+            type: 'POST',
+            url: 'cart_update.php',
+            data: {
+                id: id,
+                quantity: qty,
+            },
+            dataType: 'json',
+            success: function(response){
+                if(!response.error){
+                    location.reload();
+                }
+                else{
+                    alert(response.message);
+                }
+            }
+        });
+    });
 
+    $(document).on('click', '.cart_delete', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+        
+        $.ajax({
+            type: 'POST',
+            url: 'cart_delete.php',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response){
+                if(!response.error){
+                    location.reload();
+                }
+                else{
+                    alert(response.message);
+                }
+            }
+        });
+    });
 
-	$(document).on('click', '.minus', function(e){
-		e.preventDefault();
-		var id = $(this).data('id');
-		var qty = $('#qty_'+id).val();
-		if(qty>1){
-			qty--;
-		}
-		$('#qty_'+id).val(qty);
-		$.ajax({
-			type: 'POST',
-			url: 'cart_update.php',
-			data: {
-				id: id,
-				qty: qty,
-			},
-			dataType: 'json',
-			success: function(response){
-				if(!response.error){
-					getDetails();
-					getCart();
-					getTotal();
-				}
-			}
-		});
-	});
-
-	$(document).on('click', '.add', function(e){
-		e.preventDefault();
-		var id = $(this).data('id');
-		var qty = $('#qty_'+id).val();
-		qty++;
-		$('#qty_'+id).val(qty);
-		$.ajax({
-			type: 'POST',
-			url: 'cart_update.php',
-			data: {
-				id: id,
-				qty: qty,
-			},
-			dataType: 'json',
-			success: function(response){
-				if(!response.error){
-					getDetails();
-					getCart();
-					getTotal();
-				}
-			}
-		});
-	});
-
-	getDetails();
-	getTotal();
-
+    $('#checkout').click(function(e){
+        e.preventDefault();
+        window.location.href = 'checkout.php';
+    });
 });
-
-function getDetails(){
-	$.ajax({
-		type: 'POST',
-		url: 'cart_details.php',
-		dataType: 'json',
-		success: function(response){
-			$('#tbody').html(response);
-			getCart();
-		}
-	});
-}
-
-function getTotal(){
-	$.ajax({
-		type: 'POST',
-		url: 'cart_total.php',
-		dataType: 'json',
-		success:function(response){
-			total = response;
-			$('#total').val(total);
-		}
-	});
-}
 </script>
 </body>
 </html>

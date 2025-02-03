@@ -7,56 +7,107 @@
 
 	$id = $_POST['id'];
 	$quantity = $_POST['quantity'];
+	$price = $_POST['price'];
+
+	function getCartCount($conn, $userId) {
+	    $stmt = $conn->prepare("SELECT COUNT(*) as count FROM cart WHERE user_id=:user_id");
+	    $stmt->execute(['user_id' => $userId]);
+	    $row = $stmt->fetch();
+	    return $row['count'];
+	}
 
 	if(isset($_SESSION['user'])){
-		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM cart WHERE user_id=:user_id AND product_id=:product_id");
-		$stmt->execute(['user_id'=>$user['id'], 'product_id'=>$id]);
-		$row = $stmt->fetch();
-		if($row['numrows'] < 1){
-			try{
-				$stmt = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity) VALUES (:user_id, :product_id, :quantity)");
-				$stmt->execute(['user_id'=>$user['id'], 'product_id'=>$id, 'quantity'=>$quantity]);
-				$output['message'] = 'Item added to cart';
-				
-			}
-			catch(PDOException $e){
-				$output['error'] = true;
-				$output['message'] = $e->getMessage();
-			}
-		}
-		else{
-			$output['error'] = true;
-			$output['message'] = 'Product already in cart';
-		}
+	    $stmt = $conn->prepare("SELECT quantity FROM cart WHERE user_id=:user_id AND product_id=:product_id");
+	    $stmt->execute(['user_id'=>$user['id'], 'product_id'=>$id]);
+	    $row = $stmt->fetch();
+	    
+	    // Récupérer le prix de base du produit
+	    $stmt = $conn->prepare("SELECT price FROM products WHERE id=:id");
+	    $stmt->execute(['id' => $id]);
+	    $product = $stmt->fetch();
+	    $basePrice = $product['price']; // Prix par kg
+	    
+	    if(!$row){
+	        try{
+	            $stmt = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity, price_per_unit) VALUES (:user_id, :product_id, :quantity, :price)");
+	            $stmt->execute([
+	                'user_id' => $user['id'],
+	                'product_id' => $id,
+	                'quantity' => $quantity,
+	                'price' => $basePrice // Prix par kg constant
+	            ]);
+	            $output['message'] = $quantity . 'g added to cart';
+	        }
+	        catch(PDOException $e){
+	            $output['error'] = true;
+	            $output['message'] = $e->getMessage();
+	        }
+	    }
+	    else{
+	        try {
+	            $newQuantity = $row['quantity'] + $quantity;
+	            if($newQuantity > 5000) { // Maximum 5kg
+	                $output['error'] = true;
+	                $output['message'] = 'Maximum quantity (5kg) exceeded';
+	                echo json_encode($output);
+	                exit();
+	            }
+	            if($newQuantity < 100) { // Minimum 100g
+	                $output['error'] = true;
+	                $output['message'] = 'Minimum quantity (100g) required';
+	                echo json_encode($output);
+	                exit();
+	            }
+	            
+	            $stmt = $conn->prepare("UPDATE cart SET quantity = :quantity WHERE user_id=:user_id AND product_id=:product_id");
+	            $stmt->execute([
+	                'user_id' => $user['id'],
+	                'product_id' => $id,
+	                'quantity' => $newQuantity
+	            ]);
+	            $output['message'] = $quantity . 'g added to cart (Total: ' . $newQuantity . 'g)';
+	        }
+	        catch(PDOException $e){
+	            $output['error'] = true;
+	            $output['message'] = $e->getMessage();
+	        }
+	    }
+	    // Get updated cart count
+	    $output['count'] = getCartCount($conn, $user['id']);
 	}
 	else{
-		if(!isset($_SESSION['cart'])){
-			$_SESSION['cart'] = array();
-		}
+	    // Pour les utilisateurs non connectés
+	    // Récupérer le prix de base du produit
+	    $stmt = $conn->prepare("SELECT price FROM products WHERE id=:id");
+	    $stmt->execute(['id' => $id]);
+	    $product = $stmt->fetch();
+	    $basePrice = $product['price']; // Prix par kg
 
-		$exist = array();
+	    if(!isset($_SESSION['cart'])){
+	        $_SESSION['cart'] = array();
+	    }
 
-		foreach($_SESSION['cart'] as $row){
-			array_push($exist, $row['productid']);
-		}
-
-		if(in_array($id, $exist)){
-			$output['error'] = true;
-			$output['message'] = 'Product already in cart';
-		}
-		else{
-			$data['productid'] = $id;
-			$data['quantity'] = $quantity;
-
-			if(array_push($_SESSION['cart'], $data)){
-				$output['message'] = 'Item added to cart';
-			}
-			else{
-				$output['error'] = true;
-				$output['message'] = 'Cannot add item to cart';
-			}
-		}
-
+	    if(isset($_SESSION['cart'][$id])){
+	        $newQuantity = $_SESSION['cart'][$id]['quantity'] + $quantity;
+	        if($newQuantity > 5000) {
+	            $output['error'] = true;
+	            $output['message'] = 'Maximum quantity (5kg) exceeded';
+	        } else if($newQuantity < 100) {
+	            $output['error'] = true;
+	            $output['message'] = 'Minimum quantity (100g) required';
+	        } else {
+	            $_SESSION['cart'][$id]['quantity'] = $newQuantity;
+	            $output['message'] = $quantity . 'g added to cart (Total: ' . $newQuantity . 'g)';
+	        }
+	    }
+	    else{
+	        $_SESSION['cart'][$id] = array(
+	            'quantity' => $quantity,
+	            'price_per_unit' => $basePrice // Prix par kg constant
+	        );
+	        $output['message'] = $quantity . 'g added to cart';
+	    }
+	    $output['count'] = count($_SESSION['cart']);
 	}
 
 	$pdo->close();

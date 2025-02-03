@@ -62,7 +62,19 @@
           <li class="nav-item position-relative">
             <a href="cart_view.php" class="nav-link">
               <i class="fa fa-shopping-cart fa-lg"></i>
-              <span class="cart_count">0</span>
+              <span class="badge badge-light" id="cart-count">
+                <?php
+                if(isset($_SESSION['user'])){
+                    $stmt = $conn->prepare("SELECT COUNT(*) as count FROM cart WHERE user_id=:user_id");
+                    $stmt->execute(['user_id'=>$user['id']]);
+                    $row = $stmt->fetch();
+                    echo $row['count'];
+                }
+                else{
+                    echo count($_SESSION['cart'] ?? []);
+                }
+                ?>
+              </span>
             </a>
           </li>
 

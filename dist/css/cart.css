@@ -1,0 +1,36 @@
+.table {
+    margin-top: 20px;
+}
+
+#cart_table th {
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+#cart_table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.quantity {
+    width: 100px;
+    text-align: center;
+}
+
+.btn-flat {
+    border-radius: 0;
+}
+
+.checkout-section {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.cart_delete {
+    padding: 5px 10px;
+}
+
+.total-row {
+    font-weight: bold;
+    background-color: #f8f9fa;
+}

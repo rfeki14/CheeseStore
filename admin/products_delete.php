@@ -1,27 +1,31 @@
 <?php
-	include 'includes/session.php';
+include 'includes/session.php';
 
-	if(isset($_POST['delete'])){
-		$id = $_POST['id'];
-		echo"ID: $id";
-		$conn = $pdo->open();
+if(isset($_POST['delete'])){
+    $id = $_POST['id'];
+    
+    try {
+        $conn = $pdo->open();
 
-		try{
-			$stmt = $conn->prepare("DELETE FROM `products` WHERE id=:id");
-			$stmt->execute(['id'=>$id]);
-			echo "Executing SQL: DELETE FROM `products` WHERE id=$id";
-			$_SESSION['success'] = 'Product deleted successfully';
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
+        // First delete related transaction details
+        $stmt = $conn->prepare("DELETE FROM transactiondetails WHERE productId=:id");
+        $stmt->execute(['id'=>$id]);
 
-		$pdo->close();
-	}
-	else{
-		$_SESSION['error'] = 'Select product to delete first';
-	}
+        // Then delete the product
+        $stmt = $conn->prepare("DELETE FROM products WHERE id=:id");
+        $stmt->execute(['id'=>$id]);
 
-	header('location: products.php');
-	
+        $_SESSION['success'] = 'Product deleted successfully';
+    }
+    catch(PDOException $e) {
+        $_SESSION['error'] = $e->getMessage();
+    }
+
+    $pdo->close();
+}
+else {
+    $_SESSION['error'] = 'Select product to delete first';
+}
+
+header('location: products.php');
 ?>

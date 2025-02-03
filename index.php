@@ -96,14 +96,19 @@
                                                             <a href="product.php?product=<?= $product['slug'] ?>" class="action-btn" title="View Details">
                                                                 <i class="fas fa-eye"></i>
                                                             </a>
-                                                            <button class="action-btn addcart" data-id="<?= $product['id'] ?>" title="Add to Cart">
+                                                            <button class="action-btn addcart" 
+                                                                data-id="<?= $product['id'] ?>" 
+                                                                data-price="<?= $product['price'] ?>"
+                                                                data-name="<?= $product['name'] ?>"
+                                                                data-quantity="1000"
+                                                                title="Add to Cart">
                                                                 <i class="fas fa-shopping-cart"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                     <div class="product-info">
                                                         <h5><a href="product.php?product=<?= $product['slug'] ?>"><?= $product['name'] ?></a></h5>
-                                                        <p class="price" style="color: #e63946;"><?= number_format($product['price'], 3) ?> DT</p>
+                                                        <div class="price">€<?= number_format($product['price'], 2) ?></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -174,5 +179,40 @@
 </div>
 
 <?php include 'includes/scripts.php'; ?>
+<script>
+$(function(){
+    $(document).on('click', '.addcart', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+        var price = $(this).data('price');
+        var quantity = parseInt($(this).data('quantity')); // Assurez-vous que c'est un nombre
+        
+        if(quantity < 50 || quantity > 5000) {
+            alert('Quantity must be between 50g and 5000g');
+            return;
+        }
+        
+        $.ajax({
+            type: 'POST',
+            url: 'cart_add.php',
+            data: {
+                id: id,
+                quantity: quantity,
+                price: price * (quantity/1000) // Prix pour la quantité en kg
+            },
+            dataType: 'json',
+            success: function(response){
+                if(!response.error){
+                    $('#cart-count').text(response.count);
+                    alert(response.message);
+                }
+                else {
+                    alert(response.message);
+                }
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

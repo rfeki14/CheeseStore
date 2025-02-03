@@ -55,11 +55,27 @@
                                     <!-- Add to Cart -->
                                     <form class="form-inline" id="productForm">
                                         <div class="form-group">
-                                            <div class="input-group">
-                                                <button type="button" id="minus" class="quantity-btn"><i class="fa fa-minus"></i></button>
-                                                <input type="text" name="quantity" id="quantity" class="form-control text-center" 
-                                                       style="width: 60px; font-size: 18px;" value="1">
-                                                <button type="button" id="add" class="quantity-btn"><i class="fa fa-plus"></i></button>
+                                            <div class="quantity-control">
+                                                <div class="quantity-buttons-left">
+                                                    <button type="button" class="quantity-btn" data-value="-1000">-1000g</button>
+                                                    <button type="button" class="quantity-btn" data-value="-500">-500g</button>
+                                                    <button type="button" class="quantity-btn" data-value="-100">-100g</button>
+                                                </div>
+                                                
+                                                <input type="number" name="quantity" id="quantity" class="form-control text-center" 
+                                                       value="1000" min="100" max="5000" step="100" 
+                                                       data-base-price="<?php echo $product['price']; ?>">
+                                                
+                                                <div class="quantity-buttons-right">
+                                                    <button type="button" class="quantity-btn" data-value="100">+100g</button>
+                                                    <button type="button" class="quantity-btn" data-value="500">+500g</button>
+                                                    <button type="button" class="quantity-btn" data-value="1000">+1000g</button>
+                                                </div>
+                                            </div>
+                                            <div class="price-display">
+                                                <span>Prix: </span>
+                                                <span id="calculated-price"><?php echo number_format(($product['price'] * 0.1), 3); ?></span>
+                                                <span> DT</span>
                                             </div>
                                             <input type="hidden" value="<?php echo $product['prodid']; ?>" name="id">
                                             <button type="submit" class="cart-btn">
@@ -91,21 +107,69 @@
 <?php include 'includes/scripts.php'; ?>
 
 <script>
-    $(function(){
-        $('#add').click(function(e){
-            e.preventDefault();
-            var quantity = $('#quantity').val();
-            quantity++;
-            $('#quantity').val(quantity);
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('quantity');
+        const priceDisplay = document.getElementById('calculated-price');
+        const basePrice = parseFloat(quantityInput.dataset.basePrice);
+
+        function updatePrice() {
+            const quantity = parseInt(quantityInput.value);
+            // Convert to kg (divide by 1000) and multiply by base price
+            const calculatedPrice = (quantity / 1000) * basePrice;
+            priceDisplay.textContent = calculatedPrice.toFixed(3);
+        }
+
+        // Add event listeners to all quantity buttons
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const value = parseInt(this.dataset.value);
+                let currentQty = parseInt(quantityInput.value);
+                currentQty += value;
+
+                // Ensure quantity stays within bounds
+                if (currentQty >= 50 && currentQty <= 5000) {
+                    quantityInput.value = currentQty;
+                    updatePrice();
+                }
+            });
         });
 
-        $('#minus').click(function(e){
+        // Update price when quantity is changed manually
+        quantityInput.addEventListener('change', updatePrice);
+
+        // Handle form submission
+        document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            var quantity = $('#quantity').val();
-            if(quantity > 1){
-                quantity--;
-            }
-            $('#quantity').val(quantity);
+            const quantity = parseInt(quantityInput.value);
+            const basePrice = parseFloat(quantityInput.dataset.basePrice);
+            const calculatedPrice = (quantity / 1000) * basePrice;
+            
+            $.ajax({
+                type: 'POST',
+                url: 'cart_add.php',
+                data: {
+                    id: <?php echo $product['prodid']; ?>,
+                    quantity: quantity,
+                    price: calculatedPrice
+                },
+                dataType: 'json',
+                success: function(response){
+                    if(!response.error){
+                        // Mise à jour du panier
+                        getCart();
+                        // Message de succès
+                        alert('Product added to cart successfully');
+                    }
+                    else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('An error occurred while adding to cart');
+                    console.error(error);
+                }
+            });
         });
     });
 </script>

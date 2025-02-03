@@ -14,11 +14,30 @@
 <!-- CK Editor -->
 <script src="bower_components/ckeditor/ckeditor.js"></script>
 <script>
-  $(function () {
-    // Datatable
-    $('#example1').DataTable()
-    //CK Editor
-    CKEDITOR.replace('editor1')
+  $(document).ready(function() {
+    // Check if we're on an admin page (you can modify this check based on your URL structure)
+    var isAdminPage = window.location.href.indexOf('admin') > -1;
+    
+    // Only initialize DataTable if we're on an admin page and the table exists
+    if (isAdminPage && $('#example1').length) {
+        if ($.fn.DataTable.isDataTable('#example1')) {
+            $('#example1').DataTable().destroy();
+        }
+        $('#example1').DataTable({
+            'responsive': true,
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        });
+    }
+
+    // CK Editor (only initialize if element exists)
+    if (typeof CKEDITOR !== 'undefined' && $('#editor1').length) {
+        CKEDITOR.replace('editor1');
+    }
   });
 </script>
 <!--Magnify -->
@@ -81,3 +100,4 @@ function getCart(){
 	});
 }
 </script>
+<script src="dist/js/cart.js"></script>
