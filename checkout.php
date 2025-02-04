@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2>Checkout</h2>
                 <div class="box box-solid">
                     <div class="box-body">
-                        <form method="POST" action="checkout.php">
+                        <form method="POST" action="confirmation.php">
                             <input type="hidden" name="total" value="<?php echo htmlspecialchars($_POST['total'] ?? 0); ?>">
                             <div class="form-group">
                                 <label for="delivery_method">Delivery Method:</label>
@@ -131,6 +131,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <button type="submit" class="btn btn-primary">Proceed to Confirmation</button>
                         </form>
+
+                        <?php if (empty($userProfile['billing_street']) && empty($userProfile['delivery_street'])): ?>
+                            <div id="address_book_section">
+                                <h3>Address Book</h3>
+                                <p>No addresses found. Please add an address.</p>
+                                <button id="add_address_button" class="btn btn-secondary">Add Address</button>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </section>
@@ -157,6 +165,11 @@ document.getElementById('delivery_method').addEventListener('change', function()
         deliverySection.style.display = 'block';
         billingSection.style.display = 'block';
     }
+});
+
+document.getElementById('add_address_button').addEventListener('click', function() {
+    // Redirect to the add address page
+    window.location.href = 'add_address.php';
 });
 </script>
 </body>

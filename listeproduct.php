@@ -36,7 +36,7 @@
                                                         </div>
                                                         <input type='number' name='quantity' class='quantity-input' 
                                                                value='100' min='50' max='5000' step='50' 
-                                                               data-base-price='".$row['priceU']."'>
+                                                               data-base-price='".$row['price']."'>
                                                         <div class='quantity-buttons-right'>
                                                             <button type='button' class='quantity-btn' data-value='50'>+50g</button>
                                                             <button type='button' class='quantity-btn' data-value='100'>+100g</button>
@@ -45,7 +45,7 @@
                                                     </div>
                                                     <div class='price-display'>
                                                         <span>Prix: </span>
-                                                        <span class='calculated-price'>".number_format(($row['priceU'] * 0.1), 3)."</span>
+                                                        <span class='calculated-price'>".number_format(($row['price'] * 0.1), 3)."</span>
                                                         <span> DT</span>
                                                     </div>
                                                     <button class='cart-btn addcart' data-id='".$row['id']."'>

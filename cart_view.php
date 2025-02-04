@@ -127,6 +127,7 @@ $(function(){
     $(document).on('click', '.cart_delete', function(e){
         e.preventDefault();
         var id = $(this).data('id');
+        console.log("test",id);
         
         $.ajax({
             type: 'POST',

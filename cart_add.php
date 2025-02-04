@@ -22,10 +22,10 @@
 	    $row = $stmt->fetch();
 	    
 	    // Récupérer le prix de base du produit
-	    $stmt = $conn->prepare("SELECT priceU FROM products WHERE id=:id");
+	    $stmt = $conn->prepare("SELECT price FROM products WHERE id=:id");
 	    $stmt->execute(['id' => $id]);
 	    $product = $stmt->fetch();
-	    $basePrice = $product['priceU']; // Prix par kg
+	    $basePrice = $product['price']; // Prix par kg
 	    
 	    if(!$row){
 	        try{
@@ -78,10 +78,10 @@
 	else{
 	    // Pour les utilisateurs non connectés
 	    // Récupérer le prix de base du produit
-	    $stmt = $conn->prepare("SELECT priceu FROM products WHERE id=:id");
+	    $stmt = $conn->prepare("SELECT price FROM products WHERE id=:id");
 	    $stmt->execute(['id' => $id]);
 	    $product = $stmt->fetch();
-	    $basePrice = $product['priceu']; // Prix par kg
+	    $basePrice = $product['price']; // Prix par kg
 
 	    if(!isset($_SESSION['cart'])){
 	        $_SESSION['cart'] = array();

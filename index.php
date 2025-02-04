@@ -98,7 +98,7 @@
                                                             </a>
                                                             <button class="action-btn addcart" 
                                                                 data-id="<?= $product['id'] ?>" 
-                                                                data-price="<?= $product['priceU'] ?>"
+                                                                data-price="<?= $product['price'] ?>"
                                                                 data-name="<?= $product['name'] ?>"
                                                                 data-quantity="1000"
                                                                 title="Add to Cart">
@@ -108,7 +108,7 @@
                                                     </div>
                                                     <div class="product-info">
                                                         <h5><a href="product.php?product=<?= $product['slug'] ?>"><?= $product['name'] ?></a></h5>
-                                                        <div class="price">€<?= number_format($product['priceU'], 2) ?></div>
+                                                        <div class="price">€<?= number_format($product['price'], 2) ?></div>
                                                     </div>
                                                 </div>
                                             </div>
