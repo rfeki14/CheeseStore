@@ -1,7 +1,4 @@
--- Disable foreign key checks
-USE ecomm;
 
-SET FOREIGN_KEY_CHECKS = 0;
 
 -- Dumping data for table `address`
 INSERT INTO `address` (`id`, `street`, `city`, `state`, `zip_code`, `country`) VALUES
@@ -38,7 +35,7 @@ INSERT INTO `details` (`id`, `sales_id`, `product_id`, `quantity`) VALUES
 INSERT INTO `users` (`id`, `email`, `password`, `type`, `firstname`, `lastname`, `contact_info`, `photo`, `status`, `activate_code`, `reset_code`, `created_on`) VALUES
 (5, 'admin@admin.com', '$2y$10$8wY63GX/y9Bq780GBMpxCesV9n1H6WyCqcA2hNy2uhC59hEnOpNaS', 1, 'Admin', 'admin', '', 'facebook-profile-image.jpeg', 1, '', '', '2018-05-01'),
 (1, 'cheese_lover@example.com', '$2y$10$8wY63GX/y9Bq780GBMpxCesV9n1H6WyCqcA2hNy2uhC59hEnOpNaS', 0, 'Cheese', 'Lover', '1234567890', 'cheese_lover.jpg', 1, '', '', '2025-01-01'),
-(2, 'milk_fan@example.com', '$2y$10$dvV7onY2bPSb9GBENwR57OixbBy3veerLtRt/FqnpoeyzV1h8x48K', 0, 'Milk', 'Fan', '0987654321', 'milk_fan.jpg', 1, '', '', '2025-01-02');
+(2, 'milk_fan@example.com', '$2y$10$dvV7onY2bPSb9GBENwR57OixbBy3veerLtRt/FqnpoeyzV1h8x48K', 0, 'Milk', 'Fan', '0987654321', 'milk_fan.jpg', 1, '', '', '2025-01-02'),
 (11, 'test@gmail.com', '$2y$10$dvV7onY2bPSb9GBENwR57OixbBy3veerLtRt/FqnpoeyzV1h8x48K', 0, 'test', 'test', 'test', '', 1, '', '', '2018-05-11');
 
 -- Dumping data for table `user_addresses`
@@ -55,6 +52,3 @@ INSERT INTO `edition` (`id`, `product_id`, `poid`, `prix`) VALUES
 (5, 5, 1000, 2.99),
 (6, 6, 1000, 2.49);
 
-
--- Enable foreign key checks
-SET FOREIGN_KEY_CHECKS = 1;

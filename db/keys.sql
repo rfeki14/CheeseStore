@@ -1,9 +1,8 @@
-USE ecomm;
+
 -- Indexes for table `address`
 
 ALTER TABLE `address`
-    ADD PRIMARY KEY (`id`),
-    ADD KEY `user_id` (`user_id`);
+    ADD PRIMARY KEY (`id`);
 
 -- Indexes for table `cart`
 ALTER TABLE `cart`
