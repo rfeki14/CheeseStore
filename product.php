@@ -4,12 +4,18 @@
     $slug = $_GET['product'];
 
     try {
+        // Récupération du produit avec ses éditions
         $stmt = $conn->prepare("SELECT *, products.name AS prodname, category.name AS catname, products.id AS prodid 
                                 FROM products 
                                 LEFT JOIN category ON category.id = products.category_id 
                                 WHERE slug = :slug");
         $stmt->execute(['slug' => $slug]);
         $product = $stmt->fetch();
+
+        // Récupération des éditions du produit
+        $stmt = $conn->prepare("SELECT * FROM edition WHERE product_id = :prodid");
+        $stmt->execute(['prodid' => $product['prodid']]);
+        $editions = $stmt->fetchAll();
     } catch (PDOException $e) {
         echo "There is some problem in connection: " . $e->getMessage();
     }
@@ -43,7 +49,23 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h1 class="product-title"><?php echo $product['prodname']; ?></h1>
-                                    <h3 class="product-price">&#36; <?php echo number_format($product['price'], 2); ?></h3>
+                                    <h3 class="product-price" id="displayPrice">&#36; <?php echo number_format($product['price'], 2); ?></h3>
+                                    
+                                    <!-- Edition selector -->
+                                    <div class="form-group">
+                                        <label for="edition">Poids:</label>
+                                        <select name="edition" id="edition" class="form-control" required>
+                                            <option value="">Sélectionnez un poids</option>
+                                            <?php
+                                            foreach($editions as $edition){
+                                                echo "<option value='".$edition['id']."' data-price='".$edition['price']."'>"
+                                                    .$edition['weight']."g - $".number_format($edition['price'], 2)
+                                                    ."</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
                                     <p><b>Category:</b> 
                                         <a href="category.php?category=<?php echo $product['cat_slug']; ?>" class="category-link">
                                             <?php echo $product['catname']; ?>
@@ -56,26 +78,11 @@
                                     <form class="form-inline" id="productForm">
                                         <div class="form-group">
                                             <div class="quantity-control">
-                                                <div class="quantity-buttons-left">
-                                                    <button type="button" class="quantity-btn" data-value="-1000">-1000g</button>
-                                                    <button type="button" class="quantity-btn" data-value="-500">-500g</button>
-                                                    <button type="button" class="quantity-btn" data-value="-100">-100g</button>
+                                                <div class="input-group">
+                                                    <input type="number" name="quantity" id="quantity" class="form-control text-center" 
+                                                           value="1" min="1" max="<?php echo $product['qtty']; ?>" data-stock="<?php echo $product['qtty']; ?>">
+                                                    <span class="input-group-text">pièce(s)</span>
                                                 </div>
-                                                
-                                                <input type="number" name="quantity" id="quantity" class="form-control text-center" 
-                                                       value="1000" min="100" max="5000" step="100" 
-                                                       data-base-price="<?php echo $product['price']; ?>">
-                                                
-                                                <div class="quantity-buttons-right">
-                                                    <button type="button" class="quantity-btn" data-value="100">+100g</button>
-                                                    <button type="button" class="quantity-btn" data-value="500">+500g</button>
-                                                    <button type="button" class="quantity-btn" data-value="1000">+1000g</button>
-                                                </div>
-                                            </div>
-                                            <div class="price-display">
-                                                <span>Prix: </span>
-                                                <span id="calculated-price"><?php echo number_format(($product['price'] * 0.1), 3); ?></span>
-                                                <span> DT</span>
                                             </div>
                                             <input type="hidden" value="<?php echo $product['prodid']; ?>" name="id">
                                             <button type="submit" class="cart-btn">
@@ -107,71 +114,91 @@
 <?php include 'includes/scripts.php'; ?>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const quantityInput = document.getElementById('quantity');
-        const priceDisplay = document.getElementById('calculated-price');
-        const basePrice = parseFloat(quantityInput.dataset.basePrice);
+$(function(){
+    // Mise à jour du prix lors du changement d'édition
+    $('#edition').change(function(){
+        var selectedPrice = $(this).find(':selected').data('price');
+        if(selectedPrice) {
+            $('#displayPrice').html('&#36; ' + parseFloat(selectedPrice).toFixed(2));
+        }
+    });
 
-        function updatePrice() {
-            const quantity = parseInt(quantityInput.value);
-            // Convert to kg (divide by 1000) and multiply by base price
-            const calculatedPrice = (quantity / 1000) * basePrice;
-            priceDisplay.textContent = calculatedPrice.toFixed(3);
+    $('#productForm').submit(function(e){
+        e.preventDefault();
+        var productId = $('input[name=id]').val();
+        var quantity = parseInt($('#quantity').val());
+        var stock = parseInt($('#quantity').data('stock'));
+        var editionId = $('#edition').val();
+        
+        if(!editionId) {
+            alert('Veuillez sélectionner un poids');
+            return;
         }
 
-        // Add event listeners to all quantity buttons
-        document.querySelectorAll('.quantity-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const value = parseInt(this.dataset.value);
-                let currentQty = parseInt(quantityInput.value);
-                currentQty += value;
+        // Vérification de la quantité
+        if(quantity > stock) {
+            alert('La quantité disponible est de ' + stock + ' pièces');
+            $('#quantity').val(stock);
+            quantity = stock;
+            return;
+        }
 
-                // Ensure quantity stays within bounds
-                if (currentQty >= 50 && currentQty <= 5000) {
-                    quantityInput.value = currentQty;
-                    updatePrice();
-                }
-            });
-        });
+        if(quantity < 1) {
+            alert('La quantité minimum est 1');
+            $('#quantity').val(1);
+            quantity = 1;
+            return;
+        }
 
-        // Update price when quantity is changed manually
-        quantityInput.addEventListener('change', updatePrice);
-
-        // Handle form submission
-        document.getElementById('productForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const quantity = parseInt(quantityInput.value);
-            const basePrice = parseFloat(quantityInput.dataset.basePrice);
-            const calculatedPrice = (quantity / 1000) * basePrice;
-            
-            $.ajax({
-                type: 'POST',
-                url: 'cart_add.php',
-                data: {
-                    id: <?php echo $product['prodid']; ?>,
-                    quantity: quantity,
-                    price: calculatedPrice
-                },
-                dataType: 'json',
-                success: function(response){
-                    if(!response.error){
-                        // Mise à jour du panier
-                        getCart();
-                        // Message de succès
-                        alert('Product added to cart successfully');
+        $.ajax({
+            type: 'POST',
+            url: 'cart_add.php',
+            data: {
+                id: productId,
+                quantity: quantity,
+                edition: editionId
+            },
+            dataType: 'json',
+            success: function(response){
+                if(!response.error){
+                    if(typeof(Storage) !== "undefined") {
+                        // Récupérer le panier existant ou créer un nouveau
+                        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                        
+                        // Vérifier si le produit existe déjà
+                        let existingItem = cart.find(item => item.edition_id === response.product.edition_id);
+                        
+                        if(existingItem) {
+                            existingItem.quantity = quantity;
+                            existingItem.price = response.product.price;
+                        } else {
+                            cart.push(response.product);
+                        }
+                        
+                        // Sauvegarder le panier
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        
+                        // Mettre à jour l'affichage du panier
+                        updateCartCount(cart.length);
                     }
-                    else {
-                        alert(response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('An error occurred while adding to cart');
-                    console.error(error);
+                    
+                    alert('Produit ajouté au panier');
+                } else {
+                    alert(response.message);
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                alert('Une erreur est survenue');
+                console.error(error);
+            }
         });
     });
+
+    function updateCartCount(count) {
+        // Mettre à jour le compteur du panier dans la navbar
+        $('#cart-count').text(count);
+    }
+});
 </script>
 
 </body>

@@ -28,29 +28,16 @@
                                                 <div class='product-details'>
                                                     <h2 class='product-title'>".$row['name']."</h2>
                                                     <p class='product-description'>".substr($row['description'], 0, 100)."...</p>
-                                                    <div class='quantity-control'>
-                                                        <div class='quantity-buttons-left'>
-                                                            <button type='button' class='quantity-btn' data-value='-500'>-500g</button>
-                                                            <button type='button' class='quantity-btn' data-value='-100'>-100g</button>
-                                                            <button type='button' class='quantity-btn' data-value='-50'>-50g</button>
-                                                        </div>
-                                                        <input type='number' name='quantity' class='quantity-input' 
-                                                               value='100' min='50' max='5000' step='50' 
-                                                               data-base-price='".$row['price']."'>
-                                                        <div class='quantity-buttons-right'>
-                                                            <button type='button' class='quantity-btn' data-value='50'>+50g</button>
-                                                            <button type='button' class='quantity-btn' data-value='100'>+100g</button>
-                                                            <button type='button' class='quantity-btn' data-value='500'>+500g</button>
-                                                        </div>
-                                                    </div>
                                                     <div class='price-display'>
                                                         <span>Prix: </span>
-                                                        <span class='calculated-price'>".number_format(($row['price'] * 0.1), 3)."</span>
+                                                        <span class='calculated-price'>".number_format($row['price'], 3)."</span>
                                                         <span> DT</span>
                                                     </div>
-                                                    <button class='cart-btn addcart' data-id='".$row['id']."'>
-                                                        <i class='fa fa-shopping-cart'></i> Add to Cart
-                                                    </button>
+                                                    <div class='buttons-container'>
+                                                        <a href='product.php?product=".$row['slug']."' class='cart-btn'>
+                                                            <i class='fa fa-eye'></i> View Product
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
