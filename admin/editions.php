@@ -138,7 +138,6 @@ if (isset($_GET['category'])) {
                                             $stmt = $conn->prepare("SELECT edition.*, products.name AS prodname FROM edition LEFT JOIN products ON products.id=edition.product_id $where");
                                             $stmt->execute();
                                             foreach ($stmt as $row) {
-                                                $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
                                                 $product = (!empty($row['prodname'])) ? htmlspecialchars($row['prodname']) : 'None';
                                                 echo "
                                                         <tr>
@@ -176,7 +175,6 @@ if (isset($_GET['category'])) {
     </div>
         <?php include 'includes/footer.php'; ?>
         <?php include 'includes/editions_modal.php'; ?>
-        <?php include 'includes/editions_modal2.php'; ?>
 
 </div>
 <!-- ./wrapper -->
@@ -264,17 +262,10 @@ function getRow(id) {
                                 $('#edit_name').val(response.editionname);
                                 $('#edit_price').val(response.price);
                                 $('#edit_weight').val(response.weight);
+                                $('#edit_product').val(response.product_id);
 
                                 // Load product options and select the correct one
                                 getProduct(response.product_id);
-
-                                // Populate View Modal (`#description`)
-                                $('#desc').html(`
-                                        <strong>Name:</strong> ${response.editionname}<br>
-                                        <strong>Product:</strong> ${response.product_name}<br>
-                                        <strong>Price:</strong> $${response.price}<br>
-                                        <strong>Weight:</strong> ${response.weight}<br>
-                                `);
 
                         } else {
                                 console.error("Invalid response:", response);
@@ -302,7 +293,9 @@ function getProduct(selectedProductId = null) {
 
                                 // Populate both Add and Edit dropdowns
                                 $('#product').html(productOptions);
+                                $('#product').val(selectedProductId);
                                 $('#edit_product').html(productOptions);
+                                $('#edit_product').val(selectedProductId);
 
                                 // Set the selected product AFTER options are populated
                                 if (selectedProductId) {

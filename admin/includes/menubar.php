@@ -27,8 +27,10 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          <li><a href="editions.php"><i class="fa fa-circle-o"></i> Editions</a></li>
           <li><a href="products.php"><i class="fa fa-circle-o"></i> Product List</a></li>
           <li><a href="category.php"><i class="fa fa-circle-o"></i> Category</a></li>
+          
         </ul>
       </li>
     </ul>

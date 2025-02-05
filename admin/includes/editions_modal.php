@@ -36,6 +36,7 @@
                     </div>
             </div>
             <div class="modal-footer">
+                <input name="add" type="text" hidden value="1">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Save</button>
                 </form>

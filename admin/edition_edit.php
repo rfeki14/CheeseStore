@@ -2,7 +2,7 @@
 include 'includes/session.php';
 
 $id = $_POST['id'];
-$productid = $_POST['productid'];
+$productid = $_POST['product'];
 $name = $_POST['name'];
 $price = $_POST['price'];
 $weight = $_POST['weight'];

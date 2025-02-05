@@ -4,18 +4,18 @@
 
 	if(isset($_POST['add'])){
 		$name = $_POST['name'];
-        $productid = $_POST['productid'];
+        $productid = $_POST['product'];
 		$price = $_POST['price'];
 		$weight=$_POST['weight'];
 
 		$conn = $pdo->open();
 
-		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products WHERE name=:name");
+		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM Edition WHERE name=:name");
 		$stmt->execute(['name'=>$name]);
 		$row = $stmt->fetch();
 
 		if($row['numrows'] > 0){
-			$_SESSION['error'] = 'Product already exist';
+			$_SESSION['error'] = 'Edition already exist';
 		}
 		else{
 			try{
