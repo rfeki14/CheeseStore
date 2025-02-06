@@ -172,17 +172,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Password validation
-        const newPass = document.getElementById('new_password').value;
-        const confirmPass = document.getElementById('confirm_password').value;
+        var passwordFields = document.getElementById('new_password_fields');
+        if (passwordFields.style.display !== 'none') {
+            const newPass = document.getElementById('new_password').value;
+            const confirmPass = document.getElementById('confirm_password').value;
 
-        if (newPass !== confirmPass) {
-            alert('Les mots de passe ne correspondent pas');
-            return false;
-        }
+            if (newPass !== confirmPass) {
+                alert('Les mots de passe ne correspondent pas');
+                return false;
+            }
 
-        if (newPass.length < 6) {
-            alert('Le nouveau mot de passe doit contenir au moins 6 caractères');
-            return false;
+            if (newPass.length < 6) {
+                alert('Le nouveau mot de passe doit contenir au moins 6 caractères');
+                return false;
+            }
         }
 
         return true;

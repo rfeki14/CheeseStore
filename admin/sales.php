@@ -47,6 +47,7 @@
                   <th>Date</th>
                   <th>Buyer Name</th>
                   <th>Transaction#</th>
+                  <th>Status</th>
                   <th>Amount</th>
                   <th>Full Details</th>
                 </thead>
@@ -58,7 +59,7 @@
                       $stmt = $conn->prepare("SELECT *, sales.id AS salesid FROM sales LEFT JOIN users ON users.id=sales.user_id ORDER BY sales_date DESC");
                       $stmt->execute();
                       foreach($stmt as $row){
-                        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id WHERE details.sales_id=:id");
+                        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN edition on edition.id=details.product_id  LEFT JOIN products ON products.id=edition.product_id WHERE details.sales_id=:id");
                         $stmt->execute(['id'=>$row['salesid']]);
                         $total = 0;
                         foreach($stmt as $details){
@@ -70,7 +71,11 @@
                             <td class='hidden'></td>
                             <td>".date('M d, Y', strtotime($row['sales_date']))."</td>
                             <td>".$row['firstname'].' '.$row['lastname']."</td>
-                            <td>".$row['id']."</td>
+                            <td>".$row['salesid']."</td>
+                            <td>
+                                  <input type='checkbox' class='status-toggle' data-id='".$row['salesid']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Active' data-off='Inactive' data-onstyle='success' data-offstyle='danger' data-size='small'>
+                              </div>
+                            </td>
                             <td>&#36; ".number_format($total, 2)."</td>
                             <td><button type='button' class='btn btn-info btn-sm btn-flat transact' data-id='".$row['salesid']."'><i class='fa fa-search'></i> View</button></td>
                           </tr>
@@ -92,7 +97,7 @@
     </section>
      
   </div>
-  	<?php include 'includes/footer.php'; ?>
+      <?php include 'includes/footer.php'; ?>
     <?php include '../includes/profile_modal.php'; ?>
 
 </div>
@@ -143,7 +148,108 @@ $(function(){
 });
 </script>
 <script>
+   $(document).on('change', '.status-toggle', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var $toggle = $(this);
+    var id = $toggle.data('id');
+    var status = $toggle.prop('checked');
+    
+    // Empêcher les clics multiples
+    $toggle.bootstrapToggle('disable');
+    
+    $.ajax({
+      url: 'users_status.php',
+      type: 'POST',
+      data: {
+        id: id,
+        status: status ? 1 : 0
+      },
+      success: function(response) {
+        $toggle.bootstrapToggle('enable');
+        if(response == 'ok') {
+          // Message plus discret en haut de la page
+          var message = status ? 'User activated successfully' : 'User deactivated successfully';
+          $(".content").prepend(
+            '<div class="alert alert-success alert-dismissible">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            '<h4><i class="icon fa fa-check"></i> Success!</h4>' + message +
+            '</div>'
+          );
+          
+          // Auto-dismiss après 2 secondes
+          setTimeout(function() {
+            $('.alert').fadeOut('slow', function() {
+              $(this).remove();
+            });
+          }, 2000);
+        } else {
+          // En cas d'erreur, revenir à l'état précédent
+          $toggle.bootstrapToggle('toggle');
+        }
+      },
+      error: function() {
+        // En cas d'erreur, revenir à l'état précédent
+        $toggle.bootstrapToggle('enable');
+        $toggle.bootstrapToggle('toggle');
+      }
+    });
+
+    return false;
+  });
 $(function(){
+  $(document).on('change', '.status-toggle', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var $toggle = $(this);
+    var id = $toggle.data('id');
+    var status = $toggle.prop('checked');
+    
+    // Empêcher les clics multiples
+    $toggle.bootstrapToggle('disable');
+    
+    $.ajax({
+      url: 'users_status.php',
+      type: 'POST',
+      data: {
+        id: id,
+        status: status ? 1 : 0
+      },
+      success: function(response) {
+        $toggle.bootstrapToggle('enable');
+        if(response == 'ok') {
+          // Message plus discret en haut de la page
+          var message = status ? 'User activated successfully' : 'User deactivated successfully';
+          $(".content").prepend(
+            '<div class="alert alert-success alert-dismissible">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            '<h4><i class="icon fa fa-check"></i> Success!</h4>' + message +
+            '</div>'
+          );
+          
+          // Auto-dismiss après 2 secondes
+          setTimeout(function() {
+            $('.alert').fadeOut('slow', function() {
+              $(this).remove();
+            });
+          }, 2000);
+        } else {
+          // En cas d'erreur, revenir à l'état précédent
+          $toggle.bootstrapToggle('toggle');
+        }
+      },
+      error: function() {
+        // En cas d'erreur, revenir à l'état précédent
+        $toggle.bootstrapToggle('enable');
+        $toggle.bootstrapToggle('toggle');
+      }
+    });
+
+    return false;
+  });
+
   $(document).on('click', '.transact', function(e){
     e.preventDefault();
     $('#transaction').modal('show');
@@ -156,7 +262,10 @@ $(function(){
       success: function(response){
         $('#date').html(response.date);
         $('#transid').html(response.transaction);
-        $('#detail').html(response.list);  // Fixing the append issue
+        $('#delivery').html(response.delivery_method);
+        $('#status').html(response.status);
+        $('#address').html(response.address);
+        $('#detail').html(response.list);
         $('#total').html(response.total);
       }
     });
@@ -165,8 +274,27 @@ $(function(){
   $("#transaction").on("hidden.bs.modal", function () {
       $('#detail').html("");  // Clear table on modal close
   });
-});
 
+  // Event listener for status toggle
+  $(document).on('change', '.status-toggle', function() {
+    var salesId = $(this).data('id');
+    var status = $(this).is(':checked') ? 1 : 0;
+
+    $.ajax({
+      type: 'POST',
+      url: 'update_status.php',
+      data: {id: salesId, status: status},
+      success: function(response) {
+        if(response !== 'success') {
+          alert('Failed to update status');
+        }
+      },
+      error: function() {
+        alert('Error updating status');
+      }
+    });
+  });
+});
 </script>
 </body>
 </html>

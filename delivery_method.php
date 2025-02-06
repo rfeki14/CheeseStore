@@ -1,6 +1,6 @@
 <?php 
 include 'includes/session.php';
-include 'includes/header.php';  // Correction du point qui s'était glissé dans le nom du fichier
+include 'includes/header.php';  
 include 'includes/constants.php';
 
 if(!isset($_SESSION['user'])) {
@@ -18,16 +18,11 @@ $total = $_POST['total'];
 // Récupération des adresses
 $conn = $pdo->open();
 try {
-    // Correction de la vérification de l'ID utilisateur
     $user_id = (int)$_SESSION['user'];
     
     if ($user_id <= 0) {
         throw new Exception("Invalid user ID: " . var_export($_SESSION['user'], true));
     }
-    
-    // Debug de la session
-    error_log("Session Debug - Raw user data: " . var_export($_SESSION['user'], true));
-    error_log("Session Debug - Parsed user_id: " . $user_id);
     
     $stmt = $conn->prepare("
         SELECT a.* 
@@ -39,8 +34,6 @@ try {
     $stmt->execute(['user_id' => $user_id]);
     $addresses = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    error_log("SQL Debug - Found " . count($addresses) . " addresses for user " . $user_id);
-    
 } catch(PDOException $e) {
     error_log("Database Error: " . $e->getMessage());
     $addresses = [];
@@ -48,21 +41,18 @@ try {
     error_log("Session Error: " . $e->getMessage());
     $addresses = [];
 }
+try{
+    $stmt = $conn->prepare("SELECT s.id, s.name, a.street, a.city, a.zip_code, a.state, a.country FROM stores s, address a WHERE s.address = a.id");
+    $stmt->execute();
+    $stores = $stmt->fetchAll();
+} catch(PDOException $e){
+    error_log("Database Error: " . $e->getMessage());
+    $stores = [];
+}
 
 $pdo->close();
 
-// Vérifier explicitement si nous avons des adresses
 $hasAddresses = !empty($addresses);
-
-// Amélioration du debug
-error_log("Debug - User ID: " . $user_id);
-error_log("Debug - Addresses: " . json_encode($addresses, JSON_PRETTY_PRINT));
-
-// Formatage plus propre du var_dump
-echo "<pre style='display:none;'>";
-var_dump($user_id);
-var_dump($addresses);
-echo "</pre>";
 
 ?>
 
@@ -76,16 +66,21 @@ echo "</pre>";
                     <div class="col-sm-12">
                         <h1 class="page-header">Choose Delivery Method</h1>
                         <?php
-                        if(isset($_SESSION['error'])){
-                            echo "<div class='alert alert-danger'>".$_SESSION['error']."</div>";
+                        if(isset($_SESSION['error'])) {
+                            echo "
+                                <div class='alert alert-danger'>
+                                    {$_SESSION['error']}
+                                </div>
+                            ";
                             unset($_SESSION['error']);
                         }
+                        
                         ?>
                         <div class="box box-solid">
                             <div class="box-body">
                                 <form action="process_delivery.php" method="POST" id="deliveryForm">
-                                    <input type="hidden" name="total" value="<?php echo htmlspecialchars($total); ?>">
                                     
+                                    <input type="hidden" name="total" value="<?php echo htmlspecialchars($total); ?>">                                    
                                     <div class="delivery-options">
                                         <div class="option">
                                             <input type="radio" name="delivery_method" id="pickup" value="pickup" required>
@@ -98,9 +93,9 @@ echo "</pre>";
                                             <div class="store-selection" style="display:none;">
                                                 <h4>Select Store Location:</h4>
                                                 <select name="store_location" class="form-control">
-                                                    <?php foreach(STORES as $key => $store): ?>
-                                                        <option value="<?php echo $key; ?>">
-                                                            <?php echo $store['name']; ?> - <?php echo $store['address']; ?>
+                                                    <?php foreach( $stores as $store): ?>
+                                                        <option value="<?php echo $store['id']; ?>">
+                                                            <?php echo $store['name']."-".$store['street']." ".$store['city']." ".$store['zip_code'].",".$store['state'].",".$store['country'] ?>
                                                         </option>
                                                     <?php endforeach; ?>
                                                 </select>
@@ -135,9 +130,8 @@ echo "</pre>";
                                                                 </label>
                                                             </div>
                                                         <?php endforeach; ?>
-                                                        <!-- Bouton d'ajout d'adresse -->
                                                         <div class="mt-3">
-                                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAddressModal">
+                                                            <button type="button" class="btn btn-success mt3" data-toggle="modal" data-target="#addAddressModal">
                                                                 <i class="fa fa-plus"></i> Add Another Address
                                                             </button>
                                                         </div>
@@ -168,11 +162,11 @@ echo "</pre>";
 </div>
 
 <!-- Add Address Modal -->
-<div class="modal fade" id="addAddressModal">
+<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Delivery Address</h4>
+                <h4 class="modal-title" id="addAddressModalLabel">Add New Delivery Address</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -272,7 +266,6 @@ echo "</pre>";
 
 <script>
 $(function(){
-    // Garder uniquement le code essentiel
     $('input[name="delivery_method"]').change(function() {
         $('.store-selection, .address-selection').hide();
         if($(this).val() === 'pickup') {
@@ -282,17 +275,14 @@ $(function(){
         }
     });
 
-    // Afficher les adresses si delivery est déjà sélectionné
     if($('#delivery').is(':checked')) {
         $('.address-selection').show();
     }
 
-    // Si une erreur est présente, afficher le modal
     <?php if(isset($_SESSION['error'])): ?>
     $('#addAddressModal').modal('show');
     <?php endif; ?>
 
-    // Gestionnaire du formulaire d'adresse
     $('#newAddressForm').on('submit', function(e){
         e.preventDefault();
         
@@ -300,18 +290,15 @@ $(function(){
         var $submitBtn = $form.find('button[type="submit"]');
         var $formMessage = $('#formMessage');
         
-        // Désactiver le bouton pendant la soumission
         $submitBtn.prop('disabled', true);
         
-        // Envoyer la requête AJAX
         $.ajax({
-            url: 'address_add_ajax.php',
+            url: 'address_add.php',
             method: 'POST',
             data: $form.serialize(),
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    // Créer le nouvel élément d'adresse
                     var newAddress = `
                         <div class="address-item">
                             <input type="radio" name="address_id" 
@@ -327,13 +314,10 @@ $(function(){
                             </label>
                         </div>`;
 
-                    // Mettre à jour l'interface
                     if ($('.address-list').length) {
-                        // Si la liste existe déjà
                         $('.no-address-message').remove();
                         $('.address-list').prepend(newAddress);
                     } else {
-                        // Si c'est la première adresse
                         $('.address-selection').html(`
                             <div class="address-list">
                                 ${newAddress}
@@ -341,20 +325,16 @@ $(function(){
                         `);
                     }
 
-                    // Réinitialiser le formulaire et fermer le modal
                     $form[0].reset();
                     $('#addAddressModal').modal('hide');
                     
-                    // Sélectionner l'option de livraison
                     $('#delivery').prop('checked', true).trigger('change');
 
-                    // Afficher un message de succès temporaire
                     $('<div class="alert alert-success">').html('Address added successfully')
                         .insertBefore('.address-list')
                         .delay(3000)
                         .fadeOut(function() { $(this).remove(); });
                 } else {
-                    // Afficher le message d'erreur
                     $formMessage.html(`
                         <div class="alert alert-danger">
                             ${response.message || 'Error adding address'}
@@ -371,13 +351,11 @@ $(function(){
                 `);
             },
             complete: function() {
-                // Réactiver le bouton
                 $submitBtn.prop('disabled', false);
             }
         });
     });
 
-    // Validation du formulaire de livraison
     $('#deliveryForm').on('submit', function(e) {
         var method = $('input[name="delivery_method"]:checked').val();
         

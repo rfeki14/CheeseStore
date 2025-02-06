@@ -1,4 +1,4 @@
-<!-- Edit Modal -->
+<!-- Edit User Modal -->
 <div class="modal fade" id="edit">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -47,12 +47,18 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Adresses</label>
                         <div class="col-sm-9">
-                            <div id="addresses-container" class="addresses-wrapper">
-                                <!-- Les adresses seront ajoutées ici dynamiquement -->
-                            </div>
-                            <button type="button" class="btn btn-info btn-sm btn-add-address" id="add-address">
-                                <i class="fa fa-plus"></i> Ajouter une adresse
-                            </button>
+                            <form id="addressForm" class="form-horizontal" method="POST" action="add_address.php">
+                            <input type="hidden" name="user_id" class="userid">
+                                <div id="addresses-container" class="addresses-wrapper">
+                                    <!-- Les adresses seront ajoutées ici dynamiquement -->
+                                </div>
+                                <button type="button" class="btn btn-info btn-sm btn-add-address" id="add-address">
+                                    <i class="fa fa-plus"></i> Ajouter une adresse
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-check"></i> Confirmer les adresses
+                                </button>
+                            </form>
                         </div>
                     </div>
             </div>
@@ -64,50 +70,3 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function(){
-    function loadAddresses(userId) {
-        $.ajax({
-            url: 'users_edit.php',
-            type: 'GET',
-            data: {id: userId},
-            success: function(response) {
-                let addresses = JSON.parse(response);
-                let container = $('#addresses-container');
-                container.empty();
-                
-                addresses.forEach(address => {
-                    container.append(createAddressHTML(address));
-                });
-            }
-        });
-    }
-
-    function createAddressHTML(address = {}) {
-        return `
-            <div class="address-item">
-                <input type="hidden" name="addresses[][id]" value="${address.id || ''}">
-                <input type="text" class="form-control" name="addresses[][street]" placeholder="Rue" value="${address.street || ''}">
-                <input type="text" class="form-control" name="addresses[][city]" placeholder="Ville" value="${address.city || ''}">
-                <button type="button" class="btn btn-danger btn-sm remove-address">Supprimer</button>
-            </div>
-        `;
-    }
-
-    $('#add-address').click(function(){
-        $('#addresses-container').append(createAddressHTML());
-    });
-
-    $(document).on('click', '.remove-address', function(){
-        $(this).closest('.address-item').remove();
-    });
-
-    $('#edit').on('show.bs.modal', function(event){
-        let button = $(event.relatedTarget);
-        let userId = button.data('id');
-        $('.userid').val(userId);
-        loadAddresses(userId);
-    });
-});
-
-</script>

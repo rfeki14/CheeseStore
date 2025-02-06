@@ -65,6 +65,14 @@
                 Date: <span id="date"></span>
                 <span class="pull-right">Transaction#: <span id="transid"></span></span> 
               </p>
+              <p>
+                Delivery Method: <span id="delivery"></span>
+                <span class="pull-right">Status:<span id="status"></span></span>
+                </p>
+                <p>
+                 Adresse: <span id="address"></span>
+                </p>
+                               
               <table class="table table-bordered">
                 <thead>
                   <th>Product</th>
@@ -74,7 +82,7 @@
                 </thead>
                 <tbody id="detail">
                   <tr>
-                    <td colspan="3" align="right"><b>Total</b></td>
+                    <td colspan="3" style="aligh:right"><b>Total</b></td>
                     <td><span id="total"></span></td>
                   </tr>
                 </tbody>

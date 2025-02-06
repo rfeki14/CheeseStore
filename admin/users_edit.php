@@ -11,7 +11,7 @@ if (isset($_POST['edit'])) {
     $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
 
     try {
-        $sql = "UPDATE users SET email = :email, firstname = :firstname, lastname = :lastname, contact = :contact";
+        $sql = "UPDATE users SET email = :email, firstname = :firstname, lastname = :lastname, contact_info = :contact";
         if ($password) {
             $sql .= ", password = :password";
         }

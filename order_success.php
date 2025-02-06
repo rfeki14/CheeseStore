@@ -13,9 +13,8 @@ try {
     $conn = $pdo->open();
     
     $stmt = $conn->prepare("
-        SELECT s.*, a.street, a.city, a.state, a.zip_code 
-        FROM sales s 
-        LEFT JOIN address a ON s.delivery_address_id = a.id 
+        SELECT s.* 
+        FROM sales s
         WHERE s.id = :sales_id AND s.user_id = :user_id
     ");
     
@@ -24,14 +23,31 @@ try {
     
     if(!$order) {
         throw new Exception("Order not found");
+    }else if($order['delivery_method'] == 'pickup'){
+        $stmt = $conn->prepare("SELECT * FROM stores s , address a where s.address = a.id and s.id = :store_id");
+        $stmt->execute(['store_id' => $order['dp_address']]);
+        $store = $stmt->fetch();        
+
+        if (!$store) {
+            throw new Exception("Store not found");
+        }
+    }else{
+        $stmt = $conn->prepare("SELECT * FROM address WHERE id = :address_id");
+        $stmt->execute(['address_id' => $order['dp_address']]);
+        $address = $stmt->fetch();
+
+        if (!$address) {
+            throw new Exception("Address not found");
+        }
     }
+    
 
     // Récupérer les détails de la commande
     $stmt = $conn->prepare("
-        SELECT sd.*, p.name 
-        FROM sales_details sd 
-        JOIN products p ON sd.product_id = p.id 
-        WHERE sd.sales_id = :sales_id
+        SELECT d.*, p.name ,e.price
+        FROM details d left join edition e on d.product_id = e.id 
+        JOIN products p ON e.product_id = p.id 
+        WHERE d.sales_id = :sales_id
     ");
     $stmt->execute(['sales_id' => $sales_id]);
     $items = $stmt->fetchAll();
@@ -62,18 +78,23 @@ try {
                                     
                                     <div class="order-details mt-4">
                                         <h5>Order Details:</h5>
-                                        <p>Total Amount: <?php echo number_format($order['total_amount'], 2); ?> DT</p>
+                                        <p>Total Amount: <?php echo number_format($order['total'], 2); ?> DT</p>
                                         <p>Delivery Method: <?php echo ucfirst($order['delivery_method']); ?></p>
                                         
                                         <?php if($order['delivery_method'] == 'delivery'): ?>
                                             <p>Delivery Address:<br>
-                                            <?php echo $order['street'] . ', ' . 
-                                                     $order['city'] . ', ' . 
-                                                     $order['state'] . ' ' . 
-                                                     $order['zip_code']; ?>
+                                            <?php echo $address['street'] . ', ' . 
+                                                     $address['city'] . ', ' . 
+                                                     $address['state'] . ' ' . 
+                                                     $address['zip_code']; ?>
                                             </p>
                                         <?php else: ?>
-                                            <p>Pickup Location: <?php echo STORES[$order['store_location']]['name']; ?></p>
+                                            <p>Pickup Location: <?php echo  $store['name']; ?><br>
+                                            <?php echo $store['street'] . ', ' . 
+                                                     $store['city'] . ', ' . 
+                                                     $store['state'] . ' ' . 
+                                                     $store['zip_code']." ".
+                                                     $store['phone'];?>
                                         <?php endif; ?>
 
                                         <h5 class="mt-4">Ordered Items:</h5>
@@ -92,7 +113,7 @@ try {
                                                     <tr>
                                                         <td><?php echo $item['name']; ?></td>
                                                         <td><?php echo $item['quantity']; ?></td>
-                                                        <td><?php echo number_format($item['price'], 2); ?> DT</td>
+                                                        <td><?php echo number_format(($item['price']), 2); ?> DT</td>
                                                         <td><?php echo number_format($item['quantity'] * $item['price'], 2); ?> DT</td>
                                                     </tr>
                                                     <?php endforeach; ?>

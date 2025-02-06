@@ -150,6 +150,7 @@
 
 <!-- Modifier l'ordre des scripts -->
 <?php include 'includes/scripts.php'; ?>
+<script src="js/edituser.js"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script>
 $(document).ready(function(){
@@ -235,7 +236,7 @@ $(document).ready(function(){
     return false;
   });
 
-  // ...existing code...
+  
 });
 
 function getRow(id){

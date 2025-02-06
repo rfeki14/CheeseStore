@@ -1,43 +1,71 @@
 <?php
 include 'includes/session.php';
 
-if (isset($_POST['id'])) {
-    $id = $_POST['id'];
-    $conn = $pdo->open();
+$id = $_POST['id'];
 
-    // Get transaction details
-    $stmt = $conn->prepare("SELECT *, sales.id AS salesid FROM sales WHERE id=:id");
-    $stmt->execute(['id' => $id]);
-    $row = $stmt->fetch();
+$conn = $pdo->open();
 
-    // Get product details for the transaction
-    $stmt = $conn->prepare("SELECT * FROM details 
-        LEFT JOIN products ON products.id = details.product_id 
-        WHERE sales_id=:id");
-    $stmt->execute(['id' => $id]);
+$output = array('list'=>'');
 
-    $list = '';
-    $total = 0;
+$stmt = $conn->prepare("SELECT id, sales_date, delivery_method, dp_address, status FROM sales WHERE id=:id");
+$stmt->execute(['id'=>$id]);
+$row = $stmt->fetch();
 
-    foreach ($stmt as $details) {
-        $subtotal = $details['price'] * $details['quantity'];
-        $total += $subtotal;
-        $list .= "
-            <tr>
-                <td>".$details['name']."</td>
-                <td>&#36; ".number_format($details['price'], 2)."</td>
-                <td>".$details['quantity']."</td>
-                <td>&#36; ".number_format($subtotal, 2)."</td>
-            </tr>";
+if (!$row) {
+    $output['error'] = 'Transaction not found';
+    echo json_encode($output);
+    $pdo->close();
+    exit();
+}
+
+$output['transaction'] = $row['id'];
+$output['delivery_method'] = $row['delivery_method'];
+$output['date'] = date('M d, Y', strtotime($row['sales_date']));
+$output['status'] = $row['status']?'Completed':'Pending';
+
+if ($row['delivery_method'] == 'pickup') {
+    $stmt = $conn->prepare("SELECT s.name, a.street, a.city, a.state, a.zip_code FROM stores s LEFT JOIN address a ON s.address = a.id WHERE s.id = :store_id");
+    $stmt->execute(['store_id' => $row['dp_address']]);
+    $store = $stmt->fetch();
+
+    if (!$store) {
+        $output['error'] = 'Store not found';
+		
     }
 
-    $pdo->close();
+    $output['store'] = $store['name'];
+    $output['address'] = $store['street'].' '.$store['city'].' '.$store['state'].' '.$store['zip_code'];
+} else {
+    $stmt = $conn->prepare("SELECT street, city, state, zip_code FROM address WHERE id = :address_id");
+    $stmt->execute(['address_id' => $row['dp_address']]);
+    $address = $stmt->fetch();
 
-    echo json_encode([
-        'date' => date('M d, Y', strtotime($row['sales_date'])),
-        'transaction' => $row['id'],
-        'list' => $list,
-        'total' => "&#36; ".number_format($total, 2)
-    ]);
+    if (!$address) {
+        $output['error'] = 'Address not found';
+
+    }
+
+    $output['address'] = $address['street'].' '.$address['city'].' '.$address['state'].' '.$address['zip_code'];
 }
+
+$stmt = $conn->prepare("SELECT p.name, p.price, d.quantity FROM details d LEFT JOIN products p ON p.id = d.product_id WHERE d.sales_id = :id");
+$stmt->execute(['id'=>$id]);
+
+$total = 0;
+foreach ($stmt as $row) {
+    $subtotal = $row['price'] * $row['quantity'];
+    $total += $subtotal;
+    $output['list'] .= "
+        <tr class='prepend_items'>
+            <td>".$row['name']."</td>
+            <td>&#36; ".number_format($row['price'], 2)."</td>
+            <td>".$row['quantity']."</td>
+            <td>&#36; ".number_format($subtotal, 2)."</td>
+        </tr>
+    ";
+}
+
+$output['total'] = '<b>&#36; '.number_format($total, 2).'<b>';
+$pdo->close();
+echo json_encode($output);
 ?>

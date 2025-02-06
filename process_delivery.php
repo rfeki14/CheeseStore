@@ -41,10 +41,12 @@ try {
     } elseif($delivery_method === 'pickup' && !isset($_POST['store_location'])) {
         throw new Exception('Store location not selected');
     }
-
     // Ajouter les frais de livraison
     if($delivery_method === 'delivery') {
         $total += 7.00;
+        $address=$_POST['address_id'];
+    }else{
+        $address=$_POST['store_location'];
     }
 
     // Insérer la vente
@@ -53,16 +55,14 @@ try {
             user_id, 
             total, 
             delivery_method, 
-            store_pickup_location, 
-            delivery_address,
+            dp_address,
             sales_date,
             status
         ) VALUES (
             :user_id, 
             :total, 
             :delivery_method, 
-            :store_location, 
-            :delivery_address,
+            :address, 
             NOW(),
             0
         )
@@ -72,8 +72,7 @@ try {
         'user_id' => $user_id,
         'total' => $total,
         'delivery_method' => $delivery_method,
-        'store_location' => ($delivery_method === 'pickup') ? $_POST['store_location'] : null,
-        'delivery_address' => ($delivery_method === 'delivery') ? $_POST['address_id'] : null
+        'address' => $address
     ]);
 
     if(!$result) {
@@ -85,8 +84,8 @@ try {
 
     // Récupérer les articles du panier avec les informations du produit
     $stmt = $conn->prepare("SELECT *, cart.quantity as cart_quantity, cart.price as cart_price 
-                           FROM cart 
-                           LEFT JOIN products ON products.id=cart.edition_id 
+                           FROM cart LEFT JOIN Edition ON Edition.id=cart.edition_id
+                           LEFT JOIN products ON products.id=edition.product_id 
                            WHERE user_id=:user_id");
     $stmt->execute(['user_id'=>$user_id]);
 

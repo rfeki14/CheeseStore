@@ -8,7 +8,7 @@ if(isset($_POST['id'])){
     $conn = $pdo->open();
 
     try{
-        $stmt = $conn->prepare("UPDATE users SET status=:status WHERE id=:id");
+        $stmt=$conn->prepare("UPDATE sales SET status=:status WHERE id=:id");
         $stmt->execute(['status'=>$status, 'id'=>$id]);
         echo 'success';
     }
