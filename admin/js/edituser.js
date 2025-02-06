@@ -1,12 +1,24 @@
-
 $(document).ready(function(){
     function loadAddresses(userId) {
+        console.log('Loading addresses for user ID:', userId); // Add this line for debugging
         $.ajax({
             url: 'get_addresses.php',
             type: 'GET',
             data: {id: userId},
             success: function(response) {
-                let addresses = JSON.parse(response);
+                let addresses;
+                try {
+                    addresses = JSON.parse(response);
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                    addresses = [];
+                }
+
+                if (!Array.isArray(addresses)) {
+                    console.error('Expected an array but got:', addresses);
+                    addresses = [];
+                }
+
                 let container = $('#addresses-container');
                 container.empty();
                 
@@ -26,29 +38,13 @@ $(document).ready(function(){
         `;
     }
 
-    function createAddressHTML(address = {}) {
-        return `
-            <div class="address-item">
-                <input type="hidden" name="addresses[][id]" value="${address.id || ''}">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="addresses[][street]" placeholder="Rue" value="${address.street || ''}" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="addresses[][city]" placeholder="Ville" value="${address.city || ''}" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="addresses[][state]" placeholder="État/Région" value="${address.state || ''}" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="addresses[][zip_code]" placeholder="Code postal" value="${address.zip_code || ''}" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="addresses[][country]" placeholder="Pays" value="${address.country || ''}" required>
-                </div>
-                <button type="button" class="btn btn-danger btn-sm remove-address">Supprimer</button>
-            </div>
-        `;
-    }
+    $('#edit').on('show.bs.modal', function(event){
+        let button = $(event.relatedTarget);
+        let userId = button.data('id');
+        console.log('User ID:', userId); // Add this line for debugging
+        $('.userid').val(userId); // Ensure the user ID is set in the hidden input field
+        loadAddresses(userId);
+    });
 
     $('#add-address').click(function(){
         $('#addresses-container').append(createAddressHTML());
@@ -73,13 +69,6 @@ $(document).ready(function(){
         } else {
             $(this).closest('.address-item').remove();
         }
-    });
-
-    $('#edit').on('show.bs.modal', function(event){
-        let button = $(event.relatedTarget);
-        let userId = button.data('id');
-        $('.userid').val(userId);
-        loadAddresses(userId);
     });
 
     // Address form submission

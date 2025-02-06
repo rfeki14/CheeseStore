@@ -150,10 +150,108 @@
 
 <!-- Modifier l'ordre des scripts -->
 <?php include 'includes/scripts.php'; ?>
-<script src="js/edituser.js"></script>
+<!-- <script src="js/edituser.js"></script>-->
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script>
 $(document).ready(function(){
+
+  
+  function loadAddresses(userId) {
+        console.log('Loading addresses for user ID:', userId); // Add this line for debugging
+        $.ajax({
+            url: 'get_addresses.php',
+            type: 'GET',
+            data: {id: userId},
+            success: function(response) {
+                let addresses;
+                try {
+                    addresses = JSON.parse(response);
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                    addresses = [];
+                }
+
+                if (!Array.isArray(addresses)) {
+                    console.error('Expected an array but got:', addresses);
+                    addresses = [];
+                }
+
+                let container = $('#addresses-container');
+                container.empty();
+                
+                addresses.forEach(address => {
+                    container.append(createAddressSpan(address));
+                });
+            }
+        });
+    }
+
+    function createAddressSpan(address) {
+        return `<p>
+            <span class="address-item">
+                ${address.street}, ${address.city}, ${address.state} ${address.zip_code}, ${address.country}
+                <button type="button" class=" pull-right btn btn-danger btn-sm remove-address" data-id="${address.id}">Supprimer</button>
+            </span><br></p>
+        `;
+    }
+    $('#edit').on('show.bs.modal', function(event){
+        var userId = $(this).data('id');
+        console.log('User ID:', userId); // Add this line for debugging
+        if (userId) {
+            $('.userid').val(userId); // Ensure the user ID is set in the hidden input field
+            loadAddresses(userId);
+        } else {
+            //console.error('User ID not found');
+        }
+    });
+
+    $('#add-address').click(function(){
+        $('#addresses-container').append(createAddressHTML());
+    });
+
+    $(document).on('click', '.remove-address', function(){
+        var addressId = $(this).data('id');
+        if (addressId) {
+            $.ajax({
+                url: 'delete_address.php',
+                type: 'POST',
+                data: {id: addressId},
+                success: function(response) {
+                    if (response == 'success') {
+                        alert('Adresse supprimée avec succès');
+                        loadAddresses($('.userid').val());
+                    } else {
+                        alert('Erreur lors de la suppression de l\'adresse');
+                    }
+                }
+            });
+        } else {
+            $(this).closest('.address-item').remove();
+        }
+    });
+
+    // Address form submission
+    $('#addressForm').on('submit', function(e){
+        e.preventDefault();
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: 'add_address.php',
+            data: formData,
+            success: function(response){
+                if(response == 'success'){
+                    alert('Adresses mises à jour avec succès');
+                    $('#edit').modal('hide');
+                    location.reload(); // Reload the page to show the updated addresses
+                } else {
+                    alert('Erreur lors de la mise à jour des adresses');
+                }
+            }
+        });
+    });
+
+
   // Initialiser les toggles
   $('.status-toggle').bootstrapToggle();
   
@@ -163,6 +261,7 @@ $(document).ready(function(){
     $('#edit').modal('show');
     var id = $(this).data('id');
     getRow(id);
+    loadAddresses(id);
   });
 
   $(document).on('click', '.delete', function(e){
@@ -252,7 +351,6 @@ function getRow(id){
       $('#edit_firstname').val(response.firstname);
       $('#edit_lastname').val(response.lastname);
       $('#edit_contact').val(response.contact_info);
-      $('#edit_address').val(response.addresses); // Changed from address to addresses
       $('.fullname').html(response.firstname+' '+response.lastname);
     }
   });
