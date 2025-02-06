@@ -71,8 +71,8 @@ if(isset($_POST['signup'])){
             $mail->isSMTP();
             $mail->Host = 'smtp.mailersend.net';  
             $mail->SMTPAuth = true;
-            $mail->Username = 'MS_qH6QZS@trial-jpzkmgqweq1g059v.mlsender.net'; // Your Gmail
-            $mail->Password = 'mssp.eBufytt.0p7kx4xqw9eg9yjr.bxRiPGU'; // **Use App Password**
+            $mail->Username = 'MS_n1Elf5@trial-jpzkmgqweq1g059v.mlsender.net'; // Your Gmail
+            $mail->Password = 'mssp.KXrfkTC.351ndgwqvkdgzqx8.2NpyiRW'; // **Use App Password**
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use 'PHPMailer::ENCRYPTION_STARTTLS' if using TLS
             $mail->Port = 587; // **Use 465 for SSL, 587 for TLS**
 

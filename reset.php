@@ -26,7 +26,7 @@
 					<p>Your Account:</p>
 					<p>Email: ".$email."</p>
 					<p>Please click the link below to reset your password.</p>
-					<a href='http://localhost/ecommerce/password_reset.php?code=".$code."&user=".$row['id']."'>Reset Password</a>
+					<a href='http://localhost/CheeseStore/password_reset.php?code=".$code."&user=".$row['id']."'>Reset Password</a>
 				";
 
 				//Load phpmailer
@@ -36,10 +36,10 @@
 			    try {
 			        //Server settings
 			        $mail->isSMTP();                                     
-			        $mail->Host = 'smtp.gmail.com';                      
+			        $mail->Host = 'smtp.mailersend.net';                      
 			        $mail->SMTPAuth = true;                               
-			        $mail->Username = '';     
-			        $mail->Password = '';                    
+			        $mail->Username = 'MS_n1Elf5@trial-jpzkmgqweq1g059v.mlsender.net';     
+			        $mail->Password = 'mssp.KXrfkTC.351ndgwqvkdgzqx8.2NpyiRW';                    
 			        $mail->SMTPOptions = array(
 			            'ssl' => array(
 			            'verify_peer' => false,
@@ -47,18 +47,18 @@
 			            'allow_self_signed' => true
 			            )
 			        );                         
-			        $mail->SMTPSecure = 'ssl';                           
-			        $mail->Port = 465;                                   
+			        $mail->SMTPSecure = PHPMAILER::ENCRYPTION_STARTTLS;                           
+			        $mail->Port = 587;                                   
 
-			        $mail->setFrom('testsourcecodester@gmail.com');
+			        $mail->setFrom('testing@gmail.com');
 			        
 			        //Recipients
 			        $mail->addAddress($email);              
-			        $mail->addReplyTo('testsourcecodester@gmail.com');
+			        $mail->addReplyTo('testing@gmail.com');
 			       
 			        //Content
 			        $mail->isHTML(true);                                  
-			        $mail->Subject = 'ECommerce Site Password Reset';
+			        $mail->Subject = 'Coeur Blanc Site Password Reset';
 			        $mail->Body    = $message;
 
 			        $mail->send();
