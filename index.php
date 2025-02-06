@@ -95,15 +95,7 @@
                                                         <div class="product-actions">
                                                             <a href="product.php?product=<?= $product['slug'] ?>" class="action-btn" title="View Details">
                                                                 <i class="fas fa-eye"></i>
-                                                            </a>
-                                                            <button class="action-btn addcart" 
-                                                                data-id="<?= $product['id'] ?>" 
-                                                                data-price="<?= $product['price'] ?>"
-                                                                data-name="<?= $product['name'] ?>"
-                                                                data-quantity="1000"
-                                                                title="Add to Cart">
-                                                                <i class="fas fa-shopping-cart"></i>
-                                                            </button>
+                                        </a>
                                                         </div>
                                                     </div>
                                                     <div class="product-info">
@@ -147,11 +139,12 @@
     <div class="map-section">
         <h2 class="map-title">📍 Visit Us in Tunis</h2>
         <div class="map-container">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3318.5789869140363!2d10.181502615288342!3d36.80197457995357!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd337a5c1157b5%3A0x4d5b62449935ff63!2sAvenue%20Habib%20Bourguiba%2C%20Tunis!5e0!3m2!1sen!2stn!4v1714023456789" 
-                allowfullscreen="" 
-                loading="lazy">
-            </iframe>
+        <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d199.58897333160508!2d10.193483333074079!3d36.832330504581314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stn!4v1738877843546!5m2!1sen!2stn"
+             allowfullscreen="" 
+             loading="lazy">
+
+        </iframe>
         </div>
     </div>
    <!-- Icons & Information Section (Placed Below Map) -->
