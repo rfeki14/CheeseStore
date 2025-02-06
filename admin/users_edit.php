@@ -1,44 +1,85 @@
 <?php
-	include 'includes/session.php';
+include 'includes/session.php';
+$conn = $pdo->open();
 
-	if(isset($_POST['edit'])){
-		$id = $_POST['id'];
-		$firstname = $_POST['firstname'];
-		$lastname = $_POST['lastname'];
-		$email = $_POST['email'];
-		$password = $_POST['password'];
-		$address = $_POST['address'];
-		$contact = $_POST['contact'];
+if (isset($_POST['edit'])) {
+    $id = $_POST['id'];
+    $email = $_POST['email'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $contact = $_POST['contact'];
+    $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
 
-		$conn = $pdo->open();
-		$stmt = $conn->prepare("SELECT * FROM users WHERE id=:id");
-		$stmt->execute(['id'=>$id]);
-		$row = $stmt->fetch();
+    try {
+        $sql = "UPDATE users SET email = :email, firstname = :firstname, lastname = :lastname, contact = :contact";
+        if ($password) {
+            $sql .= ", password = :password";
+        }
+        $sql .= " WHERE id = :id";
 
-		if($password == $row['password']){
-			$password = $row['password'];
-		}
-		else{
-			$password = password_hash($password, PASSWORD_DEFAULT);
-		}
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':firstname', $firstname);
+        $stmt->bindParam(':lastname', $lastname);
+        $stmt->bindParam(':contact', $contact);
+        if ($password) {
+            $stmt->bindParam(':password', $password);
+        }
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
 
-		try{
-			$stmt = $conn->prepare("UPDATE users SET email=:email, password=:password, firstname=:firstname, lastname=:lastname, address=:address, contact_info=:contact WHERE id=:id");
-			$stmt->execute(['email'=>$email, 'password'=>$password, 'firstname'=>$firstname, 'lastname'=>$lastname, 'address'=>$address, 'contact'=>$contact, 'id'=>$id]);
-			$_SESSION['success'] = 'User updated successfully';
+        // Gestion des adresses
+        if (isset($_POST['addresses'])) {
+            $existingIds = [];
 
-		}
-		catch(PDOException $e){
-			$_SESSION['error'] = $e->getMessage();
-		}
-		
+            foreach ($_POST['addresses'] as $address) {
+                if (!empty($address['id'])) {
+                    // Mettre à jour l'adresse existante
+                    $stmt = $conn->prepare("UPDATE address SET street = :street, city = :city, state = :state, zip_code = :zip_code, country = :country WHERE id = :id");
+                    $stmt->execute([
+                        'street' => $address['street'],
+                        'city' => $address['city'],
+                        'state' => $address['state'],
+                        'zip_code' => $address['zip_code'],
+                        'country' => $address['country'],
+                        'id' => $address['id']
+                    ]);
+                    $existingIds[] = $address['id'];
+                } else {
+                    // Insérer une nouvelle adresse
+                    $stmt = $conn->prepare("INSERT INTO address (street, city, state, zip_code, country) VALUES (:street, :city, :state, :zip_code, :country)");
+                    $stmt->execute([
+                        'street' => $address['street'],
+                        'city' => $address['city'],
+                        'state' => $address['state'],
+                        'zip_code' => $address['zip_code'],
+                        'country' => $address['country']
+                    ]);
+                    $newAddressId = $conn->lastInsertId();
 
-		$pdo->close();
-	}
-	else{
-		$_SESSION['error'] = 'Fill up edit user form first';
-	}
+                    // Associer la nouvelle adresse à l'utilisateur
+                    $stmt = $conn->prepare("INSERT INTO user_addresses (user_id, address_id) VALUES (:user_id, :address_id)");
+                    $stmt->execute([
+                        'user_id' => $id,
+                        'address_id' => $newAddressId
+                    ]);
+                    $existingIds[] = $newAddressId;
+                }
+            }
 
-	header('location: users.php');
+            // Supprimer les adresses supprimées dans le formulaire
+            if (!empty($existingIds)) {
+                $stmt = $conn->prepare("DELETE FROM address WHERE id NOT IN (" . implode(',', $existingIds) . ") AND id IN (SELECT address_id FROM user_addresses WHERE user_id = :id)");
+                $stmt->execute(['id' => $id]);
+            }
+        }
 
+        $_SESSION['success'] = "Utilisateur mis à jour avec succès.";
+    } catch (PDOException $e) {
+        $_SESSION['error'] = $e->getMessage();
+    }
+}
+
+$pdo->close();
+header('location: users.php');
 ?>

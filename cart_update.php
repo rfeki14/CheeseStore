@@ -21,7 +21,7 @@ try {
 
     // Vérifier l'article et le stock
     $stmt = $conn->prepare("
-        SELECT c.id, e.prix, p.qtty as stock 
+        SELECT c.id, e.price, p.qtty as stock 
         FROM cart c 
         LEFT JOIN edition e ON e.id = c.edition_id
         LEFT JOIN products p ON p.id = e.product_id
@@ -53,7 +53,7 @@ try {
         AND user_id = :user_id
     ");
     
-    $newPrice = $row['prix'] * $quantity;
+    $newPrice = $row['price'] * $quantity;
     $success = $updateStmt->execute([
         'qty' => $quantity,
         'price' => $newPrice,

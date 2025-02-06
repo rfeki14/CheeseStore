@@ -21,7 +21,7 @@ if(isset($_POST['id']) && isset($_POST['quantity']) && isset($_POST['edition']))
         $product = $stmt->fetch();
 
         if($product){
-            $price = $product['prix'] * $quantity;
+            $price = $product['price'] * $quantity;
 
             if(isset($_SESSION['user'])){
                 // Logique pour utilisateur connecté
@@ -47,9 +47,9 @@ if(isset($_POST['id']) && isset($_POST['quantity']) && isset($_POST['edition']))
                 'name' => $product['name'],
                 'photo' => $product['photo'],
                 'quantity' => $quantity,
-                'prix' => $product['prix'],
+                'price' => $product['price'],
                 'price' => $price,
-                'poid' => $product['poid'],
+                'weight' => $product['weight'],
                 'stock' => $product['stock']
             ];
             

@@ -29,7 +29,7 @@
                                                     <h2 class='product-title'>".$row['name']."</h2>
                                                     <p class='product-description'>".substr($row['description'], 0, 100)."...</p>
                                                     <div class='price-display'>
-                                                        <span>Prix: </span>
+                                                        <span>price: </span>
                                                         <span class='calculated-price'>".number_format($row['price'], 3)."</span>
                                                         <span> DT</span>
                                                     </div>

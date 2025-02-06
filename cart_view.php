@@ -38,7 +38,7 @@
                                             try {
                                                 $stmt = $conn->prepare("
                                                     SELECT c.id AS cartid, c.quantity, c.price AS cart_price,
-                                                           e.prix, e.poid,
+                                                           e.price, e.weight,
                                                            p.name, p.photo, p.id AS product_id, p.qtty AS stock
                                                     FROM cart c
                                                     LEFT JOIN edition e ON e.id = c.edition_id 
@@ -49,7 +49,7 @@
                                                 
                                                 while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                                                     $image = !empty($row['photo']) ? 'images/'.$row['photo'] : 'images/noimage.jpg';
-                                                    $subtotal = $row['prix'] * $row['quantity'];
+                                                    $subtotal = $row['price'] * $row['quantity'];
                                                     $total += $subtotal;
                                                     ?>
                                                     <tr class="cart-item">
@@ -58,9 +58,9 @@
                                                         </td>
                                                         <td class="product-name">
                                                             <span class="product-title"><?php echo htmlspecialchars($row['name']); ?></span>
-                                                            <span class="product-weight"><?php echo $row['poid']; ?>g</span>
+                                                            <span class="product-weight"><?php echo $row['weight']; ?>g</span>
                                                         </td>
-                                                        <td class="product-price"><?php echo number_format($row['prix'], 2); ?> DT</td>
+                                                        <td class="product-price"><?php echo number_format($row['price'], 2); ?> DT</td>
                                                         <td class="product-quantity">
                                                             <div class="quantity-control">
                                                                 <button class="quantity-btn minus" data-id="<?php echo $row['cartid']; ?>">-</button>
@@ -185,7 +185,7 @@ $(function(){
                 let total = 0;
                 
                 cart.forEach(function(item) {
-                    let subtotal = item.prix * item.quantity;
+                    let subtotal = item.price * item.quantity;
                     total += subtotal;
                     cartHtml += generateCartItemHtml(item, subtotal);
                 });
@@ -204,9 +204,9 @@ $(function(){
                 </td>
                 <td class="product-name">
                     <span class="product-title">${item.name}</span>
-                    <span class="product-weight">${item.poid}g</span>
+                    <span class="product-weight">${item.weight}g</span>
                 </td>
-                <td class="product-price">${item.prix.toFixed(2)} DT</td>
+                <td class="product-price">${item.price.toFixed(2)} DT</td>
                 <td class="product-quantity">
                     <div class="quantity-control">
                         <input type="number" class="quantity-input" 
@@ -416,7 +416,7 @@ $(function(){
                 let total = 0;
                 
                 cart.forEach(function(item) {
-                    let subtotal = item.prix * item.quantity;
+                    let subtotal = item.price * item.quantity;
                     total += subtotal;
                     cartHtml += `
                         <tr class="cart-item">
@@ -425,9 +425,9 @@ $(function(){
                             </td>
                             <td class="product-name">
                                 <span class="product-title">${item.name}</span>
-                                <span class="product-weight">${item.poid}g</span>
+                                <span class="product-weight">${item.weight}g</span>
                             </td>
-                            <td class="product-price">${item.prix.toFixed(2)} DT</td>
+                            <td class="product-price">${item.price.toFixed(2)} DT</td>
                             <td class="product-quantity">
                                 <div class="quantity-control">
                                     <button class="quantity-btn minus" data-id="${item.edition_id}">-</button>
@@ -479,7 +479,7 @@ $(function(){
             localStorage.setItem('cart', JSON.stringify(cart));
             
             // Mise à jour de l'affichage
-            let price = parseFloat(item.prix);
+            let price = parseFloat(item.price);
             let subtotal = price * qty;
             let $row = $(`.quantity-input[data-id="${id}"]`).closest('tr');
             $row.find('.product-subtotal').text(subtotal.toFixed(2) + ' DT');

@@ -123,8 +123,8 @@ CREATE TABLE `user_addresses` (
 CREATE TABLE `edition` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `poid` float(11) NOT NULL,
-  `prix` double NOT NULL DEFAULT 0
+  `weight` float(11) NOT NULL,
+  `price` double NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 COMMIT;

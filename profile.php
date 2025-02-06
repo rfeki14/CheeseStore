@@ -186,19 +186,42 @@
 	        							<h4>Name:</h4>
 	        							<h4>Email:</h4>
 	        							<h4>Contact Info:</h4>
-	        							<h4>Address:</h4>
-	        							<h4>Member Since:</h4>
+	        							<h4>Adresses:</h4>
 	        						</div>
 	        						<div class="col-sm-9">
 	        							<h4><?php echo $user['firstname'].' '.$user['lastname']; ?>
 	        								<span class="pull-right">
-	        									<button class="btn btn-success btn-flat btn-sm" onclick="$('#edit').modal('show');"><i class="fa fa-edit"></i> Edit</button>
+	        									<a href="edit_profile.php" class="btn btn-success btn-flat btn-sm"><i class="fa fa-edit"></i> Modifier</a>
 	        								</span>
 	        							</h4>
 	        							<h4><?php echo $user['email']; ?></h4>
 	        							<h4><?php echo (!empty($user['contact_info'])) ? $user['contact_info'] : 'N/a'; ?></h4>
-	        							<h4><?php echo (!empty($user['address'])) ? $user['address'] : 'N/a'; ?></h4>
-	        							<h4><?php echo date('M d, Y', strtotime($user['created_on'])); ?></h4>
+	        							<div class="addresses-list">
+											<?php
+											$conn = $pdo->open();
+											try {
+												$stmt = $conn->prepare("
+													SELECT a.* 
+													FROM address a 
+													JOIN user_addresses ua ON a.id = ua.address_id 
+													WHERE ua.user_id = :user_id
+												");
+												$stmt->execute(['user_id' => $user['id']]);
+												
+												while($row = $stmt->fetch()) {
+													echo '<div class="address-item">';
+													echo '<p>' . $row['street'] . '<br>';
+													echo $row['city'] . ', ' . $row['state'] . ' ' . $row['zip_code'] . '<br>';
+													echo $row['country'] . '</p>';
+													echo '</div>';
+												}
+											}
+											catch(PDOException $e) {
+												echo "Il y a un problème: " . $e->getMessage();
+											}
+											$pdo->close();
+											?>
+										</div>
 	        						</div>
 	        					</div>
 	        				</div>

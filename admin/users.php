@@ -79,10 +79,23 @@
                     $conn = $pdo->open();
 
                     try{
-                      $stmt = $conn->prepare("SELECT * FROM users WHERE type=:type");
+                      $stmt = $conn->prepare("
+                          SELECT users.*, 
+                                 GROUP_CONCAT(
+                                     CONCAT(address.street, ', ', address.city, ', ', 
+                                           address.state, ' ', address.zip_code, ', ', address.country)
+                                     SEPARATOR '<br>'
+                                 ) as addresses
+                          FROM users 
+                          LEFT JOIN user_addresses ON users.id = user_addresses.user_id
+                          LEFT JOIN address ON user_addresses.address_id = address.id
+                          WHERE users.type = :type
+                          GROUP BY users.id
+                      ");
                       $stmt->execute(['type'=>0]);
                       foreach($stmt as $row){
                         $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/profile.jpg';
+                        $addresses = !empty($row['addresses']) ? $row['addresses'] : 'No address registered';
                         echo "
                           <tr>
                             <td>
@@ -91,7 +104,7 @@
                             </td>
                             <td>".$row['email']."</td>
                             <td>".$row['firstname'].' '.$row['lastname']."</td>
-                            <td>".$row['address']."</td>
+                            <td>".html_entity_decode($addresses)."</td>
                             <td>".$row['contact_info']."</td>
                             <td>
                               <input type='checkbox' class='status-toggle' data-id='".$row['id']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Active' data-off='Inactive' data-onstyle='success' data-offstyle='danger' data-size='small'>
@@ -237,8 +250,8 @@ function getRow(id){
       $('#edit_password').val(response.password);
       $('#edit_firstname').val(response.firstname);
       $('#edit_lastname').val(response.lastname);
-      $('#edit_address').val(response.address);
       $('#edit_contact').val(response.contact_info);
+      $('#edit_address').val(response.addresses); // Changed from address to addresses
       $('.fullname').html(response.firstname+' '+response.lastname);
     }
   });
@@ -246,18 +259,23 @@ function getRow(id){
 </script>
 <style>
 .btn {
-    padding: 8px 16px;
-    font-weight: 500;
+    padding: 4px 12px;  // Reduced from 8px 16px
+    font-weight: 400;   // Reduced from 500
     transition: all 0.3s ease;
+    font-size: 12px;    // Added smaller font size
+}
+
+.btn i {
+    font-size: 11px;    // Added smaller icon size
 }
 
 .btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  // Reduced shadow
 }
 
 .btn-group {
-    gap: 8px;
+    gap: 4px;  // Reduced from 8px
 }
 
 .rounded-pill {

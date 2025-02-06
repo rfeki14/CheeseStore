@@ -44,7 +44,7 @@ INSERT INTO `user_addresses` (`user_id`, `address_id`) VALUES
 (2, 2);
 
 -- Dumping data for table `edition`
-INSERT INTO `edition` (`id`, `product_id`, `poid`, `prix`) VALUES
+INSERT INTO `edition` (`id`, `product_id`, `weight`, `price`) VALUES
 (1, 1, 500, 5.99),
 (2, 2, 500, 6.99),
 (3, 3, 500, 7.99),

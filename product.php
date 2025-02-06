@@ -53,9 +53,9 @@
                                     
                                     <!-- Edition selector -->
                                     <div class="form-group">
-                                        <label for="edition">Poids:</label>
+                                        <label for="edition">weights:</label>
                                         <select name="edition" id="edition" class="form-control" required>
-                                            <option value="">Sélectionnez un poids</option>
+                                            <option value="">Sélectionnez un weights</option>
                                             <?php
                                             foreach($editions as $edition){
                                                 echo "<option value='".$edition['id']."' data-price='".$edition['price']."'>"
@@ -115,7 +115,7 @@
 
 <script>
 $(function(){
-    // Mise à jour du prix lors du changement d'édition
+    // Mise à jour du price lors du changement d'édition
     $('#edition').change(function(){
         var selectedPrice = $(this).find(':selected').data('price');
         if(selectedPrice) {
@@ -131,7 +131,7 @@ $(function(){
         var editionId = $('#edition').val();
         
         if(!editionId) {
-            alert('Veuillez sélectionner un poids');
+            alert('Veuillez sélectionner un weights');
             return;
         }
 

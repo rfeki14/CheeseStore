@@ -198,7 +198,7 @@ $(function(){
             data: {
                 id: id,
                 quantity: quantity,
-                price: price * (quantity/1000) // Prix pour la quantité en kg
+                price: price * (quantity/1000) // price pour la quantité en kg
             },
             dataType: 'json',
             success: function(response){
