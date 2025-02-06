@@ -69,16 +69,16 @@ if(isset($_POST['signup'])){
         try {
             // SMTP settings
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';  
+            $mail->Host = 'smtp.mailersend.net';  
             $mail->SMTPAuth = true;
-            $mail->Username = 'moutiasaad481@gmail.com'; // Your Gmail
-            $mail->Password = 'tznyehbdcujjdyum'; // **Use App Password**
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Use 'PHPMailer::ENCRYPTION_STARTTLS' if using TLS
-            $mail->Port = 465; // **Use 465 for SSL, 587 for TLS**
+            $mail->Username = 'MS_qH6QZS@trial-jpzkmgqweq1g059v.mlsender.net'; // Your Gmail
+            $mail->Password = 'mssp.eBufytt.0p7kx4xqw9eg9yjr.bxRiPGU'; // **Use App Password**
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use 'PHPMailer::ENCRYPTION_STARTTLS' if using TLS
+            $mail->Port = 587; // **Use 465 for SSL, 587 for TLS**
 
-            $mail->setFrom('moutiasaad481@gmail.com', 'Cheese Store');
+            $mail->setFrom('MS_qH6QZS@trial-jpzkmgqweq1g059v.mlsender.net', 'Cheese Store');
             $mail->addAddress($email);
-            $mail->addReplyTo('moutiasaad481@gmail.com', 'Cheese Store');
+            $mail->addReplyTo('MS_qH6QZS@trial-jpzkmgqweq1g059v.mlsender.net', 'Cheese Store');
 
             // Email content
             $mail->isHTML(true);

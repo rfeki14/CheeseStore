@@ -78,7 +78,7 @@ $(document).ready(function(){
     $('#edit').on('show.bs.modal', function(event){
         let button = $(event.relatedTarget);
         let userId = button.data('id');
-        $('.userid').val(userId); // Ensure the user ID is set in the hidden input field
+        $('.userid').val(userId);
         loadAddresses(userId);
     });
 
