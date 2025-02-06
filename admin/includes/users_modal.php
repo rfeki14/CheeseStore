@@ -48,15 +48,12 @@
                         <label class="col-sm-3 control-label">Adresses</label>
                         <div class="col-sm-9">
                             <form id="addressForm" class="form-horizontal" method="POST" action="add_address.php">
-                            <input type="hidden" name="user_id" class="userid">
+                                <input type="hidden" name="user_id" class="userid">
                                 <div id="addresses-container" class="addresses-wrapper">
                                     <!-- Les adresses seront ajoutées ici dynamiquement -->
                                 </div>
                                 <button type="button" class="btn btn-info btn-sm btn-add-address" id="add-address">
                                     <i class="fa fa-plus"></i> Ajouter une adresse
-                                </button>
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-check"></i> Confirmer les adresses
                                 </button>
                             </form>
                         </div>

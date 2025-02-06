@@ -185,6 +185,31 @@ $(document).ready(function(){
             }
         });
     }
+function createAddressHTML(address = {}) {
+    return `<form id="addForm" class="form-horizontal">
+        <div class="address-item">
+            <input type="hidden" id="id" name="id" value="${address.id || ''}">
+            <div class="form-group">
+                <input type="text" class="form-control" id="street" name="street" placeholder="Rue" value="${address.street || ''}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="city" name="city" placeholder="Ville" value="${address.city || ''}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="state" name="state" placeholder="État/Région" value="${address.state || ''}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="Code postal" value="${address.zip_code || ''}" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="country" name="country" placeholder="Pays" value="${address.country || ''}" required>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm add-add"><i class="fa fa-check"></i> Confirmer les adresses</button>
+            <button type="button" class=" pull-right btn btn-danger btn-sm remove-address">Supprimer</button>
+        </div>
+        </form>
+    `;
+}
 
     function createAddressSpan(address) {
         return `<p>
@@ -201,7 +226,7 @@ $(document).ready(function(){
             $('.userid').val(userId); // Ensure the user ID is set in the hidden input field
             loadAddresses(userId);
         } else {
-            //console.error('User ID not found');
+            console.error('User ID not found');
         }
     });
 
@@ -229,17 +254,56 @@ $(document).ready(function(){
             $(this).closest('.address-item').remove();
         }
     });
+    $(document).on('click', '.add-add', function(){
+        //collecting data
+        let userid = $('.userid').val();
+        let street = $('#street').val();
+        let city = $('#city').val();
+        let state = $('#state').val();
+        let zip_code = $('#zipcode').val();
+        let country = $('#country').val();
+        console.log(userid, street, city, state, zip_code, country); // Add this line for debugging
+            $.ajax({
+            type: 'POST',
+            url: 'add_address.php',
+            data: {
+                user_id: userid,
+                street: street,
+                city: city,
+                state: state,
+                zip_code: zip_code,
+                country: country
+            },
+            success: function(response){
+                console.log('Response:', response); // Add this line for debugging
+                if(response == 'success'){
+                    alert('Adresses mises à jour avec succès');
+                    $('#edit').modal('hide');
+                    //loadAddresses(userid);
+                    location.reload(); // Reload the page to show the updated addresses
+                } else {
+                    alert('Erreur lors de la mise à jour des adresses');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        });
+        
+    });
 
     // Address form submission
-    $('#addressForm').on('submit', function(e){
-        e.preventDefault();
+    $('#add-add').on('click', function(e){
+        console.log('Submitting address form'); // Add this line for debugging
         var formData = $(this).serialize();
+        console.log('Form Data:', formData); // Add this line for debugging
 
         $.ajax({
             type: 'POST',
             url: 'add_address.php',
             data: formData,
             success: function(response){
+                console.log('Response:', response); // Add this line for debugging
                 if(response == 'success'){
                     alert('Adresses mises à jour avec succès');
                     $('#edit').modal('hide');
@@ -247,6 +311,9 @@ $(document).ready(function(){
                 } else {
                     alert('Erreur lors de la mise à jour des adresses');
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
             }
         });
     });
