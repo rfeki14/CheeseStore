@@ -8,7 +8,7 @@
       <!-- Logo -->
       <a href="index.php" class="navbar-brand">
        
-        <img src="images/logo.png" width="50" height="50" alt="ShopMate Logo">
+        <img src="images/logo.png" width="50" height="50" alt="Coeur Blanc Logo">
 
       </a>
 

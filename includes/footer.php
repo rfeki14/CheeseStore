@@ -33,7 +33,7 @@
         <!-- Copyright Section -->
         <div class="mt-4">
             <hr class="bg-light">
-            <p class="mb-0">&copy; 2025 ShopMate. All rights reserved.</p>
+            <p class="mb-0">&copy; 2025 Coeur Blanc. All rights reserved.</p>
         </div>
     </div>
 </footer>
