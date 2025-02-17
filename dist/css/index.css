@@ -12,7 +12,7 @@ body {
     background: linear-gradient(135deg, #1c252c 0%, #2d363d 100%);
     color: var(--text-light);
 }
-
+z
 /* Navbar Enhancement */
 .navbar {
     background: rgba(28, 37, 44, 0.95);
@@ -179,7 +179,7 @@ body {
 .map-title {
     font-size: 2.2rem;
     font-weight: 800;
-    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    background: linear-gradient(45deg, #FF9A23, #FF9A23);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 30px;
@@ -208,7 +208,7 @@ iframe {
 }
 /* Monthly Top Sellers Title */
 .text-primary {
-    color: #2ecc71 !important; /* Red color */
+    color: #FF9A23 !important; /* Red color */
     font-size: 28px;
     font-weight: bold;
     text-align: center;
@@ -254,7 +254,7 @@ iframe {
 /* Change Icon Colors to Red */
 .info-box i {
     font-size: 2.5rem;
-    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    background: linear-gradient(45deg, #FF9A23, #FF9A23);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 15px;
@@ -362,16 +362,16 @@ iframe {
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    color: #2ecc71; /* Rouge pour les icônes */
+    color: #FF9A23; /* Rouge pour les icônes */
     text-decoration: none;
     margin: 0 5px;
 }
 
 .action-btn:hover {
-    background: #2ecc71; /* Fond rouge au survol */
+    background: #FF9A23; /* Fond rouge au survol */
     color: white;
     transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(230, 57, 70, 0.5);
+    box-shadow: 0 0 15px rgb(255, 180, 67);
 }
 
 .product-info h5 a {
@@ -383,7 +383,7 @@ iframe {
 }
 
 .product-info h5 a:hover {
-    color: #2ecc71;
+    color: #FF9A23;
     text-decoration: none;
 }
 
