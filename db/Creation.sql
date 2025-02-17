@@ -88,7 +88,7 @@ CREATE TABLE `details` (
 
 CREATE TABLE `edition` (
   `id` int(11) NOT NULL,
-  `name` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `product_id` int(11) NOT NULL,
   `weight` float NOT NULL,
   `price` double NOT NULL DEFAULT 0
