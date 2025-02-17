@@ -12,7 +12,7 @@ body {
     text-align: center;
     font-size: 36px;
     font-weight: bold;
-    color: #ffb400; /* Highlight color similar to navbar logo */
+    color:#FF9A23; /* Highlight color similar to navbar logo */
     margin-top: 50px; /* Adds spacing from the navbar */
     margin-bottom: 30px;
 }
@@ -52,7 +52,7 @@ body {
 .about-title {
     font-size: 32px;
     font-weight: bold;
-    color: #ffb400; /* Highlight color similar to navbar logo */
+    color: #FF9A23; /* Highlight color similar to navbar logo */
     margin-bottom: 20px;
     text-align: left;
 }
