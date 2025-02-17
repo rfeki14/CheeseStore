@@ -8,7 +8,7 @@ if(isset($_POST['delete'])){
         $conn = $pdo->open();
 
         // First delete related transaction details
-        $stmt = $conn->prepare("DELETE FROM transactiondetails WHERE productId=:id");
+        $stmt = $conn->prepare("DELETE FROM details WHERE product_id=:id");
         $stmt->execute(['id'=>$id]);
 
         // Then delete the product

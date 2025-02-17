@@ -58,7 +58,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm rounded-pill">
+              <a href="#adduserModal" data-toggle="modal" class="btn btn-success btn-sm rounded-pill">
                 <i class="fa fa-plus"></i> New User
               </a>
             </div>
@@ -176,12 +176,15 @@ $(document).ready(function(){
                     addresses = [];
                 }
 
-                let container = $('#addresses-container');
+                let container = $('#edit-addresses-container');
                 container.empty();
                 
                 addresses.forEach(address => {
                     container.append(createAddressSpan(address));
                 });
+            },
+            error: function(){
+              console.log("something went wrong")
             }
         });
     }
@@ -189,6 +192,9 @@ function createAddressHTML(address = {}) {
     return `<form id="addForm" class="form-horizontal">
         <div class="address-item">
             <input type="hidden" id="id" name="id" value="${address.id || ''}">
+            <div class="form-group">
+                <input type="text" class="form-control" id="phone" name="phone" placeholder="tel" value="${address.phone || ''}" required>
+            </div>
             <div class="form-group">
                 <input type="text" class="form-control" id="street" name="street" placeholder="Rue" value="${address.street || ''}" required>
             </div>
@@ -211,14 +217,32 @@ function createAddressHTML(address = {}) {
     `;
 }
 
-    function createAddressSpan(address) {
-        return `<p>
-            <span class="address-item">
-                ${address.street}, ${address.city}, ${address.state} ${address.zip_code}, ${address.country}
-                <button type="button" class=" pull-right btn btn-danger btn-sm remove-address" data-id="${address.id}">Supprimer</button>
-            </span><br></p>
-        `;
-    }
+function updateAddressIds() {
+    var ids = [];
+    // For each remove button in the addresses container, retrieve its data-id
+    $('#addresses-container .remove-address').each(function(){
+        var id = $(this).data('id');
+        if(id) {
+            ids.push(id);
+        }
+    });
+    // Update the hidden input with a comma-separated list of IDs
+    $('#address_ids').val(ids.join(','));
+}
+
+
+function createAddressSpan(address) {
+    return `<p>
+        <span class="address-item">
+            ${address.street}, ${address.city}, ${address.state} ${address.zip_code}, ${address.country}
+            <button type="button" class="pull-right btn btn-danger btn-sm remove-address" data-id="${address.id}">Supprimer</button>
+        </span><br></p>
+    `;
+}
+
+    
+
+
     $('#edit').on('show.bs.modal', function(event){
         var userId = $(this).data('id');
         console.log('User ID:', userId); // Add this line for debugging
@@ -234,6 +258,10 @@ function createAddressHTML(address = {}) {
         $('#addresses-container').append(createAddressHTML());
     });
 
+    $('edit-add-address').click(function(){
+      $('edit-addresses-container').append(createAddressHTML());
+    });
+
     $(document).on('click', '.remove-address', function(){
         var addressId = $(this).data('id');
         if (addressId) {
@@ -245,6 +273,7 @@ function createAddressHTML(address = {}) {
                     if (response == 'success') {
                         alert('Adresse supprimée avec succès');
                         loadAddresses($('.userid').val());
+                        updateAddressIds();
                     } else {
                         alert('Erreur lors de la suppression de l\'adresse');
                     }
@@ -256,12 +285,13 @@ function createAddressHTML(address = {}) {
     });
     $(document).on('click', '.add-add', function(){
         //collecting data
-        let userid = $('.userid').val();
+        let userid = $('#edituserid').val();
         let street = $('#street').val();
         let city = $('#city').val();
         let state = $('#state').val();
         let zip_code = $('#zipcode').val();
         let country = $('#country').val();
+        let phone = $('#phone').val();
         console.log(userid, street, city, state, zip_code, country); // Add this line for debugging
             $.ajax({
             type: 'POST',
@@ -272,15 +302,19 @@ function createAddressHTML(address = {}) {
                 city: city,
                 state: state,
                 zip_code: zip_code,
-                country: country
+                country: country,
+                phone : phone
             },
+            dataType: 'json',
             success: function(response){
                 console.log('Response:', response); // Add this line for debugging
-                if(response == 'success'){
-                    alert('Adresses mises à jour avec succès');
-                    $('#edit').modal('hide');
-                    //loadAddresses(userid);
-                    location.reload(); // Reload the page to show the updated addresses
+                if(response.status){
+                    alert('Adresse ajouté avec succès');
+                    let form = $('#addForm');
+                    form.remove();
+                    let container = $('#addresses-container');
+                    container.append(createAddressSpan(response.address))
+                    updateAddressIds();
                 } else {
                     alert('Erreur lors de la mise à jour des adresses');
                 }
@@ -292,43 +326,24 @@ function createAddressHTML(address = {}) {
         
     });
 
-    // Address form submission
-    $('#add-add').on('click', function(e){
-        console.log('Submitting address form'); // Add this line for debugging
-        var formData = $(this).serialize();
-        console.log('Form Data:', formData); // Add this line for debugging
-
-        $.ajax({
-            type: 'POST',
-            url: 'add_address.php',
-            data: formData,
-            success: function(response){
-                console.log('Response:', response); // Add this line for debugging
-                if(response == 'success'){
-                    alert('Adresses mises à jour avec succès');
-                    $('#edit').modal('hide');
-                    location.reload(); // Reload the page to show the updated addresses
-                } else {
-                    alert('Erreur lors de la mise à jour des adresses');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', status, error);
-            }
-        });
-    });
-
 
   // Initialiser les toggles
   $('.status-toggle').bootstrapToggle();
+
+  /*$(document).on('submit','.addnewuser',function(e){
+    e.preventDefault();
+
+  }*/
   
   // Existant event handlers
   $(document).on('click', '.edit', function(e){
     e.preventDefault();
     $('#edit').modal('show');
     var id = $(this).data('id');
+    console.log(id)
     getRow(id);
     loadAddresses(id);
+    
   });
 
   $(document).on('click', '.delete', function(e){

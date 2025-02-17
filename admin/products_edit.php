@@ -6,7 +6,6 @@ $id = $_POST['id'];
 $name = $_POST['name'];
 $slug = slugify($name);
 $category = $_POST['category'];
-$price = $_POST['price'];
 $description = $_POST['description'];
 $qtty = $_POST['qtty'];
 
@@ -40,12 +39,11 @@ try {
     $photo = (!empty($image_name)) ? $image_name : $row['photo'];
 
     // Update product details in database
-    $stmt = $conn->prepare("UPDATE products SET name=:name, slug=:slug, category_id=:category, price=:price, qtty=:qtty, description=:description, photo=:photo WHERE id=:id");
+    $stmt = $conn->prepare("UPDATE products SET name=:name, slug=:slug, category_id=:category, qtty=:qtty, description=:description, photo=:photo WHERE id=:id");
     $stmt->execute([
         'name' => $name,
         'slug' => $slug,
         'category' => $category,
-        'price' => $price,
         'qtty' => $qtty,
         'description' => $description,
         'photo' => $photo, // Include updated or old image

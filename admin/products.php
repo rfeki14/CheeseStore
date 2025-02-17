@@ -97,7 +97,6 @@ if (isset($_GET['category'])) {
                   <th>Category</th>
                   <th>Photo</th>
                   <th>Description</th>
-                  <th>Price</th>
                   <th>Quantity</th>
                   <th>Views Today</th>
                   <th>Tools</th>
@@ -128,8 +127,7 @@ if (isset($_GET['category'])) {
                                   <i class='fa fa-search'></i> View
                                 </a>
                               </td>
-                              <td>&#36; " . number_format($row['price'], 2) . '</td>
-                              <td>' . number_format($row['qtty'], 2) . '</td>
+                              <td> " . number_format($row['qtty'], 3) . '</td>
                               <td>' . $counter . "</td>
                               <td>
                                 <div class='btn-group'>
@@ -241,7 +239,6 @@ function getRow(id) {
                 // Update View and Edit Modals with Product Details
                 $('.name').html("ID: " + response.prodid + " - " + response.prodname);
                 $('#edit_name').val(response.prodname);
-                $('#edit_price').val(response.price);
                 $('#edit_quantity').val(response.qtty);
 
                 // Load category options and select the correct one

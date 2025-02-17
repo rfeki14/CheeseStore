@@ -1,33 +1,49 @@
 <?php
-include 'includes/session.php';
+include "includes/session.php";
 
-if(isset($_POST['user_id']) && isset($_POST['street']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['zip_code']) && isset($_POST['country'])) {
-    $user_id = $_POST['user_id'];
-    $street = $_POST['street'];
-    $city = $_POST['city'];
-    $state = $_POST['state'];
-    $zip_code = $_POST['zip_code'];
-    $country = $_POST['country'];
+// Insert multiple addresses into the Address table
+if (isset($_POST['phone']) && isset($_POST['street']) && isset($_POST['city']) && isset($_POST['state']) && isset($_POST['zip_code']) && isset($_POST['country'])) {
+    $address=array(
+        'id' =>0,
+        'phone' => $_POST['phone'],
+        'street'=> $_POST['street'],
+        'city'=> $_POST['city'],
+        'state' => $_POST['state'],
+        'zip_code' => $_POST['zip_code'],
+        'country'=> $_POST['country']
+    );
+        // Insert each address
+        $query = "INSERT INTO address (phone, street, city, state, zip_code, country) 
+                  VALUES (:phone, :street, :city, :state, :zip_code, :country)";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([
+            ':phone' => $address['phone'], 
+            ':street' =>$address['street'],
+            ':city' => $address['city'],
+            ':state' => $address['state'],
+            ':zip_code' => $address['zip_code'],
+            ':country' => $address['country']
+            ]);
 
-    $conn = $pdo->open();
+        // Store the address ID
+        $address['id'] = $conn->lastInsertId();
 
-    try {
-        // Insert the new address into the address table
-        $stmt = $conn->prepare("INSERT INTO address (street, city, state, zip_code, country) VALUES (:street, :city, :state, :zip_code, :country)");
-        $stmt->execute(['street'=>$street, 'city'=>$city, 'state'=>$state, 'zip_code'=>$zip_code, 'country'=>$country]);
-        $address_id = $conn->lastInsertId();
-
-        // Link the new address to the user in the user_addresses table
-        $stmt = $conn->prepare("INSERT INTO user_addresses (user_id, address_id) VALUES (:user_id, :address_id)");
-        $stmt->execute(['user_id'=>$user_id, 'address_id'=>$address_id]);
-
-        echo 'success';
-    } catch(PDOException $e) {
-        echo $e->getMessage();
+    if (isset($_POST['user_id']) && $_POST['user_id'] != '') {
+        // Existing User Modal - link addresses to the user
+        $user_id = $_POST['user_id'];
+            $query = "INSERT INTO user_addresses (user_id, address_id) 
+                      VALUES (:user_id, :address_id) 
+                      ON DUPLICATE KEY UPDATE address_id = :address_id";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([
+                ':user_id' => $user_id,
+                ':address_id' => $address['id']
+            ]);
+        } else {
+        // If it's a new user, send address IDs back to be linked later
+        echo json_encode(['status' => 'success', 'address' => $address]);
     }
-
-    $pdo->close();
-} else {
-    echo 'Invalid request';
+}else{
+    echo json_encode(['status'=> 'error',''=> '']);
 }
 ?>

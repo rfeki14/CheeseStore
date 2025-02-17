@@ -38,10 +38,10 @@
   $top_products = $stmt->fetchAll();
 
   // Récupérer les meilleurs clients
-  $stmt = $conn->prepare("SELECT users.firstname, users.lastname, SUM(products.price * details.quantity) AS total_spent 
+  $stmt = $conn->prepare("SELECT users.firstname, users.lastname, SUM(e.price * details.quantity) AS total_spent 
                           FROM sales 
                           LEFT JOIN details ON details.sales_id = sales.id 
-                          LEFT JOIN products ON products.id = details.product_id
+                          LEFT JOIN edition e ON e.id = details.product_id
                           LEFT JOIN users ON users.id = sales.user_id 
                           GROUP BY users.id 
                           ORDER BY total_spent DESC 
@@ -102,8 +102,8 @@
           <div class="small-box bg-aqua">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT details.*, products.price FROM details 
-                         LEFT JOIN products ON products.id=details.product_id");
+                $stmt = $conn->prepare("SELECT details.*, e.price FROM details 
+                         LEFT JOIN edition e ON e.id=details.product_id");
                 $stmt->execute();
 
                 $total = 0;
@@ -170,10 +170,10 @@
           <div class="small-box bg-red">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT details.*, products.price 
+                $stmt = $conn->prepare("SELECT details.*, e.price 
                          FROM details 
                          LEFT JOIN sales ON sales.id=details.sales_id 
-                         LEFT JOIN products ON products.id=details.product_id 
+                         LEFT JOIN edition e ON e.id=details.product_id 
                          WHERE sales_date=:sales_date");
                 $stmt->execute(['sales_date'=>$today]);
 
@@ -334,10 +334,10 @@
   $sales = array();
   for( $m = 1; $m <= 12; $m++ ) {
     try{
-      $stmt = $conn->prepare("SELECT details.*, products.price 
+      $stmt = $conn->prepare("SELECT details.*, e.price 
                          FROM details 
                          LEFT JOIN sales ON sales.id=details.sales_id 
-                         LEFT JOIN products ON products.id=details.product_id 
+                         LEFT JOIN edition e ON e.id=details.product_id 
                          WHERE MONTH(sales_date)=:month AND YEAR(sales_date)=:year");
       $stmt->execute(['month'=>$m, 'year'=>$year]);
       $total = 0;

@@ -28,11 +28,6 @@
                                                 <div class='product-details'>
                                                     <h2 class='product-title'>".$row['name']."</h2>
                                                     <p class='product-description'>".substr($row['description'], 0, 100)."...</p>
-                                                    <div class='price-display'>
-                                                        <span>price: </span>
-                                                        <span class='calculated-price'>".number_format($row['price'], 3)."</span>
-                                                        <span> DT</span>
-                                                    </div>
                                                     <div class='buttons-container'>
                                                         <a href='product.php?product=".$row['slug']."' class='cart-btn'>
                                                             <i class='fa fa-eye'></i> View Product

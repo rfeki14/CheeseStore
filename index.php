@@ -100,7 +100,6 @@
                                                     </div>
                                                     <div class="product-info">
                                                         <h5><a href="product.php?product=<?= $product['slug'] ?>"><?= $product['name'] ?></a></h5>
-                                                        <div class="price">€<?= number_format($product['price'], 2) ?></div>
                                                     </div>
                                                 </div>
                                             </div>

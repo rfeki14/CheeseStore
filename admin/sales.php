@@ -60,12 +60,14 @@
                       $stmt = $conn->prepare("SELECT *, sales.id AS salesid FROM sales LEFT JOIN users ON users.id=sales.user_id ORDER BY sales_date DESC");
                       $stmt->execute();
                       foreach($stmt as $row){
-                        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN edition on edition.id=details.product_id  LEFT JOIN products ON products.id=edition.product_id WHERE details.sales_id=:id");
+                        $total=0;
+                        $total = $row['total'];
+                        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN edition on edition.id=details.product_id WHERE details.sales_id=:id");
                         $stmt->execute(['id'=>$row['salesid']]);
-                        $total = 0;
+                        
                         foreach($stmt as $details){
                           $subtotal = $details['price']*$details['quantity'];
-                          $total += $subtotal;
+                          #$total +=$subtotal;
                         }
                         echo "
                           <tr>
@@ -149,153 +151,110 @@ $(function(){
 });
 </script>
 <script>
-   $(document).on('change', '.status-toggle', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    var $toggle = $(this);
-    var id = $toggle.data('id');
-    var status = $toggle.prop('checked');
-    
-    // Empêcher les clics multiples
-    $toggle.bootstrapToggle('disable');
-    
-    $.ajax({
-      url: 'users_status.php',
-      type: 'POST',
-      data: {
-        id: id,
-        status: status ? 1 : 0
-      },
-      success: function(response) {
-        $toggle.bootstrapToggle('enable');
-        if(response == 'ok') {
-          // Message plus discret en haut de la page
-          var message = status ? 'User activated successfully' : 'User deactivated successfully';
-          $(".content").prepend(
-            '<div class="alert alert-success alert-dismissible">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            '<h4><i class="icon fa fa-check"></i> Success!</h4>' + message +
-            '</div>'
-          );
-          
-          // Auto-dismiss après 2 secondes
-          setTimeout(function() {
-            $('.alert').fadeOut('slow', function() {
-              $(this).remove();
-            });
-          }, 2000);
-        } else {
-          // En cas d'erreur, revenir à l'état précédent
-          $toggle.bootstrapToggle('toggle');
-        }
-      },
-      error: function() {
-        // En cas d'erreur, revenir à l'état précédent
-        $toggle.bootstrapToggle('enable');
-        $toggle.bootstrapToggle('toggle');
-      }
+ 
+  $(function() {
+    $(document).ready(function() {
+    $('.status-toggle').each(function() {
+        var isChecked = $(this).attr('checked') ? true : false;
+        $(this).bootstrapToggle(isChecked ? 'on' : 'off');
     });
-
-    return false;
-  });
-$(function(){
+});
   $(document).on('change', '.status-toggle', function(e) {
     e.preventDefault();
     e.stopPropagation();
     
     var $toggle = $(this);
     var id = $toggle.data('id');
-    var status = $toggle.prop('checked');
-    
-    // Empêcher les clics multiples
+    var newStatus = $toggle.prop('checked') ? 1 : 0; // sale's intended status
+    var prevStatus = newStatus ? 0 : 1; // Previous status before change
+
+    // Disable toggle to prevent multiple clicks & show loading
     $toggle.bootstrapToggle('disable');
-    
+    $toggle.closest('.toggle-container').append('<span class="spinner-border spinner-border-sm ml-2"></span>');
+
     $.ajax({
-      url: 'users_status.php',
+      url: 'sale_status.php',
       type: 'POST',
-      data: {
-        id: id,
-        status: status ? 1 : 0
-      },
+      data: { id: id, status: newStatus },
+      dataType: 'json', // Expecting JSON response
       success: function(response) {
+        $('.spinner-border').remove();
         $toggle.bootstrapToggle('enable');
-        if(response == 'ok') {
-          // Message plus discret en haut de la page
-          var message = status ? 'User activated successfully' : 'User deactivated successfully';
+
+        // Ensure the response has a valid status
+        if (response && response.status === 'ok' && typeof response.newStatus !== 'undefined') {
+          var message = response.newStatus ? 'Sale Confirmed successfully' : 'Sale Cancelled successfully';
           $(".content").prepend(
-            '<div class="alert alert-success alert-dismissible">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            '<h4><i class="icon fa fa-check"></i> Success!</h4>' + message +
+            '<div class="alert alert-success alert-dismissible fade show">' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<i class="icon fa fa-check"></i> ' + message +
             '</div>'
           );
-          
-          // Auto-dismiss après 2 secondes
+
+          // Auto-dismiss after 2s
           setTimeout(function() {
-            $('.alert').fadeOut('slow', function() {
-              $(this).remove();
-            });
+            $('.alert').fadeOut('slow', function() { $(this).remove(); });
           }, 2000);
         } else {
-          // En cas d'erreur, revenir à l'état précédent
+          // If the server rejects the update, reset toggle
           $toggle.bootstrapToggle('toggle');
         }
       },
       error: function() {
-        // En cas d'erreur, revenir à l'état précédent
+        $('.spinner-border').remove();
         $toggle.bootstrapToggle('enable');
-        $toggle.bootstrapToggle('toggle');
+        
+        // Reset toggle to previous state
+        $toggle.bootstrapToggle(prevStatus ? 'on' : 'off');
       }
     });
 
     return false;
   });
 
-  $(document).on('click', '.transact', function(e){
+
+  $(document).on('click', '.transact', function(e) {
     e.preventDefault();
     $('#transaction').modal('show');
     var id = $(this).data('id');
+    console.log("click");
+
     $.ajax({
-      type: 'POST',
-      url: 'transact.php',
-      data: {id: id},
-      dataType: 'json',
-      success: function(response){
-        $('#date').html(response.date);
-        $('#transid').html(response.transaction);
-        $('#delivery').html(response.delivery_method);
-        $('#status').html(response.status);
-        $('#address').html(response.address);
-        $('#detail').html(response.list);
-        $('#total').html(response.total);
-      }
+        type: 'POST',
+        url: 'transact.php',
+        data: { id: id },
+        dataType: 'json',
+        success: function(response) {
+            // Since jQuery automatically parses the JSON response, no need for JSON.parse
+            console.log(response);
+
+            // Populate modal with the response data
+            $('#date').html(response.date);
+            $('#transid').html(response.transaction);
+            $('#delivery').html(response.delivery_method);
+            $('#status').html(response.status);
+            $('#address').html(response.address);
+            $('#detail').prepend(response.list);
+            if(response.fee!=0){
+              console.log('fee');
+              $('#dfee').show();
+              $('#fee').html(response.fee);
+            }
+            $('#total').html(response.total);
+        },
+        error: function(xhr, status, error) {
+            // Handle any AJAX errors here
+            console.log("Error:", error);
+        }
     });
-  });
+});
 
   $("#transaction").on("hidden.bs.modal", function () {
-      $('#detail').html("");  // Clear table on modal close
-  });
-
-  // Event listener for status toggle
-  $(document).on('change', '.status-toggle', function() {
-    var salesId = $(this).data('id');
-    var status = $(this).is(':checked') ? 1 : 0;
-
-    $.ajax({
-      type: 'POST',
-      url: 'update_status.php',
-      data: {id: salesId, status: status},
-      success: function(response) {
-        if(response !== 'success') {
-          alert('Failed to update status');
-        }
-      },
-      error: function() {
-        alert('Error updating status');
-      }
+        $('.prepend_items').remove();
+        $('#dfee').hide();
     });
-  });
-});
+
+
 </script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 </body>

@@ -19,7 +19,6 @@ if(isset($_POST['id'])){
         'prodname' => $row['name'],
         'category_id' => $row['category_id'], // Ensure correct category_id
         'category_name' => $row['category_name'], // Include category name
-        'price' => $row['price'],
         'qtty' => $row['qtty'],
         'photo' => $image, // Full image path
         'old_photo' => $row['photo'], // Old image filename (for reference)

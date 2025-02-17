@@ -94,7 +94,7 @@ $(function(){
   function updateStatus(id, status){
     $.ajax({
       type: 'POST',
-      url: 'update_status.php',
+      url: 'edit_status.php',
       data: {id: id, status: status},
       success: function(response){
         if(response == 'success'){

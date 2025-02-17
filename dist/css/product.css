@@ -1,3 +1,5 @@
+
+
 /* General Styling */
 body {
     font-family: 'Poppins', sans-serif;
@@ -21,7 +23,7 @@ body {
 }
 
 .nav-link:hover {
-    color: #2e7d32 !important;
+    color: #008080 !important; /* Changed from #2e7d32 to #008080 */
 }
 
 /* Add Space Between Navbar and Content */
@@ -47,8 +49,8 @@ body {
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
-    border-color: #2e7d32;
+    box-shadow: 0 8px 20px rgba(0, 128, 128, 0.3); /* Changed from rgba(46, 125, 50, 0.3) to rgba(0, 128, 128, 0.3) */
+    border-color: #008080; /* Changed from #2e7d32 to #008080 */
 }
 
 .product-image-container {
@@ -93,15 +95,15 @@ body {
 }
 
 .product-price {
-    color: #2e7d32;
+    color: #008080; /* Changed from #2e7d32 to #008080 */
     font-size: 1.3em;
     font-weight: bold;
     margin: 10px 0;
-    text-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
+    text-shadow: 0 0 10px rgba(0, 128, 128, 0.3); /* Changed from rgba(46, 125, 50, 0.3) to rgba(0, 128, 128, 0.3) */
 }
 
 .cart-btn {
-    background-color: #2e7d32;
+    background-color: #008080; /* Changed from #2e7d32 to #008080 */
     color: white;
     padding: 8px 15px;
     border: none;
@@ -114,23 +116,23 @@ body {
 }
 
 .cart-btn:hover {
-    background-color: #1b5e20;
+    background-color: #006666; /* Changed from #1b5e20 to #006666 */
     color: white;
     text-decoration: none;
 }
 
 .quantity-btn {
-    background: #2e7d32;
+    background: #008080; /* Changed from #2e7d32 to #008080 */
     color: white;
 }
 
 .category-link {
-    color: #2e7d32;
+    color: #008080; /* Changed from #2e7d32 to #008080 */
     text-decoration: none;
 }
 
 .category-link:hover {
-    color: #1b5e20;
+    color: #006666; /* Changed from #1b5e20 to #006666 */
 }
 
 /* Social Media Comments */
@@ -144,7 +146,7 @@ body {
 }
 
 .product-info h5 a:hover, .product-title a:hover {
-    color: #2e7d32;
+    color: #008080; /* Changed from #2e7d32 to #008080 */
 }
 
 .product-actions {
@@ -170,7 +172,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #2e7d32;
+    background-color: #008080; /* Changed from #2e7d32 to #008080 */
     color: white;
     border: none;
     cursor: pointer;
@@ -178,7 +180,7 @@ body {
 }
 
 .action-btn:hover {
-    background-color: #1b5e20;
+    background-color: #006666; /* Changed from #1b5e20 to #006666 */
     transform: scale(1.1);
 }
 
@@ -188,11 +190,11 @@ body {
 
 .action-btn {
     color: #ffffff;
-    background-color: #2e7d32;
+    background-color: #008080; /* Changed from #2e7d32 to #008080 */
 }
 
 .action-btn:hover {
-    background-color: #1b5e20;
+    background-color: #006666; /* Changed from #1b5e20 to #006666 */
 }
 
 .quantity-control {
@@ -211,7 +213,7 @@ body {
 
 .quantity-btn {
     padding: 5px 10px;
-    background-color: #2e7d32;
+    background-color: #008080; /* Changed from #2e7d32 to #008080 */
     color: white;
     border: none;
     border-radius: 4px;
@@ -220,21 +222,21 @@ body {
 }
 
 .quantity-btn:hover {
-    background-color: #1b5e20;
+    background-color: #006666; /* Changed from #1b5e20 to #006666 */
 }
 
 #quantity {
     width: 80px;
     text-align: center;
     font-size: 1.2em;
-    border: 1px solid #2e7d32;
+    border: 1px solid #008080; /* Changed from #2e7d32 to #008080 */
     border-radius: 4px;
     padding: 5px;
 }
 
 .price-display {
     font-size: 1.3em;
-    color: #2e7d32;
+    color: #008080; /* Changed from #2e7d32 to #008080 */
     margin: 15px 0;
     font-weight: bold;
 }

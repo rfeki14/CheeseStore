@@ -7,7 +7,7 @@ $conn = $pdo->open();
 
 $output = array('list'=>'');
 
-$stmt = $conn->prepare("SELECT id, sales_date, delivery_method, dp_address, status FROM sales WHERE id=:id");
+$stmt = $conn->prepare("SELECT id, sales_date, delivery_method, dp_address, total , status FROM sales WHERE id=:id");
 $stmt->execute(['id'=>$id]);
 $row = $stmt->fetch();
 
@@ -18,6 +18,8 @@ if (!$row) {
     exit();
 }
 
+$output['fee']=0;
+$output['total'] = '<b>&#36; '.number_format($row['total'], 2).'<b>';
 $output['transaction'] = $row['id'];
 $output['delivery_method'] = $row['delivery_method'];
 $output['date'] = date('M d, Y', strtotime($row['sales_date']));
@@ -38,6 +40,7 @@ if ($row['delivery_method'] == 'pickup') {
 } else {
     $stmt = $conn->prepare("SELECT street, city, state, zip_code FROM address WHERE id = :address_id");
     $stmt->execute(['address_id' => $row['dp_address']]);
+    $output['fee']=7;
     $address = $stmt->fetch();
 
     if (!$address) {
@@ -48,7 +51,7 @@ if ($row['delivery_method'] == 'pickup') {
     $output['address'] = $address['street'].' '.$address['city'].' '.$address['state'].' '.$address['zip_code'];
 }
 
-$stmt = $conn->prepare("SELECT p.name, p.price, d.quantity FROM details d LEFT JOIN products p ON p.id = d.product_id WHERE d.sales_id = :id");
+$stmt = $conn->prepare("SELECT p.name, e.price, d.quantity FROM details d LEFT JOIN edition e on d.product_id=e.id LEFT JOIN products p ON p.id = e.product_id WHERE d.sales_id = :id");
 $stmt->execute(['id'=>$id]);
 
 $total = 0;
@@ -64,8 +67,6 @@ foreach ($stmt as $row) {
         </tr>
     ";
 }
-
-$output['total'] = '<b>&#36; '.number_format($total, 2).'<b>';
 $pdo->close();
 echo json_encode($output);
 ?>

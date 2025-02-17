@@ -7,7 +7,7 @@ $conn = $pdo->open();
 
 $output = array('list'=>'');
 
-$stmt = $conn->prepare("SELECT id, sales_date, delivery_method, dp_address, status FROM sales WHERE id=:id");
+$stmt = $conn->prepare("SELECT id, sales_date, delivery_method, dp_address, status, total FROM sales WHERE id=:id");
 $stmt->execute(['id'=>$id]);
 $row = $stmt->fetch();
 
@@ -22,6 +22,8 @@ $output['transaction'] = $row['id'];
 $output['delivery_method'] = $row['delivery_method'];
 $output['date'] = date('M d, Y', strtotime($row['sales_date']));
 $output['status'] = $row['status']?'Completed':'Pending';
+$output['fee']=0;
+$output['total']=$row['total'];
 
 if ($row['delivery_method'] == 'pickup') {
     $stmt = $conn->prepare("SELECT s.name, a.street, a.city, a.state, a.zip_code FROM stores s LEFT JOIN address a ON s.address = a.id WHERE s.id = :store_id");
@@ -30,25 +32,24 @@ if ($row['delivery_method'] == 'pickup') {
 
     if (!$store) {
         $output['error'] = 'Store not found';
-		
-    }
+		}
 
     $output['store'] = $store['name'];
-    $output['address'] = $store['street'].' '.$store['city'].' '.$store['state'].' '.$store['zip_code'];
+    $output['address'] = $store['name'].'//'.$store['street'].' '.$store['city'].' '.$store['state'].' '.$store['zip_code'];
 } else {
+    $output['fee']=7;
     $stmt = $conn->prepare("SELECT street, city, state, zip_code FROM address WHERE id = :address_id");
     $stmt->execute(['address_id' => $row['dp_address']]);
     $address = $stmt->fetch();
 
     if (!$address) {
         $output['error'] = 'Address not found';
-
     }
 
     $output['address'] = $address['street'].' '.$address['city'].' '.$address['state'].' '.$address['zip_code'];
 }
 
-$stmt = $conn->prepare("SELECT p.name, p.price, d.quantity FROM details d LEFT JOIN products p ON p.id = d.product_id WHERE d.sales_id = :id");
+$stmt = $conn->prepare("SELECT p.name,e.weight, e.price, d.quantity FROM details d LEFT JOIN edition e on d.product_id=e.id LEFT JOIN products p ON p.id = e.product_id WHERE d.sales_id = :id");
 $stmt->execute(['id'=>$id]);
 
 $total = 0;
@@ -57,15 +58,13 @@ foreach ($stmt as $row) {
     $total += $subtotal;
     $output['list'] .= "
         <tr class='prepend_items'>
-            <td>".$row['name']."</td>
+            <td>".$row['name'].'-'.$row['weight'].'G'."</td>
             <td>&#36; ".number_format($row['price'], 2)."</td>
             <td>".$row['quantity']."</td>
             <td>&#36; ".number_format($subtotal, 2)."</td>
         </tr>
     ";
 }
-
-$output['total'] = '<b>&#36; '.number_format($total, 2).'<b>';
 $pdo->close();
 echo json_encode($output);
 ?>

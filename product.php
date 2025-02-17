@@ -49,7 +49,6 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h1 class="product-title"><?php echo $product['prodname']; ?></h1>
-                                    <h3 class="product-price" id="displayPrice">&#36; <?php echo number_format($product['price'], 2); ?></h3>
                                     
                                     <!-- Edition selector -->
                                     <div class="form-group">

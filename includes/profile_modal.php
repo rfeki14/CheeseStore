@@ -57,7 +57,8 @@
         <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span></button>
+                  <span aria-hidden="true">&times;</span>
+                </button>
               <h4 class="modal-title"><b>Transaction Full Details</b></h4>
             </div>
             <div class="modal-body">
@@ -67,8 +68,9 @@
               </p>
               <p>
                 Delivery Method: <span id="delivery"></span>
-                <span class="pull-right">Status:<span id="status"></span></span>
+                
                 </p>
+                <p>Status:<span id="status"></span></p>
                 <p>
                  Adresse: <span id="address"></span>
                 </p>
@@ -81,6 +83,10 @@
                   <th>Subtotal</th>
                 </thead>
                 <tbody id="detail">
+                    <tr id="dfee"style="display: none">
+                        <td colspan="3" style="align:right">Delivery Fee:</td>
+                        <td><span id="fee"></span></td>
+                    </tr>
                   <tr>
                     <td colspan="3" style="aligh:right"><b>Total</b></td>
                     <td><span id="total"></span></td>

@@ -1,5 +1,5 @@
 <!-- Add New User Modal -->
-<div class="modal fade" id="addnew">
+<div class="modal fade" id="adduserModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,8 @@
                 <h4 class="modal-title"><b>Ajouter un nouvel utilisateur</b></h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" method="POST" action="users_add.php" enctype="multipart/form-data">
+                <form id="addnewuser" class="form-horizontal" method="POST" action="users_add.php" enctype="multipart/form-data">
+                    <input type="hidden" name="userid" value="">
                     <div class="form-group">
                         <label for="email" class="col-sm-3 control-label">Email</label>
                         <div class="col-sm-9">
@@ -52,6 +53,8 @@
                         <label class="col-sm-3 control-label">Adresses</label>
                         <div class="col-sm-9">
                             <div id="addresses-container">
+                            <input type="hidden" name="address_ids" id="address_ids" value="">
+
                                 <!-- Les adresses seront ajoutées ici dynamiquement -->
                             </div>
                             <button type="button" class="btn btn-info btn-sm btn-add-address" id="add-address">
@@ -82,7 +85,7 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" method="POST" action="users_edit.php" enctype="multipart/form-data">
-                    <input type="hidden" class="userid" name="id">
+                    <input type="hidden" class="edituserid" name="id">
 
                     <div class="form-group">
                         <label for="edit_email" class="col-sm-3 control-label">Email</label>
@@ -126,6 +129,8 @@
                         <label class="col-sm-3 control-label">Adresses</label>
                         <div class="col-sm-9">
                             <div id="edit-addresses-container">
+                            <input type="hidden" name="address_ids" id="address_ids" value="">
+
                                 <!-- Les adresses seront ajoutées ici dynamiquement -->
                             </div>
                             <button type="button" class="btn btn-info btn-sm btn-add-address" id="edit-add-address">

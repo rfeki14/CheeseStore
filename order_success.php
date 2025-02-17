@@ -24,7 +24,7 @@ try {
     if(!$order) {
         throw new Exception("Order not found");
     }else if($order['delivery_method'] == 'pickup'){
-        $stmt = $conn->prepare("SELECT * FROM stores s , address a where s.address = a.id and s.id = :store_id");
+        $stmt = $conn->prepare("SELECT * FROM stores s , address a where s.address_id = a.id and s.id = :store_id");
         $stmt->execute(['store_id' => $order['dp_address']]);
         $store = $stmt->fetch();        
 
@@ -93,8 +93,10 @@ try {
                                             <?php echo $store['street'] . ', ' . 
                                                      $store['city'] . ', ' . 
                                                      $store['state'] . ' ' . 
-                                                     $store['zip_code']." ".
-                                                     $store['phone'];?>
+                                                     $store['zip_code']." "
+                                                     ?>
+                                                    
+                                                     
                                         <?php endif; ?>
 
                                         <h5 class="mt-4">Ordered Items:</h5>

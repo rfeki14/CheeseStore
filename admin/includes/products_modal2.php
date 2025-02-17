@@ -51,12 +51,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="edit_price" class="col-sm-3 control-label">Price</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="edit_price" name="price" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="edit_quantity" class="col-sm-3 control-label">Quantity</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="edit_quantity" name="qtty" required>
