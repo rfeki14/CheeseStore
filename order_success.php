@@ -24,7 +24,7 @@ try {
     if(!$order) {
         throw new Exception("Order not found");
     }else if($order['delivery_method'] == 'pickup'){
-        $stmt = $conn->prepare("SELECT * FROM stores s , address a where s.address_id = a.id and s.id = :store_id");
+        $stmt = $conn->prepare("SELECT * FROM stores s , address a where s.address = a.id and s.id = :store_id");
         $stmt->execute(['store_id' => $order['dp_address']]);
         $store = $stmt->fetch();        
 

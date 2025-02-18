@@ -329,11 +329,6 @@ function createAddressSpan(address) {
 
   // Initialiser les toggles
   $('.status-toggle').bootstrapToggle();
-
-  /*$(document).on('submit','.addnewuser',function(e){
-    e.preventDefault();
-
-  }*/
   
   // Existant event handlers
   $(document).on('click', '.edit', function(e){

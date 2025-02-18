@@ -42,7 +42,7 @@ try {
     $addresses = [];
 }
 try{
-    $stmt = $conn->prepare("SELECT s.id, s.name, a.street, a.city, a.zip_code, a.state, a.country FROM stores s, address a WHERE s.address_id = a.id");
+    $stmt = $conn->prepare("SELECT s.id, s.name, a.street, a.city, a.zip_code, a.state, a.country FROM stores s, address a WHERE s.address = a.id");
     $stmt->execute();
     $stores = $stmt->fetchAll();
 } catch(PDOException $e){

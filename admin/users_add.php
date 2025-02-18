@@ -2,20 +2,22 @@
 include 'includes/session.php';
 
 // Handle new user creation
-if (isset($_POST['email'])) {
+if (isset($_POST['email']) && isset($_POST['password']) &&isset($_POST['firstname']) && isset($_POST['lastname'])) {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $email = $_POST['email'];
+    $contact = $_POST['contact'];
     $password = $_POST['password'];
     
     // Insert the new user into the database
-    $query = "INSERT INTO users (firstname, lastname, email, password) 
-              VALUES (:firstname, :lastname, :email, :password)";
+    $query = "INSERT INTO users (firstname, lastname, email, password, contact) 
+              VALUES (:firstname, :lastname, :email, :password, :contact)";
     $stmt = $conn->prepare($query);
     $stmt->execute([
         ':firstname' => $firstname,
         ':lastname' => $lastname,
         ':email' => $email,
+        'contact' =>$contact,
         ':password' => password_hash($password, PASSWORD_BCRYPT)
     ]);
     

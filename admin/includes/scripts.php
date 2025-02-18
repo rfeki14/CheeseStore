@@ -72,40 +72,4 @@ $(function(){
     CKEDITOR.replace('editor2')
   });
 </script>
-<script>
-$(function(){
-  $(document).on('change', '.status-toggle', function(){
-    var id = $(this).data('id');
-    var status = $(this).is(':checked') ? 1 : 0;
-    if(status == 0){
-      $('#confirmDeactivate').modal('show');
-      $('#confirmDeactivateBtn').data('id', id);
-    } else {
-      updateStatus(id, status);
-    }
-  });
-
-  $('#confirmDeactivateBtn').click(function(){
-    var id = $(this).data('id');
-    updateStatus(id, 0);
-    $('#confirmDeactivate').modal('hide');
-  });
-
-  function updateStatus(id, status){
-    $.ajax({
-      type: 'POST',
-      url: 'edit_status.php',
-      data: {id: id, status: status},
-      success: function(response){
-        if(response == 'success'){
-          alert('User status updated successfully');
-        } else {
-          alert('Failed to update user status');
-        }
-      }
-    });
-  }
-});
-</script>
-
 

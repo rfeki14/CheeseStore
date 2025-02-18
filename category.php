@@ -59,7 +59,6 @@
                                                     <a href='product.php?product=" . htmlspecialchars($row['slug']) . "' 
                                                        class='product-title'>" . htmlspecialchars($row['name']) . "</a>
                                                 </h5>
-                                                <p class='product-price'>&#36; " . number_format($row['price'], 2) . "</p>
                                             </div>
                                         ";
                                     }

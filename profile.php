@@ -332,7 +332,10 @@ $(function(){
                 $('#delivery').html(response.delivery_method);
                 $('#address').html(response.address);
                 $('#detail').prepend(response.list);
-                $('#fee').html(response.fee);
+                if(response.fee!=0){
+                    $('#dfee').show();
+                    $('#fee').html(response.fee);
+                };
                 $('#total').html(response.total);
             }
         });
@@ -340,6 +343,8 @@ $(function(){
 
     $("#transaction").on("hidden.bs.modal", function () {
         $('.prepend_items').remove();
+        $('#dfee').hide();
+        $('#fee').html(0);
     });
 
     // Supprimer tous les autres gestionnaires de formulaire et garder uniquement celui-ci
