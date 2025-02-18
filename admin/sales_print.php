@@ -8,13 +8,7 @@
 		$stmt->execute();
 		$total = 0;
 		foreach($stmt as $row){
-			$stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id WHERE sales_id=:id");
-			$stmt->execute(['id'=>$row['salesid']]);
-			$amount = 0;
-			foreach($stmt as $details){
-				$subtotal = $details['price']*$details['quantity'];
-				$amount += $subtotal;
-			}
+			$amount = $row['total'];
 			$total += $amount;
 			$contents .= '
 			<tr>
@@ -75,7 +69,7 @@
 	    $content .= generateRow($from, $to, $conn);  
 	    $content .= '</table>';  
 	    $pdf->writeHTML($content);  
-	    $pdf->Output('sales.pdf', 'I');
+	    $pdf->Output('sales'.$from.'--'.$to.'.pdf', 'I');
 
 	    $pdo->close();
 
