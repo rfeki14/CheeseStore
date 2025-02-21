@@ -76,7 +76,7 @@
                             <td>".$row['firstname'].' '.$row['lastname']."</td>
                             <td>".$row['salesid']."</td>
                             <td>
-                              <input type='checkbox' class='status-toggle' data-id='".$row['salesid']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Actif' data-off='Inactif' data-onstyle='success' data-offstyle='danger' data-size='small'>
+                              <input type='checkbox' class='status-toggle' data-id='".$row['salesid']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Confirmé' data-off='Non Confirmé' data-onstyle='success' data-offstyle='danger' data-size='small'>
                             </td>
                             <td>&#36; ".number_format($total, 2)."</td>
                             <td><button type='button' class='btn btn-info btn-sm btn-flat transact' data-id='".$row['salesid']."'><i class='fa fa-search'></i> Voir</button></td>

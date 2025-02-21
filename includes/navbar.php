@@ -1,3 +1,13 @@
+<script>
+  function getCartLength() {
+    if (typeof(Storage) !== "undefined") {
+      // Retrieve the existing cart or create a new one
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      return cart.length;
+    }
+    return 0; // Return 0 if Storage is not supported
+  }
+</script>
 <header class="main-header">
   <!-- Lien vers le CSS externe -->
   <link rel="stylesheet" href="dist/css/navbar.css">
@@ -70,7 +80,7 @@
                     echo $row['count'];
                 }
                 else{
-                    echo count($_SESSION['cart'] ?? []);
+                  echo "<script>document.write(getCartLength());</script>";
                 }
                 ?>
               </span>

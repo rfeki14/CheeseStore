@@ -159,109 +159,126 @@ if (isset($_GET['category'])) {
   </div>
   	<?php include 'includes/footer.php'; ?>
     <?php include 'includes/products_modal.php'; ?>
-    <?php include 'includes/products_modal2.php'; ?>
 
 </div>
 <!-- ./wrapper -->
 
 <?php include 'includes/scripts.php'; ?>
 <script>
-$(function(){
-  $(document).on('click', '.edit', function(e){
-    e.preventDefault();
-    $('#edit').modal('show');
-    var id = $(this).data('id');
-    getRow(id);
-  });
+$(document).ready(function() {
+    $(document).on('click', '.edit', function(e) {
+        e.preventDefault();
+        $('#edit').modal('show');
+        var id = $(this).data('id');
+        getRow(id);
+    });
 
-  $(document).on('click', '.delete', function(e){
-    e.preventDefault();
-    $('#delete').modal('show');
-    var id = $(this).data('id');
-    getRow(id);
-  });
+    $(document).on('click', '.delete', function(e) {
+        e.preventDefault();
+        $('#delete').modal('show');
+        var id = $(this).data('id');
+        getRow(id);
+    });
 
-  $(document).on('click', '.photo', function(e){
-    e.preventDefault();
-    var id = $(this).data('id');
-    getRow(id);
-  });
-  
-  $(document).on('click', '.desc', function(e){
-    e.preventDefault();
-    var id = $(this).data('id');
-    getRow(id);
-  });
+    $(document).on('click', '.photo', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        getRow(id);
+    });
 
-  $('#select_category').change(function(){
-    var val = $(this).val();
-    if(val == 0){
-      window.location = 'products.php';
-    }
-    else if(val == -1){
-    window.location = 'products.php?category=-1';
-  }
-    else{
-      window.location = 'products.php?category='+val;
-    }
-  });
+    $(document).on('click', '.desc', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        getRow(id);
+    });
 
-  $('#addproduct').click(function(e){
-    e.preventDefault();
-    getCategory();
-  });
+    $('#select_category').change(function() {
+        var val = $(this).val();
+        if (val == 0) {
+            window.location = 'products.php';
+        } else if (val == -1) {
+            window.location = 'products.php?category=-1';
+        } else {
+            window.location = 'products.php?category=' + val;
+        }
+    });
 
-  $("#addnew").on("hidden.bs.modal", function () {
-      $('.append_items').remove();
-  });
+    $('#addproduct').click(function(e) {
+        e.preventDefault();
+        getCategory();
+    });
 
-  $("#edit").on("hidden.bs.modal", function () {
-      $('.append_items').remove();
-  });
+    $("#addnew").on("hidden.bs.modal", function() {
+        $('.append_items').remove();
+        $('#category').html("")
+    });
 
+    $("#edit").on("hidden.bs.modal", function() {
+        $('.append_items').remove();
+        $('#edit_category').html("")
+    });
 });
 
-function getRow(id) {
-    console.log("Récupération des détails du produit pour l'ID:", id); // Debugging Log
+function getCategory(id) {
+  console.log(id);
+    $.ajax({
+        type: 'POST',
+        url: 'category_fetch.php',
+        data: {},
+        dataType: 'json',
+        success: function(response) {
+          if (id){
+            var select = document.getElementById("edit_category");
+            response.forEach(category => {
+                var option = document.createElement("option");
+                option.text = category.name;
+                option.value = category.id;
+                select.appendChild(option);
+                if(category.id==id){
+                  $('select option[value='+id+']').attr("selected",true);
+                  console.log("selected");
+                }
+            });}
+            else{
+              console.log("no id");
+              var select = document.getElementById("category");
+              response.forEach(category => {
+                var option = document.createElement("option");
+                option.text = category.name;
+                option.value = category.id;
+                select.appendChild(option);
+            });
+        }
+      },
+        error: function(xhr, status, error) {
+            console.error("Erreur AJAX:", error);
+        }
+    });
+}
 
+function getRow(id) {
     $.ajax({
         type: 'POST',
         url: 'products_row.php',
         data: { id: id },
         dataType: 'json',
         success: function(response) {
-            console.log("Données du produit reçues:", response); // Debugging Log
-
             if (response) {
-                // Mettre à jour le champ caché ID
+                populateDescriptionModal(response); 
                 $('.prodid').val(response.prodid);
-
-                // Mettre à jour les modales de vue et d'édition avec les détails du produit
                 $('.name').html("ID: " + response.prodid + " - " + response.prodname);
                 $('#edit_name').val(response.prodname);
                 $('#edit_quantity').val(response.qtty);
-
-                // Charger les options de catégorie et sélectionner la bonne
                 getCategory(response.category_id);
 
-                // Charger l'ancienne prévisualisation de l'image en utilisant le bon chemin
                 if (response.photo && response.photo !== "../images/") {
                     $('#old_photo_preview').attr('src', response.photo).show();
                 } else {
                     $('#old_photo_preview').attr('src', '../images/noimage.jpg').show();
                 }
 
-                // Remplir la modale de vue (`#description`)
-                $('#desc').html(`
-                    <strong>Nom:</strong> ${response.prodname}<br>
-                    <strong>Catégorie:</strong> ${response.category_name}<br>
-                    <strong>Prix:</strong> $${response.price}<br>
-                    <strong>Quantité:</strong> ${response.qtty}<br>
-                    <strong>Description:</strong> ${response.description}<br>
-                    <img src="${response.photo}" width="150px" style="margin-top: 10px;">
-                `);
+                
 
-                // Charger la description du produit dans CKEditor
                 if (CKEDITOR.instances["edit_description"]) {
                     CKEDITOR.instances["edit_description"].setData(response.description);
                 } else {
@@ -277,3 +294,4 @@ function getRow(id) {
         }
     });
 }
+</script>

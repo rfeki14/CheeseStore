@@ -14,24 +14,24 @@
                 <span class="pull-right">Transaction#: <span id="transid"></span></span> 
               </p>
               <p>
-                Delivery Method: <span id="delivery"></span>
+              Méthode de livraison: <span id="delivery"></span>
                 
                 </p>
-                <p>Status:<span id="status"></span></p>
+                <p>Statut:<span id="status"></span></p>
                 <p>
                  Adresse: <span id="address"></span>
                 </p>
                                
               <table class="table table-bordered">
                 <thead>
-                  <th>Product</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Subtotal</th>
+                  <th>Produit</th>
+                  <th>Prix</th>
+                  <th>Quantité</th>
+                  <th>Sous-total</th>
                 </thead>
                 <tbody id="detail">
                     <tr id="dfee"style="display: none">
-                        <td colspan="3" style="align:right">Delivery Fee:</td>
+                        <td colspan="3" style="align:right">Frais de livraison :</td>
                         <td><span id="fee"></span></td>
                     </tr>
                   <tr>

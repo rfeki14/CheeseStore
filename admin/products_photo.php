@@ -1,7 +1,7 @@
 <?php
 	include 'includes/session.php';
 
-	if(isset($_POST['upload'])){
+	if(isset($_POST['id'])){
 		$id = $_POST['id'];
 		$filename = $_FILES['photo']['name'];
 

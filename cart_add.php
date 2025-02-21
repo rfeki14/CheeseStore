@@ -70,6 +70,7 @@ if(isset($_POST['id']) && isset($_POST['quantity']) && isset($_POST['edition']))
                     'weight' => $product['weight'],
                     'stock' => $product['stock']
                 ];
+                $_SESSION['cartcount']=$_SESSION['cartcount']+1;
             $output['message'] = 'Produit ajouté au panier';
         }
         else{

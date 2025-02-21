@@ -41,7 +41,7 @@ if(isset($_POST['id'])){
         // Suppression du panier en session
         if(isset($_SESSION['cart'])){
             foreach($_SESSION['cart'] as $key => $item){
-                if($item['edition_id'] == $id){
+                if($item['cartid'] == $id){
                     unset($_SESSION['cart'][$key]);
                     $_SESSION['cart'] = array_values($_SESSION['cart']); // Réindexer le tableau
                     $output['message'] = 'Item deleted successfully';
