@@ -12,7 +12,7 @@
 			$stmt = $conn->prepare("UPDATE cart SET quantity=:quantity WHERE id=:id");
 			$stmt->execute(['quantity'=>$quantity, 'id'=>$cartid]);
 
-			$_SESSION['success'] = 'Quantity updated successfully';
+			$_SESSION['success'] = 'Quantité mise à jour avec succès';
 		}
 		catch(PDOException $e){
 			$_SESSION['error'] = $e->getMessage();
@@ -22,5 +22,4 @@
 
 		header('location: cart.php?user='.$userid);
 	}
-
 ?>

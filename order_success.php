@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="dist/css/cart_view.css">
 <?php
 include 'includes/session.php';
 include 'includes/header.php';
@@ -22,30 +23,29 @@ try {
     $order = $stmt->fetch();
     
     if(!$order) {
-        throw new Exception("Order not found");
-    }else if($order['delivery_method'] == 'pickup'){
-        $stmt = $conn->prepare("SELECT * FROM stores s , address a where s.address = a.id and s.id = :store_id");
+        throw new Exception("Commande non trouvée");
+    } else if($order['delivery_method'] == 'pickup') {
+        $stmt = $conn->prepare("SELECT * FROM stores s, address a WHERE s.address = a.id AND s.id = :store_id");
         $stmt->execute(['store_id' => $order['dp_address']]);
         $store = $stmt->fetch();        
 
         if (!$store) {
-            throw new Exception("Store not found");
+            throw new Exception("Magasin non trouvé");
         }
-    }else{
+    } else {
         $stmt = $conn->prepare("SELECT * FROM address WHERE id = :address_id");
         $stmt->execute(['address_id' => $order['dp_address']]);
         $address = $stmt->fetch();
 
         if (!$address) {
-            throw new Exception("Address not found");
+            throw new Exception("Adresse non trouvée");
         }
     }
     
-
     // Récupérer les détails de la commande
     $stmt = $conn->prepare("
-        SELECT d.*, p.name ,e.price
-        FROM details d left join edition e on d.product_id = e.id 
+        SELECT d.*, p.name, e.price
+        FROM details d LEFT JOIN edition e ON d.product_id = e.id 
         JOIN products p ON e.product_id = p.id 
         WHERE d.sales_id = :sales_id
     ");
@@ -72,42 +72,40 @@ try {
                             <div class="box-body">
                                 <div class="text-center">
                                     <i class="fa fa-check-circle text-success" style="font-size: 80px;"></i>
-                                    <h2>Thank You!</h2>
-                                    <h4>Your order has been placed successfully</h4>
-                                    <p>Order Reference: #<?php echo $sales_id; ?></p>
+                                    <h2>Merci !</h2>
+                                    <h4>Votre commande a été passée avec succès</h4>
+                                    <p>Référence de la commande : #<?php echo $sales_id; ?></p>
                                     
                                     <div class="order-details mt-4">
-                                        <h5>Order Details:</h5>
-                                        <p>Total Amount: <?php echo number_format($order['total'], 2); ?> DT</p>
-                                        <p>Delivery Method: <?php echo ucfirst($order['delivery_method']); ?></p>
+                                        <h5>Détails de la commande :</h5>
+                                        <p>Montant total : <?php echo number_format($order['total'], 2); ?> DT</p>
+                                        <p>Méthode de livraison : <?php echo ucfirst($order['delivery_method']); ?></p>
                                         
                                         <?php if($order['delivery_method'] == 'delivery'): ?>
-                                            <p>Delivery Address:<br>
+                                            <p>Adresse de livraison :<br>
                                             <?php echo $address['street'] . ', ' . 
                                                      $address['city'] . ', ' . 
                                                      $address['state'] . ' ' . 
                                                      $address['zip_code']; ?>
                                             </p>
                                         <?php else: ?>
-                                            <p>Pickup Location: <?php echo  $store['name']; ?><br>
+                                            <p>Lieu de retrait : <?php echo  $store['name']; ?><br>
                                             <?php echo $store['street'] . ', ' . 
                                                      $store['city'] . ', ' . 
                                                      $store['state'] . ' ' . 
-                                                     $store['zip_code']." "
-                                                     ?>
-                                                    
-                                                     
+                                                     $store['zip_code']; ?>
+                                            </p>
                                         <?php endif; ?>
 
-                                        <h5 class="mt-4">Ordered Items:</h5>
+                                        <h5 class="mt-4">Articles commandés :</h5>
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Product</th>
-                                                        <th>Quantity</th>
-                                                        <th>Price</th>
-                                                        <th>Subtotal</th>
+                                                        <th>Produit</th>
+                                                        <th>Quantité</th>
+                                                        <th>Prix</th>
+                                                        <th>Sous-total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -125,8 +123,8 @@ try {
                                     </div>
 
                                     <div class="mt-4">
-                                        <a href="profile.php" class="btn btn-primary">View My Orders</a>
-                                        <a href="index.php" class="btn btn-default">Continue Shopping</a>
+                                        <a href="profile.php" class="btn btn-primary">Voir mes commandes</a>
+                                        <a href="index.php" class="btn btn-default">Continuer mes achats</a>
                                     </div>
                                 </div>
                             </div>

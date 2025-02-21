@@ -11,7 +11,7 @@ if(isset($_POST['id']) && isset($_POST['status'])){
         $stmt = $conn->prepare("UPDATE users SET status=:status WHERE id=:id");
         $stmt->execute(['status'=>$status, 'id'=>$id]);
         
-        $_SESSION['success'] = 'User status updated successfully';
+        $_SESSION['success'] = 'Statut de l\'utilisateur mis à jour avec succès';
         echo 'ok';
     }
     catch(PDOException $e){

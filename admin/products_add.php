@@ -8,7 +8,7 @@
 		$category = $_POST['category'];
 		$description = $_POST['description'];
 		$filename = $_FILES['photo']['name'];
-		$qtty=$_POST["qtty"];
+		$qtty = $_POST["qtty"];
 
 		$conn = $pdo->open();
 
@@ -17,7 +17,7 @@
 		$row = $stmt->fetch();
 
 		if($row['numrows'] > 0){
-			$_SESSION['error'] = 'Product already exist';
+			$_SESSION['error'] = 'Le produit existe déjà';
 		}
 		else{
 			if(!empty($filename)){
@@ -30,9 +30,9 @@
 			}
 
 			try{
-				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug,qtty, photo) VALUES (:category, :name, :description, :slug, :qtty, :photo)");
-				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug,'qtty'=>$qtty, 'photo'=>$new_filename]);
-				$_SESSION['success'] = 'Product added successfully';
+				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, qtty, photo) VALUES (:category, :name, :description, :slug, :qtty, :photo)");
+				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'qtty'=>$qtty, 'photo'=>$new_filename]);
+				$_SESSION['success'] = 'Produit ajouté avec succès';
 
 			}
 			catch(PDOException $e){
@@ -43,9 +43,8 @@
 		$pdo->close();
 	}
 	else{
-		$_SESSION['error'] = 'Fill up product form first';
+		$_SESSION['error'] = 'Veuillez d\'abord remplir le formulaire de produit';
 	}
 
 	header('location: products.php');
-
 ?>

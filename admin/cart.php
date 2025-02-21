@@ -22,28 +22,28 @@
   <?php include 'includes/navbar.php'; ?>
   <?php include 'includes/menubar.php'; ?>
 
-  <!-- Content Wrapper. Contains page content -->
+  <!-- Conteneur de contenu. Contient le contenu de la page -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- En-tête de contenu (en-tête de page) -->
     <section class="content-header">
       <h1>
-        <?php echo $user['firstname'].' '.$user['lastname'].'`s Cart' ?>
+        <?php echo $user['firstname'].' '.$user['lastname'].' - Panier' ?>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li>Users</li>
-        <li class="active">Cart</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li>Utilisateurs</li>
+        <li class="active">Panier</li>
       </ol>
     </section>
 
-    <!-- Main content -->
+    <!-- Contenu principal -->
     <section class="content">
       <?php
         if(isset($_SESSION['error'])){
           echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-warning'></i> Error!</h4>
+              <h4><i class='icon fa fa-warning'></i> Erreur!</h4>
               ".$_SESSION['error']."
             </div>
           ";
@@ -53,7 +53,7 @@
           echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-check'></i> Success!</h4>
+              <h4><i class='icon fa fa-check'></i> Succès!</h4>
               ".$_SESSION['success']."
             </div>
           ";
@@ -64,40 +64,41 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="#addnew" data-toggle="modal" id="add" data-id="<?php echo $user['id']; ?>" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> New</a>
-              <a href="users.php" class="btn btn-sm btn-primary btn-flat"><i class="fa fa-arrow-left"></i> Users</a>
+              <a href="#addnew" data-toggle="modal" id="add" data-id="<?php echo $user['id']; ?>" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> Nouveau</a>
+              <a href="users.php" class="btn btn-sm btn-primary btn-flat"><i class="fa fa-arrow-left"></i> Utilisateurs</a>
             </div>
             <div class="box-body">
               <table id="example1" class="table table-bordered">
                 <thead>
-                  <th>Product Name</th>
-                  <th>Quantity</th>
-                  <th>Tools</th>
+                  <th>Nom du Produit</th>
+                  <th>Quantité</th>
+                  <th>Outils</th>
                 </thead>
                 <tbody>
                   <?php
                     $conn = $pdo->open();
-
-                    try{
-                      $stmt = $conn->prepare("SELECT *, cart.id AS cartid FROM cart LEFT JOIN products ON products.id=cart.product_id WHERE user_id=:user_id");
-                      $stmt->execute(['user_id'=>$user['id']]);
-                      foreach($stmt as $row){
-                        echo "
-                          <tr>
-                            <td>".$row['name']."</td>
-                            <td>".$row['quantity']."</td>
-                            <td>
-                              <button class='btn btn-success btn-sm edit btn-flat' data-id='".$row['cartid']."'><i class='fa fa-edit'></i> Edit Quantity</button>
-                              <button class='btn btn-danger btn-sm delete btn-flat' data-id='".$row['cartid']."'><i class='fa fa-trash'></i> Delete</button>
-                            </td>
-                          </tr>
-                        ";
+                    try {
+                      $stmt = $conn->prepare("SELECT *, cart.id AS cartid 
+                                               FROM cart 
+                                               LEFT JOIN edition ON edition.id = cart.edition_id 
+                                               LEFT JOIN products ON products.id = edition.product_id 
+                                               WHERE user_id = :user_id");
+                      $stmt->execute(['user_id' => $user['id']]);
+                      foreach ($stmt as $row) {
+                          echo "
+                              <tr>
+                                  <td>" . $row['name'] . "</td>
+                                  <td>" . $row['quantity'] . "</td>
+                                  <td>
+                                      <button class='btn btn-success btn-sm edit btn-flat' data-id='" . $row['cartid'] . "'><i class='fa fa-edit'></i> Modifier la Quantité</button>
+                                      <button class='btn btn-danger btn-sm delete btn-flat' data-id='" . $row['cartid'] . "'><i class='fa fa-trash'></i> Supprimer</button>
+                                  </td>
+                              </tr>
+                          ";
                       }
-                    }
-                    catch(PDOException $e){
+                  } catch (PDOException $e) {
                       echo $e->getMessage();
-                    }
-
+                  }
                     $pdo->close();
                   ?>
                 </tbody>
@@ -125,7 +126,7 @@ $(function(){
     getRow(id);
   });
 
-  $(document).on('click', '.delete', function(e){
+  $(document).on ('click', '.delete', function(e){
     e.preventDefault();
     $('#delete').modal('show');
     var id = $(this).data('id');

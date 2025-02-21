@@ -17,27 +17,27 @@
   <?php include 'includes/navbar.php'; ?>
   <?php include 'includes/menubar.php'; ?>
 
-  <!-- Content Wrapper. Contains page content -->
+  <!-- Conteneur de contenu. Contient le contenu de la page -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- En-tête de contenu (en-tête de page) -->
     <section class="content-header">
       <h1>
-        Users
+        Utilisateurs
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Users</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active">Utilisateurs</li>
       </ol>
     </section>
 
-    <!-- Main content -->
+    <!-- Contenu principal -->
     <section class="content">
       <?php
         if(isset($_SESSION['error'])){
           echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-warning'></i> Error!</h4>
+              <h4><i class='icon fa fa-warning'></i> Erreur!</h4>
               ".$_SESSION['error']."
             </div>
           ";
@@ -47,7 +47,7 @@
           echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-check'></i> Success!</h4>
+              <h4><i class='icon fa fa-check'></i> Succès!</h4>
               ".$_SESSION['success']."
             </div>
           ";
@@ -59,7 +59,7 @@
           <div class="box">
             <div class="box-header with-border">
               <a href="#adduserModal" data-toggle="modal" class="btn btn-success btn-sm rounded-pill">
-                <i class="fa fa-plus"></i> New User
+                <i class="fa fa-plus"></i> Nouvel Utilisateur
               </a>
             </div>
             <div class="box-body">
@@ -67,12 +67,12 @@
                 <thead>
                   <th>Photo</th>
                   <th>Email</th>
-                  <th>Name</th>
-                  <th>Address</th>
-                  <th>Phone Number</th>
-                  <th>Status</th>
-                  <th>Date Added</th>
-                  <th>Tools</th>
+                  <th>Nom</th>
+                  <th>Adresse</th>
+                  <th>Numéro de Téléphone</th>
+                  <th>Statut</th>
+                  <th>Date d'Ajout</th>
+                  <th>Outils</th>
                 </thead>
                 <tbody>
                   <?php
@@ -95,7 +95,7 @@
                       $stmt->execute(['type'=>0]);
                       foreach($stmt as $row){
                         $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/profile.jpg';
-                        $addresses = !empty($row['addresses']) ? $row['addresses'] : 'No address registered';
+                        $addresses = !empty($row['addresses']) ? $row['addresses'] : 'Aucune adresse enregistrée';
                         echo "
                           <tr>
                             <td>
@@ -107,19 +107,19 @@
                             <td>".html_entity_decode($addresses)."</td>
                             <td>".$row['contact_info']."</td>
                             <td>
-                              <input type='checkbox' class='status-toggle' data-id='".$row['id']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Active' data-off='Inactive' data-onstyle='success' data-offstyle='danger' data-size='small'>
+                              <input type='checkbox' class='status-toggle' data-id='".$row['id']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Actif' data-off='Inactif' data-onstyle='success' data-offstyle='danger' data-size='small'>
                             </td>
                             <td>".date('M d, Y', strtotime($row['created_on']))."</td>
                             <td>
                               <div class='btn-group'>
-                                <a href='cart.php?user=".$row['id']."' class='btn btn-info btn-sm rounded-pill' title='View Cart'>
-                                  <i class='fa fa-shopping-cart'></i> Cart
+                                <a href='cart.php?user=".$row['id']."' class='btn btn-info btn-sm rounded-pill' title='Voir le Panier'>
+                                  <i class='fa fa-shopping-cart'></i> Panier
                                 </a>
-                                <button class='btn btn-primary btn-sm edit rounded-pill' data-id='".$row['id']."' title='Edit'>
-                                  <i class='fa fa-edit'></i> Edit
+                                <button class='btn btn-primary btn-sm edit rounded-pill' data-id='".$row['id']."' title='Modifier'>
+                                  <i class='fa fa-edit'></i> Modifier
                                 </button>
-                                <button class='btn btn-danger btn-sm delete rounded-pill ms-2' data-id='".$row['id']."' title='Delete'>
-                                  <i class='fa fa-trash'></i> Delete
+                                <button class='btn btn-danger btn-sm delete rounded-pill ms-2' data-id='".$row['id']."' title='Supprimer'>
+                                  <i class='fa fa-trash'></i> Supprimer
                                 </button>
                               </div>
                             </td>
@@ -157,7 +157,7 @@ $(document).ready(function(){
 
   
   function loadAddresses(userId) {
-        console.log('Loading addresses for user ID:', userId); // Add this line for debugging
+        console.log('Chargement des adresses pour l\'ID utilisateur:', userId); // Ligne ajoutée pour le débogage
         $.ajax({
             url: 'get_addresses.php',
             type: 'GET',
@@ -167,12 +167,12 @@ $(document).ready(function(){
                 try {
                     addresses = JSON.parse(response);
                 } catch (e) {
-                    console.error('Error parsing JSON:', e);
+                    console.error('Erreur lors de l\'analyse JSON:', e);
                     addresses = [];
                 }
 
                 if (!Array.isArray(addresses)) {
-                    console.error('Expected an array but got:', addresses);
+                    console.error('Un tableau était attendu mais reçu:', addresses);
                     addresses = [];
                 }
 
@@ -184,7 +184,7 @@ $(document).ready(function(){
                 });
             },
             error: function(){
-              console.log("something went wrong")
+              console.log("quelque chose s'est mal passé")
             }
         });
     }
@@ -219,38 +219,33 @@ function createAddressHTML(address = {}) {
 
 function updateAddressIds() {
     var ids = [];
-    // For each remove button in the addresses container, retrieve its data-id
     $('#addresses-container .remove-address').each(function(){
         var id = $(this).data('id');
         if(id) {
             ids.push(id);
         }
     });
-    // Update the hidden input with a comma-separated list of IDs
     $('#address_ids').val(ids.join(','));
 }
 
 
 function createAddressSpan(address) {
     return `<p>
-        <span class="address-item">
+        <span class=" address-item">
             ${address.street}, ${address.city}, ${address.state} ${address.zip_code}, ${address.country}
             <button type="button" class="pull-right btn btn-danger btn-sm remove-address" data-id="${address.id}">Supprimer</button>
         </span><br></p>
     `;
 }
 
-    
-
-
     $('#edit').on('show.bs.modal', function(event){
         var userId = $(this).data('id');
-        console.log('User ID:', userId); // Add this line for debugging
+        console.log('ID utilisateur:', userId); // Ligne ajoutée pour le débogage
         if (userId) {
-            $('.userid').val(userId); // Ensure the user ID is set in the hidden input field
+            $('.userid').val(userId); // Assurez-vous que l'ID utilisateur est défini dans le champ caché
             loadAddresses(userId);
         } else {
-            console.error('User ID not found');
+            console.error('ID utilisateur introuvable');
         }
     });
 
@@ -284,7 +279,6 @@ function createAddressSpan(address) {
         }
     });
     $(document).on('click', '.add-add', function(){
-        //collecting data
         let userid = $('#edituserid').val();
         let street = $('#street').val();
         let city = $('#city').val();
@@ -292,7 +286,7 @@ function createAddressSpan(address) {
         let zip_code = $('#zipcode').val();
         let country = $('#country').val();
         let phone = $('#phone').val();
-        console.log(userid, street, city, state, zip_code, country); // Add this line for debugging
+        console.log(userid, street, city, state, zip_code, country); // Ligne ajoutée pour le débogage
             $.ajax({
             type: 'POST',
             url: 'add_address.php',
@@ -307,9 +301,9 @@ function createAddressSpan(address) {
             },
             dataType: 'json',
             success: function(response){
-                console.log('Response:', response); // Add this line for debugging
+                console.log('Réponse:', response); // Ligne ajoutée pour le débogage
                 if(response.status){
-                    alert('Adresse ajouté avec succès');
+                    alert('Adresse ajoutée avec succès');
                     let form = $('#addForm');
                     form.remove();
                     let container = $('#addresses-container');
@@ -320,17 +314,14 @@ function createAddressSpan(address) {
                 }
             },
             error: function(xhr, status, error) {
-                console.error('AJAX Error:', status, error);
+                console.error('Erreur AJAX:', status, error);
             }
         });
         
     });
 
-
-  // Initialiser les toggles
   $('.status-toggle').bootstrapToggle();
   
-  // Existant event handlers
   $(document).on('click', '.edit', function(e){
     e.preventDefault();
     $('#edit').modal('show');
@@ -360,7 +351,6 @@ function createAddressSpan(address) {
     getRow(id);
   });
 
-  // Nouveau gestionnaire de statut corrigé
   $(document).on('change', '.status-toggle', function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -369,7 +359,6 @@ function createAddressSpan(address) {
     var id = $toggle.data('id');
     var status = $toggle.prop('checked');
     
-    // Empêcher les clics multiples
     $toggle.bootstrapToggle('disable');
     
     $.ajax({
@@ -382,28 +371,24 @@ function createAddressSpan(address) {
       success: function(response) {
         $toggle.bootstrapToggle('enable');
         if(response == 'ok') {
-          // Message plus discret en haut de la page
-          var message = status ? 'User activated successfully' : 'User deactivated successfully';
+          var message = status ? 'Utilisateur activé avec succès' : 'Utilisateur désactivé avec succès';
           $(".content").prepend(
             '<div class="alert alert-success alert-dismissible">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            '<h4><i class="icon fa fa-check"></i> Success!</h4>' + message +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times ;</button>' +
+            '<h4><i class="icon fa fa-check"></i> Succès!</h4>' + message +
             '</div>'
           );
           
-          // Auto-dismiss après 2 secondes
           setTimeout(function() {
             $('.alert').fadeOut('slow', function() {
               $(this).remove();
             });
           }, 2000);
         } else {
-          // En cas d'erreur, revenir à l'état précédent
           $toggle.bootstrapToggle('toggle');
         }
       },
       error: function() {
-        // En cas d'erreur, revenir à l'état précédent
         $toggle.bootstrapToggle('enable');
         $toggle.bootstrapToggle('toggle');
       }
@@ -435,23 +420,23 @@ function getRow(id){
 </script>
 <style>
 .btn {
-    padding: 4px 12px;  // Reduced from 8px 16px
-    font-weight: 400;   // Reduced from 500
+    padding: 4px 12px;  
+    font-weight: 400;   
     transition: all 0.3s ease;
-    font-size: 12px;    // Added smaller font size
+    font-size: 12px;    
 }
 
 .btn i {
-    font-size: 11px;    // Added smaller icon size
+    font-size: 11px;    
 }
 
 .btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  // Reduced shadow
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  
 }
 
 .btn-group {
-    gap: 4px;  // Reduced from 8px
+    gap: 4px;  
 }
 
 .rounded-pill {

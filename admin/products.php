@@ -18,17 +18,17 @@ if (isset($_GET['category'])) {
   <?php include 'includes/navbar.php'; ?>
   <?php include 'includes/menubar.php'; ?>
 
-  <!-- Content Wrapper. Contains page content -->
+  <!-- Content Wrapper. Contient le contenu de la page -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Content Header (En-tête de la page) -->
     <section class="content-header">
       <h1>
-        Product List
+        Liste des Produits
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li>Products</li>
-        <li class="active">Product List</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li>Produits</li>
+        <li class="active">Liste des Produits</li>
       </ol>
     </section>
 
@@ -39,7 +39,7 @@ if (isset($_GET['category'])) {
         echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-warning'></i> Error!</h4>
+              <h4><i class='icon fa fa-warning'></i> Erreur!</h4>
               " . $_SESSION['error'] . '
             </div>
           ';
@@ -49,7 +49,7 @@ if (isset($_GET['category'])) {
         echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-check'></i> Success!</h4>
+              <h4><i class='icon fa fa-check'></i> Succès!</h4>
               " . $_SESSION['success'] . '
             </div>
           ';
@@ -61,15 +61,15 @@ if (isset($_GET['category'])) {
           <div class="box">
             <div class="box-header with-border">
               <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm rounded-pill" id="addproduct">
-                <i class="fa fa-plus"></i> New Product
+                <i class="fa fa-plus"></i> Nouveau Produit
               </a>
               <div class="pull-right">
                 <form class="form-inline">
                   <div class="form-group">
-                    <label>Category: </label>
+                    <label>Catégorie: </label>
                     <select class="form-control input-sm" id="select_category">
-                    <option value="0" <?php echo ($catid == 0) ? 'selected' : ''; ?>>ALL</option>
-                    <option value="-1" <?php echo ($catid == -1) ? 'selected' : ''; ?>>None</option>
+                    <option value="0" <?php echo ($catid == 0) ? 'selected' : ''; ?>>TOUS</option>
+                    <option value="-1" <?php echo ($catid == -1) ? 'selected' : ''; ?>>Aucune</option>
                       <?php
                       $conn = $pdo->open();
 
@@ -93,13 +93,13 @@ if (isset($_GET['category'])) {
             <div class="box-body">
               <table id="example1" class="table table-bordered">
                 <thead>
-                  <th>Name</th>
-                  <th>Category</th>
+                  <th>Nom</th>
+                  <th>Catégorie</th>
                   <th>Photo</th>
                   <th>Description</th>
-                  <th>Quantity</th>
-                  <th>Views Today</th>
-                  <th>Tools</th>
+                  <th>Quantité</th>
+                  <th>Vues Aujourd'hui</th>
+                  <th>Actions</th>
                 </thead>
                 <tbody>
                   <?php
@@ -113,7 +113,7 @@ if (isset($_GET['category'])) {
                       foreach ($stmt as $row) {
                         $image = (!empty($row['photo'])) ? '../images/' . $row['photo'] : '../images/noimage.jpg';
                         $counter = ($row['date_view'] == $now) ? $row['counter'] : 0;
-                        $category = (!empty($row['catname'])) ? htmlspecialchars($row['catname']) : 'None';
+                        $category = (!empty($row['catname'])) ? htmlspecialchars($row['catname']) : 'Aucune';
                         echo "
                             <tr>
                               <td>" . htmlspecialchars($row['name']) . "</td>
@@ -124,7 +124,7 @@ if (isset($_GET['category'])) {
                               </td>
                               <td>
                                 <a href='#description' data-toggle='modal' class='btn btn-info btn-sm rounded-pill desc' data-id='" . $row['id'] . "'>
-                                  <i class='fa fa-search'></i> View
+                                  <i class='fa fa-search'></i> Voir
                                 </a>
                               </td>
                               <td> " . number_format($row['qtty'], 3) . '</td>
@@ -132,10 +132,10 @@ if (isset($_GET['category'])) {
                               <td>
                                 <div class='btn-group'>
                                   <button class='btn btn-primary btn-sm edit rounded-pill' data-id='" . $row['id'] . "'>
-                                    <i class='fa fa-edit'></i> Edit
+                                    <i class='fa fa-edit'></i> Modifier
                                   </button>
                                   <button class='btn btn-danger btn-sm delete rounded-pill ms-2' data-id='" . $row['id'] . "'>
-                                    <i class='fa fa-trash'></i> Delete
+                                    <i class='fa fa-trash'></i> Supprimer
                                   </button>
                                 </div>
                               </td>
@@ -222,7 +222,7 @@ $(function(){
 });
 
 function getRow(id) {
-    console.log("Fetching product details for ID:", id); // Debugging Log
+    console.log("Récupération des détails du produit pour l'ID:", id); // Debugging Log
 
     $.ajax({
         type: 'POST',
@@ -230,38 +230,38 @@ function getRow(id) {
         data: { id: id },
         dataType: 'json',
         success: function(response) {
-            console.log("Product Data Received:", response); // Debugging Log
+            console.log("Données du produit reçues:", response); // Debugging Log
 
             if (response) {
-                // Update hidden ID input field
+                // Mettre à jour le champ caché ID
                 $('.prodid').val(response.prodid);
 
-                // Update View and Edit Modals with Product Details
+                // Mettre à jour les modales de vue et d'édition avec les détails du produit
                 $('.name').html("ID: " + response.prodid + " - " + response.prodname);
                 $('#edit_name').val(response.prodname);
                 $('#edit_quantity').val(response.qtty);
 
-                // Load category options and select the correct one
+                // Charger les options de catégorie et sélectionner la bonne
                 getCategory(response.category_id);
 
-                // Load old image preview using correct path
+                // Charger l'ancienne prévisualisation de l'image en utilisant le bon chemin
                 if (response.photo && response.photo !== "../images/") {
                     $('#old_photo_preview').attr('src', response.photo).show();
                 } else {
                     $('#old_photo_preview').attr('src', '../images/noimage.jpg').show();
                 }
 
-                // Populate View Modal (`#description`)
+                // Remplir la modale de vue (`#description`)
                 $('#desc').html(`
-                    <strong>Name:</strong> ${response.prodname}<br>
-                    <strong>Category:</strong> ${response.category_name}<br>
-                    <strong>Price:</strong> $${response.price}<br>
-                    <strong>Quantity:</strong> ${response.qtty}<br>
+                    <strong>Nom:</strong> ${response.prodname}<br>
+                    <strong>Catégorie:</strong> ${response.category_name}<br>
+                    <strong>Prix:</strong> $${response.price}<br>
+                    <strong>Quantité:</strong> ${response.qtty}<br>
                     <strong>Description:</strong> ${response.description}<br>
                     <img src="${response.photo}" width="150px" style="margin-top: 10px;">
                 `);
 
-                // Load product description in CKEditor
+                // Charger la description du produit dans CKEditor
                 if (CKEDITOR.instances["edit_description"]) {
                     CKEDITOR.instances["edit_description"].setData(response.description);
                 } else {
@@ -269,91 +269,11 @@ function getRow(id) {
                     CKEDITOR.instances["edit_description"].setData(response.description);
                 }
             } else {
-                console.error("Invalid response:", response);
+                console.error("Réponse invalide:", response);
             }
         },
         error: function(xhr, status, error) {
-            console.error("AJAX Error:", error);
+            console.error("Erreur AJAX:", error);
         }
     });
 }
-
-
-
-function getCategory(selectedCategoryId = null) {
-    $.ajax({
-        type: 'POST',
-        url: 'category_fetch.php', // Fetch categories from the database
-        dataType: 'json',
-        success: function(response) {
-            console.log("Category Data Received:", response); // Debugging Log
-
-            if (Array.isArray(response)) {
-                let categoryOptions = '<option value="">Select Category</option>';
-                response.forEach(function(category) {
-                    categoryOptions += `<option value="${category.id}">${category.name}</option>`;
-                });
-
-                // Populate both Add and Edit dropdowns
-                $('#category').html(categoryOptions);
-                $('#edit_category').html(categoryOptions);
-
-                // Set the selected category AFTER options are populated
-                if (selectedCategoryId) {
-                    $('#edit_category').val(selectedCategoryId);
-                }
-            } else {
-                console.error("Invalid response format:", response);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("AJAX Error (Categories):", error);
-        }
-    });
-}
-
-
-
-</script>
-<style>
-.btn {
-    padding: 8px 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.btn-group {
-    gap: 8px;
-}
-
-.rounded-pill {
-    border-radius: 50px;
-}
-
-.btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.btn-info {
-    background-color: #17a2b8;
-    border-color: #17a2b8;
-}
-</style>
-</body>
-</html>

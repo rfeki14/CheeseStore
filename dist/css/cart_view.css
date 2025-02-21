@@ -67,7 +67,7 @@ body {
 
 /* Quantity Buttons */
 .quantity-btn {
-    background: #dc3545;
+    background: #d49b57;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -78,12 +78,12 @@ body {
 }
 
 .quantity-btn:hover {
-    background: #cc0000;
+    background: #d49b57;
 }
 
 /* Delete Button */
 .cart_delete {
-    background: #dc3545;
+    background: #d49b57;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -94,7 +94,7 @@ body {
 }
 
 .cart_delete:hover {
-    background: #c82333;
+    background: #d49b53;
 }
 
 /* Checkout Button */
@@ -104,7 +104,7 @@ body {
     font-weight: bold;
     padding: 12px;
     width: 100%;
-    background: #c82333;
+    background: #d49b57;
     color: white;
     border: none;
     transition: 0.3s;
@@ -112,7 +112,7 @@ body {
 }
 
 .btn-primary:hover {
-    background: #c82333;
+    background: #d49b57;
 }
 
 /* Login Notice */
@@ -122,7 +122,7 @@ h4 {
 }
 
 h4 a {
-    color: #cc0000;
+    color: #d49b57;
     text-decoration: none;
 }
 

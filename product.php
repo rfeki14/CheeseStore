@@ -17,10 +17,10 @@
         $stmt->execute(['prodid' => $product['prodid']]);
         $editions = $stmt->fetchAll();
     } catch (PDOException $e) {
-        echo "There is some problem in connection: " . $e->getMessage();
+        echo "Il y a un problème de connexion : " . $e->getMessage();
     }
 
-    // Page View Counter
+    // Compteur de vues de la page
     $now = date('Y-m-d');
     if ($product['date_view'] == $now) {
         $stmt = $conn->prepare("UPDATE products SET counter=counter+1 WHERE id=:id");
@@ -41,67 +41,64 @@
     <div class="content-wrapper">
         <div class="container">
             <section class="content">
-                        <div class="product-card">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <img src="<?php echo (!empty($product['photo'])) ? 'images/'.$product['photo'] : 'images/noimage.jpg'; ?>" 
-                                         class="product-image">
-                                </div>
-                                <div class="col-md-6">
-                                    <h1 class="product-title"><?php echo $product['prodname']; ?></h1>
-                                    
-                                    <!-- Edition selector -->
-                                    <div class="form-group">
-                                        <label for="edition">weights:</label>
-                                        <select name="edition" id="edition" class="form-control" required>
-                                            <option value="">Sélectionnez un weights</option>
-                                            <?php
-                                            foreach($editions as $edition){
-                                                echo "<option value='".$edition['id']."' data-price='".$edition['price']."'>"
-                                                    .$edition['weight']."g - $".number_format($edition['price'], 2)
-                                                    ."</option>";
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-
-                                    <p><b>Category:</b> 
-                                        <a href="category.php?category=<?php echo $product['cat_slug']; ?>" class="category-link">
-                                            <?php echo $product['catname']; ?>
-                                        </a>
-                                    </p>
-                                    <p><b>Description:</b></p>
-                                    <p class="product-description"><?php echo $product['description']; ?></p>
-
-                                    <!-- Add to Cart -->
-                                    <form class="form-inline" id="productForm">
-                                        <div class="form-group">
-                                            <div class="quantity-control">
-                                                <div class="input-group">
-                                                    <input type="number" name="quantity" id="quantity" class="form-control text-center" 
-                                                           value="1" min="1" max="<?php echo $product['qtty']; ?>" data-stock="<?php echo $product['qtty']; ?>">
-                                                    <span class="input-group-text">pièce(s)</span>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" value="<?php echo $product['prodid']; ?>" name="id">
-                                            <button type="submit" class="cart-btn">
-                                                <i class="fa fa-shopping-cart"></i> Add to Cart
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                <div class="product-card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="<?php echo (!empty($product['photo'])) ? 'images/'.$product['photo'] : 'images/noimage.jpg'; ?>" 
+                                 class="product-image">
                         </div>
-
-                        <!-- Facebook Comments -->
-                        <div class="comments-container">
-                            <div class="fb-comments" data-href="http://localhost/ecommerce/product.php?product=<?php echo $slug; ?>" 
-                                 data-numposts="10" width="100%">
+                        <div class="col-md-6">
+                            <h1 class="product-title"><?php echo $product['prodname']; ?></h1>
+                            
+                            <!-- Sélecteur d'édition -->
+                            <div class="form-group">
+                                <label for="edition">Poids :</label>
+                                <select name="edition" id="edition" class="form-control" required>
+                                    <option value="">Sélectionnez un poids</option>
+                                    <?php
+                                    foreach($editions as $edition){
+                                        echo "<option value='".$edition['id']."' data-price='".$edition['price']."'>"
+                                            .$edition['weight']."g - $".number_format($edition['price'], 2)
+                                            ."</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
+
+                            <p><b>Catégorie :</b> 
+                                <a href="category.php?category=<?php echo $product['cat_slug']; ?>" class="category-link">
+                                    <?php echo $product['catname']; ?>
+                                </a>
+                            </p>
+                            <p><b>Description :</b></p>
+                            <p class="product-description"><?php echo $product['description']; ?></p>
+
+                            <!-- Ajouter au panier -->
+                            <form class="form-inline" id="productForm">
+                                <div class="form-group">
+                                    <div class="quantity-control">
+                                        <div class="input-group">
+                                            <input type="number" name="quantity" id="quantity" class="form-control text-center" 
+                                                   value="1" min="1" max="<?php echo $product['qtty']; ?>" data-stock="<?php echo $product['qtty']; ?>">
+                                            <span class="input-group-text">pièce(s)</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" value="<?php echo $product['prodid']; ?>" name="id">
+                                    <button type="submit" class="cart-btn">
+                                        <i class="fa fa-shopping-cart"></i> Ajouter au panier
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Sidebar -->
+                <!-- Commentaires Facebook -->
+                <div class="comments-container">
+                    <div class="fb-comments" data-href="http://localhost/ecommerce/product.php?product=<?php echo $slug; ?>" 
+                         data-numposts="10" width="100%">
+                    </div>
+                </div>
             </section>
         </div>
     </div>
@@ -114,7 +111,7 @@
 
 <script>
 $(function(){
-    // Mise à jour du price lors du changement d'édition
+    // Mise à jour du prix lors du changement d'édition
     $('#edition').change(function(){
         var selectedPrice = $(this).find(':selected').data('price');
         if(selectedPrice) {
@@ -130,7 +127,7 @@ $(function(){
         var editionId = $('#edition').val();
         
         if(!editionId) {
-            alert('Veuillez sélectionner un weights');
+            alert('Veuillez sélectionner un poids');
             return;
         }
 

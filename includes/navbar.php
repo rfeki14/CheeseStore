@@ -1,34 +1,33 @@
 <header class="main-header">
-  <!-- Link to External CSS -->
-    <link rel="stylesheet" href="dist/css/navbar.css">
-
+  <!-- Lien vers le CSS externe -->
+  <link rel="stylesheet" href="dist/css/navbar.css">
 
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
       <!-- Logo -->
       <a href="index.php" class="navbar-brand">
-       
         <img src="images/logo.png" width="50" height="50" alt="Coeur Blanc Logo">
-
       </a>
 
-      <!-- Mobile Navbar Toggle Button -->
+      <!-- Bouton de bascule de la barre de navigation mobile -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <i class="fa fa-bars"></i>
       </button>
 
-      <!-- Navbar Items -->
+      <!-- Éléments de la barre de navigation -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
-          <li class="nav-item"><a class="nav-link" href="listeproduct.php">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.php">Accueil</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? '#about' : 'about.php'; ?>">À propos de nous</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="contact.php">Contactez-nous</a></li>
+          <li class="nav-item"><a class="nav-link" href="listeproduct.php">Produits</a></li>
 
-          <!-- Categories Dropdown -->
+          <!-- Menu déroulant des catégories -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">
-              Categories
+              Catégories
             </a>
             <ul class="dropdown-menu">
               <?php
@@ -40,7 +39,7 @@
                   echo "<li><a class='dropdown-item' href='category.php?category=".$row['cat_slug']."'>".$row['name']."</a></li>";
                 }
               } catch(PDOException $e) {
-                echo "There is some problem in connection: " . $e->getMessage();
+                echo "Il y a un problème de connexion : " . $e->getMessage();
               }
               $pdo->close();
               ?>
@@ -48,17 +47,17 @@
           </li>
         </ul>
 
-        <!-- Search Bar -->
+        <!-- Barre de recherche -->
         <form method="POST" class="d-flex" action="search.php">
           <div class="input-group">
-            <input type="text" class="form-control" name="keyword" placeholder="Search..." required>
+            <input type="text" class="form-control" name="keyword" placeholder="Rechercher..." required>
             <button class="btn btn-light" type="submit"><i class="fa fa-search"></i></button>
           </div>
         </form>
 
-        <!-- Right Section: Cart & User Profile -->
+        <!-- Section droite : Panier & Profil utilisateur -->
         <ul class="navbar-nav ms-3">
-          <!-- Cart Icon -->
+          <!-- Icône du panier -->
           <li class="nav-item position-relative">
             <a href="cart_view.php" class="nav-link">
               <i class="fa fa-shopping-cart fa-lg"></i>
@@ -78,7 +77,7 @@
             </a>
           </li>
 
-          <!-- User Profile Dropdown -->
+          <!-- Menu déroulant du profil utilisateur -->
           <?php if(isset($_SESSION['user'])): ?>
             <?php $image = (!empty($user['photo'])) ? 'images/'.$user['photo'] : 'images/profile.jpg'; ?>
             <li class="nav-item dropdown">
@@ -86,13 +85,13 @@
                 <img src="<?= $image ?>" width="30" height="30"> <?= $user['firstname'] ?>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                <li><a class="dropdown-item" href="logout.php">Sign Out</a></li>
+                <li><a class="dropdown-item" href="profile.php">Profil</a></li>
+                <li><a class="dropdown-item" href="logout.php">Déconnexion</a></li>
               </ul>
             </li>
           <?php else: ?>
-            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="signup.php">Signup</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.php">Connexion</a></li>
+            <li class="nav-item"><a class="nav-link" href="signup.php">Inscription</a></li>
           <?php endif; ?>
         </ul>
       </div>

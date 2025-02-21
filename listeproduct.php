@@ -10,7 +10,7 @@
             <section class="content">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="page-header">Our Products</h1>
+                        <h1 class="page-header">Nos Produits </h1>
                         <div class="row">
                             <?php
                             $conn = $pdo->open();
@@ -30,7 +30,7 @@
                                                     <p class='product-description'>".substr($row['description'], 0, 100)."...</p>
                                                     <div class='buttons-container'>
                                                         <a href='product.php?product=".$row['slug']."' class='cart-btn'>
-                                                            <i class='fa fa-eye'></i> View Product
+                                                            <i class='fa fa-eye'></i> Voir details
                                                         </a>
                                                     </div>
                                                 </div>

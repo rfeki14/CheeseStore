@@ -3,7 +3,6 @@
 
 	if(isset($_GET['return'])){
 		$return = $_GET['return'];
-		
 	}
 	else{
 		$return = 'home.php';
@@ -38,23 +37,21 @@
 				$stmt = $conn->prepare("UPDATE users SET email=:email, password=:password, firstname=:firstname, lastname=:lastname, photo=:photo WHERE id=:id");
 				$stmt->execute(['email'=>$email, 'password'=>$password, 'firstname'=>$firstname, 'lastname'=>$lastname, 'photo'=>$filename, 'id'=>$admin['id']]);
 
-				$_SESSION['success'] = 'Account updated successfully';
+				$_SESSION['success'] = 'Compte mis à jour avec succès';
 			}
 			catch(PDOException $e){
 				$_SESSION['error'] = $e->getMessage();
 			}
 
 			$pdo->close();
-			
 		}
 		else{
-			$_SESSION['error'] = 'Incorrect password';
+			$_SESSION['error'] = 'Mot de passe incorrect';
 		}
 	}
 	else{
-		$_SESSION['error'] = 'Fill up required details first';
+		$_SESSION['error'] = 'Veuillez d\'abord remplir les détails requis';
 	}
 
 	header('location:'.$return);
-
 ?>

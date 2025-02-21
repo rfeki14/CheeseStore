@@ -14,7 +14,6 @@
 <?php include 'includes/header.php'; ?>
 <link rel="stylesheet" href="dist/css/signup.css">
 
-
 <body class="hold-transition register-page">
   <div class="overlay"></div>
 
@@ -32,27 +31,27 @@
     ?>
 
     <div class="register-box-body">
-      <h2 class="text-primary mb-3">Create Your Account</h2>
+      <h2 class="text-primary mb-3">Créez votre compte</h2>
 
       <form action="register.php" method="POST">
         <div class="form-group">
-          <input type="text" class="form-control" name="firstname" placeholder="First Name" value="<?php echo (isset($_SESSION['firstname'])) ? $_SESSION['firstname'] : '' ?>" required>
+          <input type="text" class="form-control" name="firstname" placeholder="Prénom" value="<?php echo (isset($_SESSION['firstname'])) ? $_SESSION['firstname'] : '' ?>" required>
         </div>
 
         <div class="form-group">
-          <input type="text" class="form-control" name="lastname" placeholder="Last Name" value="<?php echo (isset($_SESSION['lastname'])) ? $_SESSION['lastname'] : '' ?>" required>
+          <input type="text" class="form-control" name="lastname" placeholder="Nom de famille" value="<?php echo (isset($_SESSION['lastname'])) ? $_SESSION['lastname'] : '' ?>" required>
         </div>
 
         <div class="form-group">
-          <input type="email" class="form-control" name="email" placeholder="Email Address" value="<?php echo (isset($_SESSION['email'])) ? $_SESSION['email'] : '' ?>" required>
+          <input type="email" class="form-control" name="email" placeholder="Adresse e-mail" value="<?php echo (isset($_SESSION['email'])) ? $_SESSION['email'] : '' ?>" required>
         </div>
 
         <div class="form-group">
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
+          <input type="password" class="form-control" name="password" placeholder="Mot de passe" required>
         </div>
 
         <div class="form-group">
-          <input type="password" class="form-control" name="repassword" placeholder="Confirm Password" required>
+          <input type="password" class="form-control" name="repassword" placeholder="Confirmer le mot de passe" required>
         </div>
 
         <?php
@@ -61,12 +60,12 @@
           }
         ?>
 
-        <button type="submit" class="btn btn-primary mt-3" name="signup"><i class="fa fa-pencil"></i> Sign Up</button>
+        <button type="submit" class="btn btn-primary mt-3" name="signup"><i class="fa fa-pencil"></i> S'inscrire</button>
       </form>
 
       <div class="register-links">
-        <a href="login.php">Already have an account? Log in</a>
-        <a href="index.php"><i class="fa fa-home"></i> Back to Home</a>
+        <a href="login.php">Vous avez déjà un compte ? Connectez-vous</a>
+        <a href="index.php"><i class="fa fa-home"></i> Retour à l'accueil</a>
       </div>
     </div>
   </div>

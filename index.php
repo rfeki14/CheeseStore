@@ -62,7 +62,7 @@
                 <div class="row">
                     <div class="col-12 text-center mb-4">
                     <link rel="stylesheet" href="dist/css/about.css"> 
-                        <h2 class="title">Our Products</h2>
+                        <h2 class="title">NOS PRODUITS</h2>
                         <div class="section-line"></div>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
 
     <!-- Full-Width Google Map Section -->
     <div class="map-section">
-        <h2 class="map-title">📍 Visit Us in Tunis</h2>
+        <h2 class="map-title">📍 Visitez nous en Tunis</h2>
         <div class="map-container">
         <iframe 
         src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d199.58897333160508!2d10.193483333074079!3d36.832330504581314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stn!4v1738877843546!5m2!1sen!2stn"

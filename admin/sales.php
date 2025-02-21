@@ -7,20 +7,20 @@
   <?php include 'includes/navbar.php'; ?>
   <?php include 'includes/menubar.php'; ?>
 
-  <!-- Content Wrapper. Contains page content -->
+  <!-- Conteneur de contenu. Contient le contenu de la page -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- En-tête de contenu (en-tête de page) -->
     <section class="content-header">
       <h1>
-        Sales History
+        Historique des Ventes
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Sales</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active">Ventes</li>
       </ol>
     </section>
 
-    <!-- Main content -->
+    <!-- Contenu principal -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
@@ -35,7 +35,7 @@
                         <input type="text" class="form-control pull-right col-sm-8" id="reservation" name="date_range" required>
                     </div>
                     <button type="submit" class="btn btn-success btn-sm btn-flat" name="print">
-                        <span class="glyphicon glyphicon-print"></span> Print
+                        <span class="glyphicon glyphicon-print"></span> Imprimer
                     </button>
                 </form>
 
@@ -46,41 +46,40 @@
                 <thead>
                   <th class="hidden"></th>
                   <th>Date</th>
-                  <th>Buyer Name</th>
+                  <th>Nom de l’Acheteur</th>
                   <th>Transaction#</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-                  <th>Full Details</th>
+                  <th>Statut</th>
+                  <th>Montant</th>
+                  <th>Détails Complets</th>
                 </thead>
                 <tbody>
                   <?php
                     $conn = $pdo->open();
 
                     try{
-                      $stmt = $conn->prepare("SELECT u.firstname,u.lastname,s.status,s.total,s.sales_date,s.id AS salesid FROM sales s LEFT JOIN users u ON u.id=s.user_id ORDER BY sales_date DESC");
+                      $stmt = $conn->prepare("SELECT u.firstname, u.lastname, s.status, s.total, s.sales_date, s.id AS salesid FROM sales s LEFT JOIN users u ON u.id=s.user_id ORDER BY sales_date DESC");
                       $stmt->execute();
                       foreach($stmt as $row){
-                        $total=0;
+                        $total = 0;
                         $total = $row['total'];
-                        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN edition on edition.id=details.product_id WHERE details.sales_id=:id");
+                        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN edition ON edition.id=details.product_id WHERE details.sales_id=:id");
                         $stmt->execute(['id'=>$row['salesid']]);
                         
                         foreach($stmt as $details){
-                          $subtotal = $details['price']*$details['quantity'];
-                          #$total +=$subtotal;
+                          $subtotal = $details['price'] * $details['quantity'];
+                          #$total += $subtotal;
                         }
                         echo "
                           <tr>
                             <td class='hidden'></td>
-                            <td>".date('M d, Y', strtotime($row['sales_date']))."</td>
+                            <td>".date('d M, Y', strtotime($row['sales_date']))."</td>
                             <td>".$row['firstname'].' '.$row['lastname']."</td>
                             <td>".$row['salesid']."</td>
-                         
-                               <td>
-                              <input type='checkbox' class='status-toggle' data-id='".$row['salesid']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Active' data-off='Inactive' data-onstyle='success' data-offstyle='danger' data-size='small'>
+                            <td>
+                              <input type='checkbox' class='status-toggle' data-id='".$row['salesid']."' ".($row['status'] ? 'checked' : '')." data-toggle='toggle' data-on='Actif' data-off='Inactif' data-onstyle='success' data-offstyle='danger' data-size='small'>
                             </td>
                             <td>&#36; ".number_format($total, 2)."</td>
-                            <td><button type='button' class='btn btn-info btn-sm btn-flat transact' data-id='".$row['salesid']."'><i class='fa fa-search'></i> View</button></td>
+                            <td><button type='button' class='btn btn-info btn-sm btn-flat transact' data-id='".$row['salesid']."'><i class='fa fa-search'></i> Voir</button></td>
                           </tr>
                         ";
                       }
@@ -107,38 +106,38 @@
 <!-- ./wrapper -->
 
 <?php include 'includes/scripts.php'; ?>
-<!-- Date Picker -->
+<!-- Sélecteur de Date -->
 <script>
 $(function(){
-  //Date picker
+  // Sélecteur de date
   $('#datepicker_add').datepicker({
     autoclose: true,
     format: 'yyyy-mm-dd'
-  })
+ })
   $('#datepicker_edit').datepicker({
     autoclose: true,
     format: 'yyyy-mm-dd'
   })
 
-  //Timepicker
+  // Sélecteur de temps
   $('.timepicker').timepicker({
     showInputs: false
   })
 
-  //Date range picker
+  // Sélecteur de plage de dates
   $('#reservation').daterangepicker()
-  //Date range picker with time picker
+  // Sélecteur de plage de dates avec sélecteur de temps
   $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
-  //Date range as a button
+  // Plage de dates en tant que bouton
   $('#daterange-btn').daterangepicker(
     {
       ranges   : {
-        'Today'       : [moment(), moment()],
-        'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-        'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        'Aujourd\'hui'       : [moment(), moment()],
+        'Hier'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Derniers 7 Jours' : [moment().subtract(6, 'days'), moment()],
+        'Derniers 30 Jours': [moment().subtract(29, 'days'), moment()],
+        'Ce Mois'  : [moment().startOf('month'), moment().endOf('month')],
+        'Dernier Mois'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
       },
       startDate: moment().subtract(29, 'days'),
       endDate  : moment()
@@ -187,11 +186,6 @@ $(function(){
         $('#fee').html(0);
     });
 
-  $("#transaction").on("hidden.bs.modal", function () {
-        $('.prepend_items').remove();
-        $('#dfee').hide();
-    });
-
   $(document).on('change', '.status-toggle', function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -214,11 +208,11 @@ $(function(){
         $toggle.bootstrapToggle('enable');
         if(response == 'ok') {
           // Message plus discret en haut de la page
-          var message = status ? 'Sale confirmed successfully' : 'Sale cancelled successfully';
+          var message = status ? 'Vente confirmée avec succès' : 'Vente annulée avec succès';
           $(".content").prepend(
             '<div class="alert alert-success alert-dismissible">' +
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            '<h4><i class="icon fa fa-check"></i> Success!</h4>' + message +
+            '<h4><i class="icon fa fa-check"></i> Succès!</h4>' + message +
             '</div>'
           );
           
@@ -244,8 +238,6 @@ $(function(){
   });
 
   });
-
-  
 
 </script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>

@@ -1,8 +1,9 @@
+
 <?php 
 include 'includes/session.php';
 include 'includes/header.php';  
 include 'includes/constants.php';
-
+include 'includes/navbar.php';
 if(!isset($_SESSION['user'])) {
     header('location: login.php');
     exit();
@@ -21,7 +22,7 @@ try {
     $user_id = (int)$_SESSION['user'];
     
     if ($user_id <= 0) {
-        throw new Exception("Invalid user ID: " . var_export($_SESSION['user'], true));
+        throw new Exception("ID utilisateur invalide : " . var_export($_SESSION['user'], true));
     }
     
     $stmt = $conn->prepare("
@@ -35,18 +36,18 @@ try {
     $addresses = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
 } catch(PDOException $e) {
-    error_log("Database Error: " . $e->getMessage());
+    error_log("Erreur de base de données : " . $e->getMessage());
     $addresses = [];
 } catch(Exception $e) {
-    error_log("Session Error: " . $e->getMessage());
+    error_log("Erreur de session : " . $e->getMessage());
     $addresses = [];
 }
-try{
+try {
     $stmt = $conn->prepare("SELECT s.id, s.name, a.street, a.city, a.zip_code, a.state, a.country FROM stores s, address a WHERE s.address = a.id");
     $stmt->execute();
     $stores = $stmt->fetchAll();
-} catch(PDOException $e){
-    error_log("Database Error: " . $e->getMessage());
+} catch(PDOException $e) {
+    error_log("Erreur de base de données : " . $e->getMessage());
     $stores = [];
 }
 
@@ -64,7 +65,7 @@ $hasAddresses = !empty($addresses);
             <section class="content">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="page-header">Choose Delivery Method</h1>
+                        <h1 class="page-header">Choisissez la méthode de livraison</h1>
                         <?php
                         if(isset($_SESSION['error'])) {
                             echo "
@@ -86,12 +87,12 @@ $hasAddresses = !empty($addresses);
                                             <input type="radio" name="delivery_method" id="pickup" value="pickup" required>
                                             <label for="pickup">
                                                 <i class="fa fa-store"></i>
-                                                Pickup from Store
-                                                <small>Free</small>
+                                                Retrait en magasin
+                                                <small>Gratuit</small>
                                             </label>
                                             
                                             <div class="store-selection" style="display:none;">
-                                                <h4>Select Store Location:</h4>
+                                                <h4>Sélectionnez le lieu de retrait :</h4>
                                                 <select name="store_location" class="form-control">
                                                     <?php foreach( $stores as $store): ?>
                                                         <option value="<?php echo $store['id']; ?>">
@@ -106,12 +107,12 @@ $hasAddresses = !empty($addresses);
                                             <input type="radio" name="delivery_method" id="delivery" value="delivery">
                                             <label for="delivery">
                                                 <i class="fa fa-truck"></i>
-                                                Home Delivery
+                                                Livraison à domicile
                                                 <small>+7.00 DT</small>
                                             </label>
                                             
                                             <div class="address-selection" style="display:none;">
-                                                <h4>Select Delivery Address:</h4>
+                                                <h4>Sélectionnez l'adresse de livraison :</h4>
                                                 <div class="address-list">
                                                     <?php if($hasAddresses): ?>
                                                         <?php foreach($addresses as $index => $row): ?>
@@ -132,13 +133,13 @@ $hasAddresses = !empty($addresses);
                                                         <?php endforeach; ?>
                                                         <div class="mt-3">
                                                             <button type="button" class="btn btn-success mt3" data-toggle="modal" data-target="#addAddressModal">
-                                                                <i class="fa fa-plus"></i> Add Another Address
+                                                                <i class="fa fa-plus"></i> Ajouter une autre adresse
                                                             </button>
                                                         </div>
                                                     <?php else: ?>
-                                                        <p class="no-address-message">No saved addresses. Please add a new address.</p>
+                                                        <p class="no-address-message">Aucune adresse enregistrée. Veuillez ajouter une nouvelle adresse.</p>
                                                         <button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#addAddressModal">
-                                                            <i class="fa fa-plus"></i> Add New Address
+                                                            <i class="fa fa-plus"></i> Ajouter une nouvelle adresse
                                                         </button>
                                                     <?php endif; ?>
                                                 </div>
@@ -148,7 +149,7 @@ $hasAddresses = !empty($addresses);
 
                                     <div class="form-actions text-center">
                                         <button type="submit" class="btn btn-primary btn-lg">
-                                            Continue to Payment
+                                            Continuer vers le paiement
                                         </button>
                                     </div>
                                 </form>
@@ -161,36 +162,36 @@ $hasAddresses = !empty($addresses);
     </div>
 </div>
 
-<!-- Add Address Modal -->
+<!-- Modal pour ajouter une adresse -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="addAddressModalLabel">Add New Delivery Address</h4>
+                <h4 class="modal-title" id="addAddressModalLabel">Ajouter une nouvelle adresse de livraison</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="formMessage"></div>
                 <form id="newAddressForm">
                     <div class="form-group">
-                        <label>Street Address*</label>
+                        <label>Adresse*</label>
                         <input type="text" class="form-control" name="street" required>
                     </div>
                     <div class="form-group">
-                        <label>City*</label>
+                        <label>Ville*</label>
                         <input type="text" class="form-control" name="city" required>
                     </div>
                     <div class="form-group">
-                        <label>State*</label>
+                        <label>État*</label>
                         <input type="text" class="form-control" name="state" required>
                     </div>
                     <div class="form-group">
-                        <label>ZIP Code*</label>
+                        <label>Code postal*</label>
                         <input type="text" class="form-control" name="zip_code" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Address</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer l'adresse</button>
                     </div>
                 </form>
             </div>
@@ -213,7 +214,7 @@ $hasAddresses = !empty($addresses);
     cursor: pointer;
 }
 .delivery-options .option:hover {
-    background-color: #f8f9fa;
+    background-color:rgba(26, 24, 24, 0.3);
 }
 .delivery-options label {
     display: block;
@@ -262,6 +263,18 @@ $hasAddresses = !empty($addresses);
 .address-item p {
     margin: 2px 0;
 }
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1c252c; /* Dark background */
+    color: #e0e0e0; /* Light text for readability */
+}
+
+/* Navbar */
+.navbar {
+    background: #1c252c; /* Dark navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
 </style>
 
 <script>
@@ -278,10 +291,6 @@ $(function(){
     if($('#delivery').is(':checked')) {
         $('.address-selection').show();
     }
-
-    <?php if(isset($_SESSION['error'])): ?>
-    $('#addAddressModal').modal('show');
-    <?php endif; ?>
 
     $('#newAddressForm').on('submit', function(e){
         e.preventDefault();
@@ -310,7 +319,7 @@ $(function(){
                                 ${$form.find('[name="city"]').val()}, 
                                 ${$form.find('[name="state"]').val()} 
                                 ${$form.find('[name="zip_code"]').val()}<br>
-                                Tunisia
+                                Tunisie
                             </label>
                         </div>`;
 
@@ -330,23 +339,23 @@ $(function(){
                     
                     $('#delivery').prop('checked', true).trigger('change');
 
-                    $('<div class="alert alert-success">').html('Address added successfully')
+                    $('<div class="alert alert-success">').html('Adresse ajoutée avec succès')
                         .insertBefore('.address-list')
                         .delay(3000)
                         .fadeOut(function() { $(this).remove(); });
                 } else {
                     $formMessage.html(`
                         <div class="alert alert-danger">
-                            ${response.message || 'Error adding address'}
+                            ${response.message || 'Erreur lors de l\'ajout de l\'adresse'}
                         </div>
                     `);
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Ajax error:', error);
+                console.error('Erreur Ajax :', error);
                 $formMessage.html(`
                     <div class="alert alert-danger">
-                        Error adding address. Please try again.
+                        Erreur lors de l'ajout de l'adresse. Veuillez réessayer.
                     </div>
                 `);
             },
@@ -361,19 +370,19 @@ $(function(){
         
         if(!method) {
             e.preventDefault();
-            alert('Please select a delivery method');
+            alert('Veuillez sélectionner une méthode de livraison');
             return false;
         }
         
         if(method === 'delivery' && !$('input[name="address_id"]:checked').length) {
             e.preventDefault();
-            alert('Please select a delivery address');
+            alert('Veuillez sélectionner une adresse de livraison');
             return false;
         }
         
         if(method === 'pickup' && !$('select[name="store_location"]').val()) {
             e.preventDefault();
-            alert('Please select a store location');
+            alert('Veuillez sélectionner un lieu de retrait');
             return false;
         }
         

@@ -7,15 +7,15 @@ if(isset($_POST['delete'])){
     try {
         $conn = $pdo->open();
 
-        // First delete related transaction details
+        // D'abord, supprimer les détails de transaction associés
         $stmt = $conn->prepare("DELETE FROM details WHERE product_id=:id");
         $stmt->execute(['id'=>$id]);
 
-        // Then delete the product
+        // Ensuite, supprimer le produit
         $stmt = $conn->prepare("DELETE FROM products WHERE id=:id");
         $stmt->execute(['id'=>$id]);
 
-        $_SESSION['success'] = 'Product deleted successfully';
+        $_SESSION['success'] = 'Produit supprimé avec succès';
     }
     catch(PDOException $e) {
         $_SESSION['error'] = $e->getMessage();
@@ -24,7 +24,7 @@ if(isset($_POST['delete'])){
     $pdo->close();
 }
 else {
-    $_SESSION['error'] = 'Select product to delete first';
+    $_SESSION['error'] = 'Sélectionnez d\'abord un produit à supprimer';
 }
 
 header('location: products.php');

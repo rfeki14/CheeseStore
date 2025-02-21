@@ -5,6 +5,7 @@
 	}
 ?>
 <?php include 'includes/header.php'; ?>
+<link rel="stylesheet" href="dist/css/cart_view.css">
 <style>
 .profile-card {
     background: #fff;
@@ -152,7 +153,7 @@
 	  <div class="content-wrapper">
 	    <div class="container">
 
-	      <!-- Main content -->
+	      <!-- Contenu principal -->
 	      <section class="content">
 	        <div class="row">
 	        	<div class="col-sm-9">
@@ -183,10 +184,10 @@
 	        				<div class="col-sm-9 profile-info">
 	        					<div class="row">
 	        						<div class="col-sm-3">
-	        							<h4>Name:</h4>
-	        							<h4>Email:</h4>
-	        							<h4>Contact Info:</h4>
-	        							<h4>Adresses:</h4>
+	        							<h4>Nom :</h4>
+	        							<h4>Email :</h4>
+	        							<h4>Informations de contact :</h4>
+	        							<h4>Adresses :</h4>
 	        						</div>
 	        						<div class="col-sm-9">
 	        							<h4><?php echo $user['firstname'].' '.$user['lastname']; ?>
@@ -229,7 +230,7 @@
 	        		</div>
 	        		<div class="box box-solid transaction-card">
 	        			<div class="transaction-header">
-	        				<h4 class="box-title"><i class="fa fa-calendar"></i> <b>Transaction History</b></h4>
+	        				<h4 class="box-title"><i class="fa fa-calendar"></i> <b>Historique des transactions</b></h4>
 	        			</div>
 	        			<div class="box-body">
 	        				<table class="table table-bordered" id="example1">
@@ -237,8 +238,8 @@
 	        						<th class="hidden"></th>
 	        						<th>Date</th>
 	        						<th>Transaction#</th>
-	        						<th>Amount</th>
-	        						<th>Full Details</th>
+	        						<th>Montant</th>
+	        						<th>Détails complets</th>
 	        					</thead>
 	        					<tbody>
 	        					<?php
@@ -255,14 +256,14 @@
 	        										<td>".date('M d, Y', strtotime($row['sales_date']))."</td>
 	        										<td>".$row['id']."</td>
 	        										<td>&#36; ".number_format($total, 2)."</td>
-	        										<td><button class='btn btn-sm btn-flat btn-info transact' data-id='".$row['id']."'><i class='fa fa-search'></i> View</button></td>
+	        										<td><button class='btn btn-sm btn-flat btn-info transact' data-id='".$row['id']."'><i class='fa fa-search'></i> Voir</button></td>
 	        									</tr>
 	        								";
 	        							}
 
 	        						}
         							catch(PDOException $e){
-										echo "There is some problem in connection: " . $e->getMessage();
+										echo "Il y a un problème de connexion : " . $e->getMessage();
 									}
 
 	        						$pdo->close();
@@ -304,7 +305,7 @@ $(function(){
                 if(response.trim() === 'success'){
                     location.reload();
                 } else {
-                    alert('Error: ' + response);
+                    alert('Erreur : ' + response);
                 }
             }
         });
@@ -360,15 +361,15 @@ $(function(){
             success: function(response){
                 console.log('Server response:', response); // Debug
                 if(response.trim() == 'success'){
-                    alert('Profile updated successfully');
+                    alert('Profil mis à jour avec succès');
                     $('#edit').modal('hide');
                     window.location.reload();
                 } else {
-                    alert('Error updating profile: ' + response);
+                    alert('Erreur lors de la mise à jour du profil : ' + response);
                 }
             },
             error: function(xhr, status, error) {
-                alert('Error: ' + error);
+                alert('Erreur : ' + error);
             }
         });
         return false;

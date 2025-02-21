@@ -6,9 +6,8 @@
 ?>
 <?php include 'includes/header.php'; ?>
 
-<!-- Link to External CSS -->
+<!-- Lien vers le CSS externe -->
 <link rel="stylesheet" href="dist/css/login.css">
-
 
 <body class="hold-transition login-page">
   <div class="overlay"></div>
@@ -26,7 +25,7 @@
     ?>
 
     <div class="login-box-body">
-      <h2 class="text-primary mb-3">Sign in to Your Account</h2>
+      <h2 class="text-primary mb-3">Connectez-vous à votre compte</h2>
 
       <form action="verify.php" method="POST">
         <div class="form-group">
@@ -34,16 +33,16 @@
         </div>
 
         <div class="form-group">
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
+          <input type="password" class="form-control" name="password" placeholder="Mot de passe" required>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3" name="login"><i class="fa fa-sign-in"></i> Sign In</button>
+        <button type="submit" class="btn btn-primary mt-3" name="login"><i class="fa fa-sign-in"></i> Se connecter</button>
       </form>
 
       <div class="login-links">
-        <a href="password_forgot.php">Forgot your password?</a>
-        <a href="signup.php">Register a new account</a>
-        <a href="index.php"><i class="fa fa-home"></i> Back to Home</a>
+        <a href="password_forgot.php">Mot de passe oublié ?</a>
+        <a href="signup.php">Créer un nouveau compte</a>
+        <a href="index.php"><i class="fa fa-home"></i> Retour à l'accueil</a>
       </div>
     </div>
   </div>

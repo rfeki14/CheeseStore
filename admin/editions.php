@@ -28,28 +28,28 @@ if (isset($_GET['category'])) {
     <?php include 'includes/navbar.php'; ?>
     <?php include 'includes/menubar.php'; ?>
 
-    <!-- Content Wrapper. Contains page content -->
+    <!-- Conteneur de contenu. Contient le contenu de la page -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
+        <!-- En-tête de contenu (en-tête de page) -->
         <section class="content-header">
             <h1>
-                Edition List
+                Liste des Éditions
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li>Editions</li>
-                <li class="active">Edition List</li>
+                <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+                <li>Éditions</li>
+                <li class="active">Liste des Éditions</li>
             </ol>
         </section>
 
-        <!-- Main content -->
+        <!-- Contenu principal -->
         <section class="content">
             <?php
             if (isset($_SESSION['error'])) {
                 echo "
                         <div class='alert alert-danger alert-dismissible'>
                             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                            <h4><i class='icon fa fa-warning'></i> Error!</h4>
+                            <h4><i class='icon fa fa-warning'></i> Erreur!</h4>
                             " . $_SESSION['error'] . '
                         </div>
                     ';
@@ -59,7 +59,7 @@ if (isset($_GET['category'])) {
                 echo "
                         <div class='alert alert-success alert-dismissible'>
                             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                            <h4><i class='icon fa fa-check'></i> Success!</h4>
+                            <h4><i class='icon fa fa-check'></i> Succès!</h4>
                             " . $_SESSION['success'] . '
                         </div>
                     ';
@@ -71,15 +71,15 @@ if (isset($_GET['category'])) {
                     <div class="box">
                         <div class="box-header with-border">
                             <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm rounded-pill" id="addedition">
-                                <i class="fa fa-plus"></i> New Edition
+                                <i class="fa fa-plus"></i> Nouvelle Édition
                             </a>
                             <div class="pull-right">
                                 <form class="form-inline">
                                     <div class="form-group">
-                                        <label>Product: </label>
+                                        <label>Produit: </label>
                                         <select class="form-control input-sm" id="select_product">
-                                            <option value="0" <?php echo ($prodid == 0) ? 'selected' : ''; ?>>ALL</option>
-                                            <option value="-1" <?php echo ($prodid == -1) ? 'selected' : ''; ?>>None</option>
+                                            <option value="0" <?php echo ($prodid == 0) ? 'selected' : ''; ?>>TOUS</option>
+                                            <option value="-1" <?php echo ($prodid == -1) ? 'selected' : ''; ?>>Aucun</option>
                                             <?php
                                             $conn = $pdo->open();
 
@@ -98,9 +98,9 @@ if (isset($_GET['category'])) {
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Category: </label>
+                                        <label>Catégorie: </label>
                                         <select class="form-control input-sm" id="select_category">
-                                            <option value="0" <?php echo ($catid == 0) ? 'selected' : ''; ?>>ALL</option>
+                                            <option value="0" <?php echo ($catid == 0) ? 'selected' : ''; ?>>TOUS</option>
                                             <?php
                                             $conn = $pdo->open();
 
@@ -124,11 +124,11 @@ if (isset($_GET['category'])) {
                         <div class="box-body">
                             <table id="example1" class="table table-bordered">
                                 <thead>
-                                    <th>Name</th>
-                                    <th>Product</th>
-                                    <th>Weight</th>
-                                    <th>Price</th>
-                                    <th>Tools</th>
+                                    <th>Nom</th>
+                                    <th>Produit</th>
+                                    <th>Poids</th>
+                                    <th>Prix</th>
+                                    <th>Outils</th>
                                 </thead>
                                 <tbody>
                                     <?php
@@ -138,7 +138,7 @@ if (isset($_GET['category'])) {
                                             $stmt = $conn->prepare("SELECT edition.*, products.name AS prodname FROM edition LEFT JOIN products ON products.id=edition.product_id $where");
                                             $stmt->execute();
                                             foreach ($stmt as $row) {
-                                                $product = (!empty($row['prodname'])) ? htmlspecialchars($row['prodname']) : 'None';
+                                                $product = (!empty($row['prodname'])) ? htmlspecialchars($row['prodname']) : 'Aucun';
                                                 echo "
                                                         <tr>
                                                             <td>" . htmlspecialchars($row['name']) . "</td>
@@ -148,10 +148,10 @@ if (isset($_GET['category'])) {
                                                             <td>
                                                                 <div class='btn-group'>
                                                                     <button class='btn btn-primary btn-sm edit rounded-pill' data-id='" . $row['id'] . "'>
-                                                                        <i class='fa fa-edit'></i> Edit
+                                                                        <i class='fa fa-edit'></i> Modifier
                                                                     </button>
                                                                     <button class='btn btn-danger btn-sm delete rounded-pill ms-2' data-id='" . $row['id'] . "'>
-                                                                        <i class='fa fa-trash'></i> Delete
+                                                                        <i class='fa fa-trash'></i> Supprimer
                                                                     </button>
                                                                 </div>
                                                             </td>
@@ -243,7 +243,7 @@ $(function(){
 });
 
 function getRow(id) {
-        console.log("Fetching edition details for ID:", id); // Debugging Log
+        console.log("Récupération des détails de l'édition pour l'ID:", id); // Journal de débogage
 
         $.ajax({
                 type: 'POST',
@@ -251,28 +251,28 @@ function getRow(id) {
                 data: { id: id },
                 dataType: 'json',
                 success: function(response) {
-                        console.log("Edition Data Received:", response); // Debugging Log
+                        console.log("Données de l'édition reçues:", response); // Journal de débogage
 
                         if (response) {
-                                // Update hidden ID input field
+                                // Mettre à jour le champ d'entrée ID caché
                                 $('.editionid').val(response.editionid);
 
-                                // Update View and Edit Modals with Edition Details
+                                // Mettre à jour les modaux de vue et d'édition avec les détails de l'édition
                                 $('.name').html("ID: " + response.editionid + " - " + response.editionname);
                                 $('#edit_name').val(response.editionname);
                                 $('#edit_price').val(response.price);
                                 $('#edit_weight').val(response.weight);
                                 $('#edit_product').val(response.product_id);
 
-                                // Load product options and select the correct one
+                                // Charger les options de produit et sélectionner le bon
                                 getProduct(response.product_id);
 
                         } else {
-                                console.error("Invalid response:", response);
+                                console.error("Réponse invalide:", response);
                         }
                 },
                 error: function(xhr, status, error) {
-                        console.error("AJAX Error:", error);
+                        console.error("Erreur AJAX:", error);
                 }
         });
 }
@@ -280,33 +280,33 @@ function getRow(id) {
 function getProduct(selectedProductId = null) {
         $.ajax({
                 type: 'POST',
-                url: 'product_fetch.php', // Fetch products from the database
+                url: 'product_fetch.php', // Récupérer les produits de la base de données
                 dataType: 'json',
                 success: function(response) {
-                        console.log("Product Data Received:", response); // Debugging Log
+                        console.log("Données de produit reçues:", response); // Journal de débogage
 
                         if (Array.isArray(response)) {
-                                let productOptions = '<option value="">Select Product</option>';
+                                let productOptions = '<option value="">Sélectionner un produit</option>';
                                 response.forEach(function(product) {
                                         productOptions += `<option value="${product.id}">${product.name}</option>`;
                                 });
 
-                                // Populate both Add and Edit dropdowns
+                                // Remplir les listes déroulantes d'ajout et d'édition
                                 $('#product').html(productOptions);
                                 $('#product').val(selectedProductId);
                                 $('#edit_product').html(productOptions);
                                 $('#edit_product').val(selectedProductId);
 
-                                // Set the selected product AFTER options are populated
+                                // Définir le produit sélectionné APRÈS que les options soient peuplées
                                 if (selectedProductId) {
                                         $('#edit_product').val(selectedProductId);
                                 }
                         } else {
-                                console.error("Invalid response format:", response);
+                                console.error("Format de réponse invalide:", response);
                         }
                 },
                 error: function(xhr, status, error) {
-                        console.error("AJAX Error (Products):", error);
+                        console.error("Erreur AJAX (Produits):", error);
                 }
         });
 }

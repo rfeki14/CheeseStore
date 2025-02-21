@@ -9,19 +9,19 @@ $category = $_POST['category'];
 $description = $_POST['description'];
 $qtty = $_POST['qtty'];
 
-// Image upload handling
+// Gestion de l'upload d'image
 if(isset($_FILES['photo']) && $_FILES['photo']['size'] > 0){
-    $target_dir = "../images/"; // Use the same path structure as in product listing
+    $target_dir = "../images/"; // Utiliser la même structure de chemin que dans la liste des produits
     $image_name = basename($_FILES["photo"]["name"]);
     $target_file = $target_dir . $image_name;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Validate file type (only allow jpg, jpeg, png, gif)
+    // Validation du type de fichier (n'autoriser que jpg, jpeg, png, gif)
     $allowed_types = array("jpg", "jpeg", "png", "gif");
     if(in_array($imageFileType, $allowed_types)){
         move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file);
     } else {
-        $_SESSION['error'] = "Only JPG, JPEG, PNG & GIF files are allowed.";
+        $_SESSION['error'] = "Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.";
         header('location: products.php');
         exit();
     }
@@ -30,15 +30,15 @@ if(isset($_FILES['photo']) && $_FILES['photo']['size'] > 0){
 $conn = $pdo->open();
 
 try {
-    // Fetch current product details to keep old image if new one is not uploaded
+    // Récupérer les détails du produit actuel pour conserver l'ancienne image si aucune nouvelle n'est téléchargée
     $stmt = $conn->prepare("SELECT photo FROM products WHERE id=:id");
     $stmt->execute(['id' => $id]);
     $row = $stmt->fetch();
 
-    // If new image is uploaded, update it; otherwise, keep the old one
+    // Si une nouvelle image est téléchargée, la mettre à jour ; sinon, garder l'ancienne
     $photo = (!empty($image_name)) ? $image_name : $row['photo'];
 
-    // Update product details in database
+    // Mettre à jour les détails du produit dans la base de données
     $stmt = $conn->prepare("UPDATE products SET name=:name, slug=:slug, category_id=:category, qtty=:qtty, description=:description, photo=:photo WHERE id=:id");
     $stmt->execute([
         'name' => $name,
@@ -46,11 +46,11 @@ try {
         'category' => $category,
         'qtty' => $qtty,
         'description' => $description,
-        'photo' => $photo, // Include updated or old image
+        'photo' => $photo, // Inclure l'image mise à jour ou l'ancienne
         'id' => $id
     ]);
 
-    $_SESSION['success'] = 'Product updated successfully';
+    $_SESSION['success'] = 'Produit mis à jour avec succès';
 } catch (PDOException $e) {
     $_SESSION['error'] = $e->getMessage();
 }

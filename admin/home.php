@@ -58,27 +58,27 @@
   <?php include 'includes/navbar.php'; ?>
   <?php include 'includes/menubar.php'; ?>
 
-  <!-- Content Wrapper. Contains page content -->
+  <!-- Conteneur de contenu. Contient le contenu de la page -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- En-tête de contenu (en-tête de page) -->
     <section class="content-header">
       <h1>
-        Dashboard
+        Tableau de Bord
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active">Tableau de Bord</li>
       </ol>
     </section>
 
-    <!-- Main content -->
+    <!-- Contenu principal -->
     <section class="content">
       <?php
         if(isset($_SESSION['error'])){
           echo "
             <div class='alert alert-danger alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-warning'></i> Error!</h4>
+              <h4><i class='icon fa fa-warning'></i> Erreur!</h4>
               ".$_SESSION['error']."
             </div>
           ";
@@ -88,17 +88,17 @@
           echo "
             <div class='alert alert-success alert-dismissible'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-check'></i> Success!</h4>
+              <h4><i class='icon fa fa-check'></i> Succès!</h4>
               ".$_SESSION['success']."
             </div>
           ";
           unset($_SESSION['success']);
         }
       ?>
-      <!-- Small boxes (Stat box) -->
+      <!-- Petites boîtes (Statistiques) -->
       <div class="row">
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
+          <!-- petite boîte -->
           <div class="small-box bg-aqua">
             <div class="inner">
               <?php
@@ -114,17 +114,17 @@
 
                 echo "<h3>&#36; ".number_format_short($total, 2)."</h3>";
               ?>
-              <p>Total Sales</p>
+              <p>Ventes Totales</p>
             </div>
             <div class="icon">
               <i class="fa fa-shopping-cart"></i>
             </div>
-            <a href="book.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="book.php" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
+          <!-- petite boîte -->
           <div class="small-box bg-green">
             <div class="inner">
               <?php
@@ -134,18 +134,17 @@
 
                 echo "<h3>".$prow['numrows']."</h3>";
               ?>
-          
-              <p>Number of Products</p>
+              <p>Nombre de Produits</p>
             </div>
             <div class="icon">
               <i class="fa fa-barcode"></i>
             </div>
-            <a href="student.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="student.php" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
+          <!-- petite boîte -->
           <div class="small-box bg-yellow">
             <div class="inner">
               <?php
@@ -155,18 +154,17 @@
 
                 echo "<h3>".$urow['numrows']."</h3>";
               ?>
-             
-              <p>Number of Users</p>
+              <p>Nombre d'Utilisateurs</p>
             </div>
             <div class="icon">
               <i class="fa fa-users"></i>
             </div>
-            <a href="return.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="return.php" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
+          <!-- petite boîte -->
           <div class="small-box bg-red">
             <div class="inner">
               <?php
@@ -184,53 +182,51 @@
                 }
 
                 echo "<h3>&#36; ".number_format_short($total, 2)."</h3>";
-                
               ?>
-
-              <p>Sales Today</p>
+              <p>Ventes Aujourd'hui</p>
             </div>
             <div class="icon">
               <i class="fa fa-money"></i>
             </div>
-            <a href="borrow.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="borrow.php" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
       </div>
       <!-- /.row -->
 
-      <!-- Additional Statistics -->
+      <!-- Statistiques Supplémentaires -->
       <div class="row">
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
+          <!-- petite boîte -->
           <div class="small-box bg-orange">
             <div class="inner">
               <h3><?php echo $new_users; ?></h3>
-              <p>New Users This Month</p>
+              <p>Nouveaux Utilisateurs Ce Mois</p>
             </div>
             <div class="icon">
               <i class="fa fa-user-plus"></i>
             </div>
-            <a href="new_users.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="new_users.php" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
       </div>
       <!-- /.row -->
 
-      <!-- Top Products -->
+      <!-- Produits Top -->
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Top 5 Products</h3>
+              <h3 class="box-title">Top 5 Produits</h3>
             </div>
             <div class="box-body">
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Product Name</th>
-                    <th>Total Quantity Sold</th>
+                    <th>Nom du Produit</th>
+                    <th>Quantité Totale Vendue</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -246,13 +242,13 @@
                   ?>
                 </tbody>
               </table>
-            </div>
+            </ div>
           </div>
         </div>
       </div>
       <!-- /.row -->
 
-      <!-- Best Clients -->
+      <!-- Meilleurs Clients -->
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
@@ -263,8 +259,8 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Total Spent</th>
+                    <th>Nom</th>
+                    <th>Total Dépensé</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -290,11 +286,11 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Monthly Sales Report</h3>
+              <h3 class="box-title">Rapport de Ventes Mensuel</h3>
               <div class="box-tools pull-right">
                 <form class="form-inline">
                   <div class="form-group">
-                    <label>Select Year: </label>
+                    <label>Sélectionner l'Année: </label>
                     <select class="form-control input-sm" id="select_year">
                       <?php
                         for($i=2015; $i<=2065; $i++){
@@ -321,14 +317,14 @@
       </div>
 
       </section>
-      <!-- right col -->
+      <!-- colonne droite -->
     </div>
       <?php include 'includes/footer.php'; ?>
 
 </div>
 <!-- ./wrapper -->
 
-<!-- Chart Data -->
+<!-- Données du Graphique -->
 <?php
   $months = array();
   $sales = array();
@@ -360,7 +356,7 @@
   $sales = json_encode($sales);
 
 ?>
-<!-- End Chart Data -->
+<!-- Fin des Données du Graphique -->
 
 <?php $pdo->close(); ?>
 <?php include 'includes/scripts.php'; ?>
@@ -372,7 +368,7 @@ $(function(){
     labels  : <?php echo $months; ?>,
     datasets: [
       {
-        label               : 'SALES',
+        label               : 'VENTES',
         fillColor           : 'rgba(60,141,188,0.9)',
         strokeColor         : 'rgba(60,141,188,0.8)',
         pointColor          : '#3b8bba',
@@ -383,33 +379,18 @@ $(function(){
       }
     ]
   }
-  //barChartData.datasets[1].fillColor   = '#00a65a'
-  //barChartData.datasets[1].strokeColor = '#00a65a'
-  //barChartData.datasets[1].pointColor  = '#00a65a'
   var barChartOptions                  = {
-    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
     scaleBeginAtZero        : true,
-    //Boolean - Whether grid lines are shown across the chart
     scaleShowGridLines      : true,
-    //String - Colour of the grid lines
-    scaleGridLineColor      : 'rgba(0,0,0,.05)',
-    //Number - Width of the grid lines
+    scaleGrid LineColor      : 'rgba(0,0,0,.05)',
     scaleGridLineWidth      : 1,
-    //Boolean - Whether to show horizontal lines (except X axis)
     scaleShowHorizontalLines: true,
-    //Boolean - Whether to show vertical lines (except Y axis)
     scaleShowVerticalLines  : true,
-    //Boolean - If there is a stroke on each bar
     barShowStroke           : true,
-    //Number - Pixel width of the bar stroke
     barStrokeWidth          : 2,
-    //Number - Spacing between each of the X value sets
     barValueSpacing         : 5,
-    //Number - Spacing between data sets within X values
     barDatasetSpacing       : 1,
-    //String - A legend template
     legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
-    //Boolean - whether to make the chart responsive
     responsive              : true,
     maintainAspectRatio     : true
   }

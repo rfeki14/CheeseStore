@@ -11,7 +11,7 @@
             <section class="content">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="page-header">YOUR CART</h1>
+                        <h1 class="page-header">VOTRE PANIER</h1>
                         <?php
                         if(isset($_SESSION['error'])){
                             echo "<div class='alert alert-danger'>".$_SESSION['error']."</div>";
@@ -24,10 +24,10 @@
                                     <thead>
                                         <tr>
                                             <th class="product-img">Photo</th>
-                                            <th class="product-name">Name</th>
-                                            <th class="product-price">Price</th>
-                                            <th class="product-quantity" width="20%">Quantity</th>
-                                            <th class="product-subtotal">Subtotal</th>
+                                            <th class="product-name">Nom</th>
+                                            <th class="product-price">Prix</th>
+                                            <th class="product-quantity" width="20%">Quantité</th>
+                                            <th class="product-subtotal">Sous-total</th>
                                             <th class="product-actions">Actions</th>
                                         </tr>
                                     </thead>
@@ -144,17 +144,17 @@
                                                 <input type='hidden' name='total' id='hidden-total' value='<?php echo $total; ?>'>
                                                 <div class="delivery-options text-center mb-3">
                                                     <button type='submit' class='btn btn-primary btn-lg checkout-btn'>
-                                                        <i class="fa fa-truck"></i> Choose Delivery Method
+                                                        <i class="fa fa-truck"></i> Choisir la méthode de livraison
                                                     </button>
                                                 </div>
                                             </form>
                                         <?php else: ?>
                                             <div class="login-notice">
                                                 <a href="login.php" class="btn btn-primary btn-lg checkout-btn">
-                                                    <i class="fa fa-sign-in"></i> Login to Continue
+                                                    <i class="fa fa-sign-in"></i> Se connecter pour continuer
                                                 </a>
                                                 <p class="text-muted mt-2">
-                                                    <small>Please login first to proceed with your order.</small>
+                                                    <small>Veuillez vous connecter d'abord pour procéder à votre commande.</small>
                                                 </p>
                                             </div>
                                         <?php endif; ?>
@@ -272,8 +272,7 @@ $(function(){
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Update Error:', error);
-                    alert('Erreur de mise à jour');
+                    alert('Une erreur est survenue lors de la mise à jour');
                     $input.val(oldValue);
                 },
                 complete: function() {
@@ -289,6 +288,7 @@ $(function(){
                 cart[itemIndex].quantity = qty;
                 localStorage.setItem('cart', JSON.stringify(cart));
                 
+                // Mise à jour de l'affichage
                 var subtotal = price * qty;
                 $row.find('td:eq(4)').text(subtotal.toFixed(2) + ' DT');
                 updateCartTotal();
@@ -377,178 +377,32 @@ $(function(){
 
     // Initialisation du panier local si pas de session
     if (!<?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>) {
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        if (cart.length === 0) {
-            $('#cart_table tbody').html('<tr><td colspan="6" class="text-center">Votre panier est vide</td></tr>');
-        }
+        loadLocalCart();
     }
     
-    // Gestionnaire pour le bouton de checkout
+    // Gestionnaire du checkout
     $('#login-checkout').click(function(e) {
         e.preventDefault();
-        // Sauvegarder le panier dans localStorage
+        // Sauvegarder l'URL actuelle pour redirection après login
         localStorage.setItem('returnToCart', 'true');
-        localStorage.setItem('cartTotal', $('#hidden-total').val());
         window.location.href = 'login.php';
     });
 
     // Ajouter ce gestionnaire d'événements
-    $('.checkout-btn').click(function(e) {
+    $('.checkout-btn').click(function() {
         if(!<?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>) {
             e.preventDefault();
             // Sauvegarder l'état du panier
             localStorage.setItem('returnToCart', 'true');
-            localStorage.setItem('cartTotal', $('.cart-total').text().replace(' DT', ''));
+            localStorage.setItem('cartTotal', $('#hidden-total').val());
             window.location.href = 'login.php';
+        }
+    ```php
         }
     });
 });
 </script>
 
-<script>
-$(function(){
-    // Fonction pour charger le panier local
-    function loadLocalCart() {
-        if(typeof(Storage) !== "undefined") {
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            if(cart.length > 0) {
-                let cartHtml = '';
-                let total = 0;
-                
-                cart.forEach(function(item) {
-                    let subtotal = item.price * item.quantity;
-                    total += subtotal;
-                    cartHtml += `
-                        <tr class="cart-item">
-                            <td class="product-img">
-                                <img src="images/${item.photo}" class="product-thumb">
-                            </td>
-                            <td class="product-name">
-                                <span class="product-title">${item.name}</span>
-                                <span class="product-weight">${item.weight}g</span>
-                            </td>
-                            <td class="product-price">${item.price.toFixed(2)} DT</td>
-                            <td class="product-quantity">
-                                <div class="quantity-control">
-                                    <button class="quantity-btn minus" data-id="${item.edition_id}">-</button>
-                                    <input type="number" class="quantity-input" 
-                                        data-id="${item.edition_id}"
-                                        value="${item.quantity}"
-                                        min="1" 
-                                        max="${item.stock}">
-                                    <button class="quantity-btn plus" data-id="${item.edition_id}">+</button>
-                                </div>
-                            </td>
-                            <td class="product-subtotal">${subtotal.toFixed(2)} DT</td>
-                            <td class="product-actions">
-                                <button class="cart_delete" data-id="${item.edition_id}">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                });
-
-                $('#cart_table tbody').html(cartHtml);
-                updateCartTotal();
-            } else {
-                $('#cart_table tbody').html('<tr><td colspan="6" class="text-center">Votre panier est vide</td></tr>');
-            }
-        }
-    }
-
-    // Gestionnaire de quantité pour le panier local
-    $(document).on('change', '.quantity-input', function(e) {
-        e.preventDefault();
-        var $input = $(this);
-        var id = $input.data('id');
-        var qty = parseInt($input.val());
-        
-        if(!<?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>) {
-            updateLocalCartQuantity(id, qty);
-        }
-    });
-
-    // Fonction de mise à jour de la quantité dans le panier local
-    function updateLocalCartQuantity(id, qty) {
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        let item = cart.find(item => item.edition_id == id);
-        
-        if(item) {
-            item.quantity = qty;
-            localStorage.setItem('cart', JSON.stringify(cart));
-            
-            // Mise à jour de l'affichage
-            let price = parseFloat(item.price);
-            let subtotal = price * qty;
-            let $row = $(`.quantity-input[data-id="${id}"]`).closest('tr');
-            $row.find('.product-subtotal').text(subtotal.toFixed(2) + ' DT');
-            updateCartTotal();
-        }
-    }
-
-    // Gestionnaire de suppression pour le panier local
-    $(document).on('click', '.cart_delete', function(e) {
-        e.preventDefault();
-        var button = $(this);
-        var id = button.data('id');
-        
-        if(!<?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>) {
-            if(confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
-                removeFromLocalCart(id);
-                button.closest('tr').fadeOut(300, function() {
-                    $(this).remove();
-                    updateCartTotal();
-                    if($('#cart_table tbody tr').length === 0) {
-                        location.reload();
-                    }
-                });
-            }
-        }
-    });
-
-    // Fonction de suppression du panier local
-    function removeFromLocalCart(id) {
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        cart = cart.filter(item => item.edition_id != id);
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    // Mise à jour du total
-    function updateCartTotal() {
-        var total = 0;
-        $('#cart_table tbody tr.cart-item').each(function() {
-            var price = parseFloat($(this).find('.product-price').text().replace('DT', '').trim());
-            var quantity = parseInt($(this).find('.quantity-input').val());
-            if(!isNaN(price) && !isNaN(quantity)) {
-                total += price * quantity;
-            }
-        });
-        $('.cart-total').text(total.toFixed(2) + ' DT');
-        
-        if(!<?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>) {
-            localStorage.setItem('cartTotal', total.toFixed(2));
-        }
-    }
-
-    // Initialisation
-    if(!<?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>) {
-        loadLocalCart();
-    }
-
-    // Gestionnaire du checkout
-    $('#checkout').click(function(e) {
-        e.preventDefault();
-        <?php if(!isset($_SESSION['user'])): ?>
-            // Sauvegarder l'URL actuelle pour redirection après login
-            localStorage.setItem('returnToCart', 'true');
-            window.location.href = 'login.php';
-        <?php else: ?>
-            window.location.href = 'checkout.php';
-        <?php endif; ?>
-    });
-});
-</script>
 <style>
 .updating {
     opacity: 0.5;
@@ -572,30 +426,11 @@ $(function(){
 }
 .login-notice p {
     margin-top: 10px;
-}
-.login-notice a {
-    color: #3c8dbc;
-    text-decoration: underline;
-}
-.checkout-section {
-    margin-top: 20px;
-    text-align: center;
-}
-.checkout-btn {
-    min-width: 200px;
-    margin-bottom: 10px;
-}
-.login-notice {
-    margin: 20px 0;
-    text-align: center;
-}
-.login-notice p {
-    margin-top: 10px;
     color: #666;
 }
 .login-notice a {
     color: #3c8dbc;
-    text-decoration: none;
+    text-decoration: underline;
 }
 .login-notice a:hover {
     text-decoration: underline;

@@ -11,7 +11,7 @@ if(isset($_POST['id']) && isset($_POST['status'])){
         $stmt = $conn->prepare("UPDATE sales SET status=:status WHERE id=:id");
         $stmt->execute(['status'=>$status, 'id'=>$id]);
         
-        $_SESSION['success'] = 'Sale status updated successfully';
+        $_SESSION['success'] = 'Statut de la vente mis à jour avec succès';
         echo 'ok';
     }
     catch(PDOException $e){

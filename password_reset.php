@@ -26,7 +26,7 @@
     ?>
 
     <div class="login-box-body">
-      <h2 class="text-primary mb-3">Reset Your Password</h2>
+      <h2 class="text-primary mb-3">Reinitialiser votre mot de passe</h2>
 
       <form action="password_new.php?code=<?php echo $_GET['code']; ?>&user=<?php echo $_GET['user']; ?>" method="POST">
         <div class="form-group">
@@ -41,8 +41,8 @@
       </form>
 
       <div class="login-links">
-        <a href="login.php">Back to Login</a>
-        <a href="index.php"><i class="fa fa-home"></i> Back to Home</a>
+        <a href="login.php">Retour à la connexion</a>
+        <a href="index.php"><i class="fa fa-home"></i> Retour à l'accueil</a>
       </div>
     </div>
   </div>

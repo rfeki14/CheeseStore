@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="dist/css/cart_view.css">
 <?php
 include 'includes/session.php';
 

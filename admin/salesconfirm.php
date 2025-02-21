@@ -1,29 +1,29 @@
 <?php
 
 if (isset($_POST['id'])) {
-    // Sanitize input
-    $id = intval($_POST['id']); // Ensure `id` is an integer
+    // Assainir l'entrée
+    $id = intval($_POST['id']); // S'assurer que `id` est un entier
 
-    include 'includes/session.php'; // Database connection
+    include 'includes/session.php'; // Connexion à la base de données
 
     $conn = $pdo->open();
 
     try {
-        // Update the `confirmed` column for the specific sale
+        // Mettre à jour la colonne `confirmed` pour la vente spécifique
         $stmt = $conn->prepare("UPDATE sales SET confirmed = 1 WHERE id = :id");
         $stmt->execute(['id' => $id]);
 
-        // Check if the update was successful
+        // Vérifier si la mise à jour a réussi
         if ($stmt->rowCount() > 0) {
-            echo "Sale confirmed successfully.";
+            echo "Vente confirmée avec succès.";
         } else {
-            echo "No rows were updated. Please check the sale ID.";
+            echo "Aucune ligne n'a été mise à jour. Veuillez vérifier l'ID de la vente.";
         }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo "Erreur: " . $e->getMessage();
     }
 
     $pdo->close();
 } else {
-    echo "No sale ID provided.";
+    echo "Aucun ID de vente fourni.";
 }

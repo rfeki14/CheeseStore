@@ -1,6 +1,6 @@
 
 <link rel="stylesheet" href="dist/css/about.css"> 
-<h1 class="title">About</h1>
+<h1 class="title">A propos</h1>
 <div class="about-section">
     
     <div class="about-container">
@@ -21,6 +21,6 @@
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+
 </body>
 </html>

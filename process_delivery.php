@@ -41,12 +41,22 @@ try {
     } elseif($delivery_method === 'pickup' && !isset($_POST['store_location'])) {
         throw new Exception('Store location not selected');
     }
+
     // Ajouter les frais de livraison
     if($delivery_method === 'delivery') {
-        $total += 7.00;
-        $address=$_POST['address_id'];
-    }else{
-        $address=$_POST['store_location'];
+        $address = $_POST['address_id'];
+
+        // Vérifier si l'adresse existe dans la table 'address'
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM address WHERE id = :address_id AND user_id = :user_id");
+        $stmt->execute(['address_id' => $address, 'user_id' => $user_id]);
+        if ($stmt->fetchColumn() == 0) {
+            throw new Exception('Invalid delivery address');
+        }
+
+        $total += 7.00; // Ajouter les frais de livraison
+
+    } else {
+        $address = $_POST['store_location'];
     }
 
     // Insérer la vente

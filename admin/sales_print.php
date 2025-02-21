@@ -12,7 +12,7 @@
 			$total += $amount;
 			$contents .= '
 			<tr>
-				<td>'.date('M d, Y', strtotime($row['sales_date'])).'</td>
+				<td>'.date('d M, Y', strtotime($row['sales_date'])).'</td>
 				<td>'.$row['firstname'].' '.$row['lastname'].'</td>
 				<td>'.$row['salesid'].'</td>
 				<td align="right">&#36; '.number_format($amount, 2).'</td>
@@ -33,15 +33,15 @@
 		$ex = explode(' - ', $_POST['date_range']);
 		$from = date('Y-m-d', strtotime($ex[0]));
 		$to = date('Y-m-d', strtotime($ex[1]));
-		$from_title = date('M d, Y', strtotime($ex[0]));
-		$to_title = date('M d, Y', strtotime($ex[1]));
+		$from_title = date('d M, Y', strtotime($ex[0]));
+		$to_title = date('d M, Y', strtotime($ex[1]));
 
 		$conn = $pdo->open();
 
 		require_once __DIR__ . '/../vendor/autoload.php';
 	    $pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);  
 	    $pdf->SetCreator(PDF_CREATOR);  
-	    $pdf->SetTitle('Sales Report: '.$from_title.' - '.$to_title);  
+	    $pdf->SetTitle('Rapport de Ventes: '.$from_title.' - '.$to_title);  
 	    $pdf->SetHeaderData('', '', PDF_HEADER_TITLE, PDF_HEADER_STRING);  
 	    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));  
 	    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));  
@@ -56,26 +56,26 @@
 	    $content = '';  
 	    $content .= '
 	      	<h2 align="center">TechSoft IT Solutions</h2>
-	      	<h4 align="center">SALES REPORT</h4>
+	      	<h4 align="center">RAPPORT DE VENTES</h4>
 	      	<h4 align="center">'.$from_title." - ".$to_title.'</h4>
 	      	<table border="1" cellspacing="0" cellpadding="3">  
 	           <tr>  
 	           		<th width="15%" align="center"><b>Date</b></th>
-	                <th width="30%" align="center"><b>Buyer Name</b></th>
+	                <th width="30%" align="center"><b>Nom de l’Acheteur</b></th>
 					<th width="40%" align="center"><b>Transaction#</b></th>
-					<th width="15%" align="center"><b>Amount</b></th>  
+					<th width="15%" align="center"><b>Montant</b></th>  
 	           </tr>  
 	      ';  
 	    $content .= generateRow($from, $to, $conn);  
 	    $content .= '</table>';  
 	    $pdf->writeHTML($content);  
-	    $pdf->Output('sales'.$from.'--'.$to.'.pdf', 'I');
+	    $pdf->Output('ventes'.$from.'--'.$to.'.pdf', 'I');
 
 	    $pdo->close();
 
 	}
 	else{
-		$_SESSION['error'] = 'Need date range to provide sales print';
+		$_SESSION['error'] = 'Besoin d\'une plage de dates pour fournir l\'impression des ventes';
 		header('location: sales.php');
 	}
 ?>
