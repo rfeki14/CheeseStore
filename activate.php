@@ -5,9 +5,9 @@
 		$output .= '
 			<div class="alert alert-danger">
                 <h4><i class="icon fa fa-warning"></i> Error!</h4>
-                Code to activate account not found.
+                Code pour activer le compte non trouvé.
             </div>
-            <h4>You may <a href="signup.php">Signup</a> or back to <a href="index.php">Homepage</a>.</h4>
+            <h4>You may <a href="signup.php">S\'inscrire</a> or back to <a href="index.php">Homepage</a>.</h4>
 		'; 
 	}
 	else{
@@ -22,9 +22,9 @@
 				$output .= '
 					<div class="alert alert-danger">
 		                <h4><i class="icon fa fa-warning"></i> Error!</h4>
-		                Account already activated.
+		                Compte deja activée.
 		            </div>
-		            <h4>You may <a href="login.php">Login</a> or back to <a href="index.php">Homepage</a>.</h4>
+		            <h4>You may <a href="login.php">Se connecter</a> or back to <a href="index.php">Homepage</a>.</h4>
 				';
 			}
 			else{
@@ -34,9 +34,9 @@
 					$output .= '
 						<div class="alert alert-success">
 			                <h4><i class="icon fa fa-check"></i> Success!</h4>
-			                Account activated - Email: <b>'.$row['email'].'</b>.
+			                Compte activé - Email : <b>'.$row['email'].'</b>.
 			            </div>
-			            <h4>You may <a href="login.php">Login</a> or back to <a href="index.php">Homepage</a>.</h4>
+			            <h4>You may <a href="login.php">Se connecter</a> or back to <a href="index.php">Homepage</a>.</h4>
 					';
 				}
 				catch(PDOException $e){
@@ -45,7 +45,7 @@
 			                <h4><i class="icon fa fa-warning"></i> Error!</h4>
 			                '.$e->getMessage().'
 			            </div>
-			            <h4>You may <a href="signup.php">Signup</a> or back to <a href="index.php">Homepage</a>.</h4>
+			            <h4>You may <a href="signup.php">S\'inscrire</a> or back to <a href="index.php">Homepage</a>.</h4>
 					';
 				}
 
@@ -56,7 +56,7 @@
 			$output .= '
 				<div class="alert alert-danger">
 	                <h4><i class="icon fa fa-warning"></i> Error!</h4>
-	                Cannot activate account. Wrong code.
+	                Activation Impossible. Code erroné.
 	            </div>
 	            <h4>You may <a href="signup.php">Signup</a> or back to <a href="index.php">Homepage</a>.</h4>
 			';

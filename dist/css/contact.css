@@ -131,3 +131,7 @@ body {
     margin-top: 40px;
     width: 100%;
 }
+.navbar {
+    background: #1c252c; /* Dark navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

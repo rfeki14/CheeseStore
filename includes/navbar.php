@@ -61,7 +61,7 @@
           <li class="nav-item position-relative">
             <a href="cart_view.php" class="nav-link">
               <i class="fa fa-shopping-cart fa-lg"></i>
-              <span class="badge badge-light" id="cart-count">
+              <span class="badge badge-light" style="color:#0d6efd" id="cart-count">
                 <?php
                 if(isset($_SESSION['user'])){
                     $stmt = $conn->prepare("SELECT COUNT(*) as count FROM cart WHERE user_id=:user_id");

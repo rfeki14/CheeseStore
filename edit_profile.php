@@ -2,6 +2,7 @@
 include 'includes/session.php';
 include 'includes/header.php';
 ?>
+    <link rel="stylesheet" href="dist/css/contact.css">
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
     <?php include 'includes/navbar.php'; ?>
