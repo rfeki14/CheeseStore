@@ -174,6 +174,10 @@ $hasAddresses = !empty($addresses);
                 <div id="formMessage"></div>
                 <form id="newAddressForm">
                     <div class="form-group">
+                        <label>Telephone*</label>
+                        <input type="text" class="form-control" name="phone" required>
+                    </div>
+                    <div class="form-group">
                         <label>Adresse*</label>
                         <input type="text" class="form-control" name="street" required>
                     </div>

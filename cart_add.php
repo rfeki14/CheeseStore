@@ -40,19 +40,36 @@ if(isset($_POST['id']) && isset($_POST['quantity']) && isset($_POST['edition']))
             } 
             
             // Retourner les informations pour le stockage local
-            $output['product'] = [
-                'cartid' => uniqid(), // ID unique pour le stockage local
-                'edition_id' => $edition_id,
-                'product_id' => $product['product_id'],
-                'name' => $product['name'],
-                'photo' => $product['photo'],
-                'quantity' => $quantity,
-                'price' => $product['price'],
-                'price' => $price,
-                'weight' => $product['weight'],
-                'stock' => $product['stock']
-            ];
-            
+            foreach($_SESSION['cart'] as $cartitem){
+                echo 'test'.$cartitem['name'].''.$cartitem['quantity']; 
+                if($cartitem['edition_id'] == $edition_id){
+                    $cartitem['quantity'] += $quantity;
+                    $output['product'] = [
+                        'cartid' => $cartitem['cartid'],
+                        'edition_id' => $cartitem['edition_id'],
+                        'product_id' => $cartitem['product_id'],
+                        'name' => $cartitem['name'],
+                        'photo' => $cartitem['photo'],
+                        'quantity' => $cartitem['quantity'],
+                        'priceu' => $cartitem['priceu'],
+                        'price' => $cart_item['price'],
+                        'weight' => $cartitem['weight'],
+                        'stock' => $cartitem['stock']
+                    ];
+                }
+            }
+                $output['product'] = [
+                    'cartid' => uniqid(), // ID unique pour le stockage local
+                    'edition_id' => $edition_id,
+                    'product_id' => $product['product_id'],
+                    'name' => $product['name'],
+                    'photo' => $product['photo'],
+                    'quantity' => $quantity,
+                    'priceu' => $product['price'],
+                    'price' => $price,
+                    'weight' => $product['weight'],
+                    'stock' => $product['stock']
+                ];
             $output['message'] = 'Produit ajouté au panier';
         }
         else{

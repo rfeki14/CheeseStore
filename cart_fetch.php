@@ -43,8 +43,8 @@
 		else{
 			foreach($_SESSION['cart'] as $row){
 				$output['count']++;
-				$stmt = $conn->prepare("SELECT *, products.name AS prodname, category.name AS catname FROM products LEFT JOIN category ON category.id=products.category_id WHERE products.id=:id");
-				$stmt->execute(['id'=>$row['productid']]);
+				$stmt = $conn->prepare("SELECT category.name AS catname FROM products LEFT JOIN category ON category.id=products.category_id WHERE products.id=:id");
+				$stmt->execute(['id'=>$row['product_id']]);
 				$product = $stmt->fetch();
 				$image = (!empty($product['photo'])) ? 'images/'.$product['photo'] : 'images/noimage.jpg';
 				$output['list'] .= "

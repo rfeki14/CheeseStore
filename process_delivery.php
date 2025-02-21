@@ -47,7 +47,7 @@ try {
         $address = $_POST['address_id'];
 
         // Vérifier si l'adresse existe dans la table 'address'
-        $stmt = $conn->prepare("SELECT COUNT(*) FROM address WHERE id = :address_id AND user_id = :user_id");
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM user_addresses WHERE address_id = :address_id AND user_id = :user_id");
         $stmt->execute(['address_id' => $address, 'user_id' => $user_id]);
         if ($stmt->fetchColumn() == 0) {
             throw new Exception('Invalid delivery address');

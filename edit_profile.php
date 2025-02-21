@@ -89,7 +89,6 @@ include 'includes/header.php';
                                                 while($row = $stmt->fetch()) {
                                                     echo '<div class="address-block panel panel-default">';
                                                     echo '<div class="panel-heading">';
-                                                    echo '<h4 class="panel-title">Adresse enregistré</h4>';
                                                     echo '</div>';
                                                     echo '<div class="panel-body">';
                                                     echo '<div class="row">';

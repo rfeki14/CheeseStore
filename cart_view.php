@@ -88,42 +88,42 @@
                                             }
                                         } 
                                         else if(isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-                                            foreach($_SESSION['cart'] as $item){
-                                                // Vérification et initialisation des valeurs
-                                                $price = isset($item['price']) ? $item['price'] : 0;
-                                                $quantity = isset($item['quantity']) ? $item['quantity'] : 0;
-                                                $subtotal = $price * $quantity;
+                                            foreach($_SESSION['cart'] as $row){
+                                                $image = !empty($row['photo']) ? 'images/'.$row['photo'] : 'images/noimage.jpg';
+                                                $subtotal = $row['price'] * $row['quantity'];
                                                 $total += $subtotal;
-                                                $image = !empty($item['photo']) ? 'images/'.$item['photo'] : 'images/noimage.jpg';
                                                 ?>
                                                 <tr class="cart-item">
                                                     <td class="product-img">
-                                                        <img src='<?php echo htmlspecialchars($image); ?>' class="product-thumb">
+                                                        <img src='<?php echo $image ?>' class="product-thumb">
                                                     </td>
                                                     <td class="product-name">
-                                                        <span class="product-title"><?php echo htmlspecialchars($item['name'] ?? 'Produit inconnu'); ?></span>
+                                                        <span class="product-title"><?php echo htmlspecialchars($row['name']); ?></span>
+                                                        <span class="product-weight"><?php echo $row['weight']; ?>g</span>
                                                     </td>
-                                                    <td class="product-price"><?php echo number_format($price, 2); ?> DT</td>
+                                                    <td class="product-price"><?php echo number_format($row['price'], 2); ?> DT</td>
                                                     <td class="product-quantity">
                                                         <div class="quantity-control">
-                                                            <button class="quantity-btn minus" data-id="<?php echo htmlspecialchars($item['edition_id'] ?? '0'); ?>">-</button>
+                                                            <button class="quantity-btn minus" data-id="<?php echo $row['cartid']; ?>">-</button>
                                                             <input type="number" class="quantity-input" 
-                                                                data-id="<?php echo htmlspecialchars($item['edition_id'] ?? '0'); ?>"
-                                                                value="<?php echo $quantity; ?>"
-                                                                min="1" max="99">
-                                                            <button class="quantity-btn plus" data-id="<?php echo htmlspecialchars($item['edition_id'] ?? '0'); ?>">+</button>
+                                                                data-id="<?php echo $row['cartid']; ?>"
+                                                                data-stock="<?php echo $row['stock']; ?>"
+                                                                value="<?php echo min($row['quantity'], $row['stock']); ?>"
+                                                                min="1" 
+                                                                max="<?php echo $row['stock']; ?>"
+                                                            >
+                                                            <button class="quantity-btn plus" data-id="<?php echo $row['cartid']; ?>">+</button>
                                                         </div>
                                                     </td>
                                                     <td class="product-subtotal"><?php echo number_format($subtotal, 2); ?> DT</td>
                                                     <td class="product-actions">
-                                                        <button class="cart_delete" 
-                                                                data-id="<?php echo htmlspecialchars($item['edition_id'] ?? '0'); ?>">
+                                                        <button class="cart_delete" data-id="<?php echo $row['cartid']; ?>">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
                                                 </tr>
                                                 <?php
-                                            }
+                                            }    
                                         }
                                         else {
                                             echo "<tr><td colspan='6' class='text-center'>Votre panier est vide</td></tr>";
@@ -374,11 +374,6 @@ $(function(){
             }
         }
     });
-
-    // Initialisation du panier local si pas de session
-    if (!<?php echo isset($_SESSION['user']) ? 'true' : 'false'; ?>) {
-        loadLocalCart();
-    }
     
     // Gestionnaire du checkout
     $('#login-checkout').click(function(e) {
@@ -397,13 +392,11 @@ $(function(){
             localStorage.setItem('cartTotal', $('#hidden-total').val());
             window.location.href = 'login.php';
         }
-    ```php
-        }
+        })
     });
-});
 </script>
 
-<style>
+<!-- <style>
 .updating {
     opacity: 0.5;
     pointer-events: none;
@@ -448,6 +441,6 @@ $(function(){
 .delivery-options {
     margin-top: 20px;
 }
-</style>
+</style>-->
 </body>
 </html>
