@@ -1,5 +1,7 @@
 <?php
 	include 'includes/session.php';
+	require_once '../includes/ImageResize.php';
+	use \Gumlet\ImageResize;
 
 	if(isset($_GET['return'])){
 		$return = $_GET['return'];
@@ -17,8 +19,10 @@
 		$photo = $_FILES['photo']['name'];
 		if(password_verify($curr_password, $admin['password'])){
 			if(!empty($photo)){
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$photo);
-				$filename = $photo;	
+				$image= new ImageResize($_FILES['photo']['tmp_name']);
+				$image->resize(320, 320);
+				$image->save('../images/users/0');
+				$filename='users/0';
 			}
 			else{
 				$filename = $admin['photo'];

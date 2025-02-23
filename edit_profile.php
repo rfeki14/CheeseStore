@@ -172,6 +172,12 @@ include 'includes/header.php';
         background-color: #f8f9fa;
         border-bottom: 1px solid #ddd;
     }
+    .form-control[readonly] {
+    color: black;
+    background-color: #e9ecef;
+    opacity: 1;
+    }
+    
     .address-block .form-group {
         margin-bottom: 15px;
     }
@@ -185,6 +191,7 @@ include 'includes/header.php';
     .box-body {
         padding: 20px;
     }
+    
 </style>
 </body>
 </html>

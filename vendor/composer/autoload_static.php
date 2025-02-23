@@ -15,6 +15,10 @@ class ComposerStaticInit99c11773273cd7e70bf7d7ca15ad012f
         array (
             'Moutiasaad\\CheeseStore\\' => 23,
         ),
+        'G' => 
+        array (
+            'Gumlet\\' => 7,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -25,6 +29,10 @@ class ComposerStaticInit99c11773273cd7e70bf7d7ca15ad012f
         'Moutiasaad\\CheeseStore\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Gumlet\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gumlet/php-image-resize/lib',
         ),
     );
 

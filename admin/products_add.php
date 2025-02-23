@@ -1,6 +1,8 @@
 <?php
 	include 'includes/session.php';
 	include 'includes/slugify.php';
+	require_once '../includes/ImageResize.php';
+	use \Gumlet\ImageResize;
 
 	if(isset($_POST['name'])){
 		$name = $_POST['name'];
@@ -21,9 +23,12 @@
 		}
 		else{
 			if(!empty($filename)){
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				$new_filename = $slug.'.'.$ext;
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/products/'.$new_filename);	
+				$ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+            	$dest='images/';
+            	$new_filename='products/'.$slug.'.'.$ext;
+				$image= new ImageResize($_FILES['photo']['tmp_name']);
+				$image->resizeToBestFit(1000,1000);
+				$image->save($new_filename);
 			}
 			else{
 				$new_filename = '';
@@ -31,7 +36,7 @@
 
 			try{
 				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, qtty, photo) VALUES (:category, :name, :description, :slug, :qtty, :photo)");
-				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'qtty'=>$qtty, 'photo'=>'products/'.$new_filename]);
+				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'qtty'=>$qtty, 'photo'=>$new_filename]);
 				$_SESSION['success'] = 'Produit ajouté avec succès';
 
 			}

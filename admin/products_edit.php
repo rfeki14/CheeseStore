@@ -1,38 +1,8 @@
 <?php
 include 'includes/session.php';
 include 'includes/slugify.php';
-function compressImage($source, $destination, $quality) { 
-    // Get image info 
-    $imgInfo = getimagesize($source); 
-    $mime = $imgInfo['mime']; 
-     
-    // Create a new image from file 
-    switch($mime){ 
-        case 'image/jpeg': 
-            $image = imagecreatefromjpeg($source); 
-            break; 
-        case 'image/png': 
-            $image = imagecreatefrompng($source); 
-            break; 
-        case 'image/gif': 
-            $image = imagecreatefromgif($source); 
-            break; 
-        default: 
-            $image = imagecreatefromjpeg($source); 
-    } 
-     
-    // Save image 
-    imagejpeg($image, $destination, $quality); 
-     
-    // Return compressed image 
-    return $destination; 
-}
-
-function convert_filesize($bytes, $decimals = 2) { 
-    $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB'); 
-    $factor = floor((strlen($bytes) - 1) / 3); 
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor]; 
-}
+require_once '../includes/ImageResize.php';
+use \Gumlet\ImageResize;
 
 $id = $_POST['id'];
 $name = $_POST['name'];
@@ -45,7 +15,7 @@ $qtty = $_POST['qtty'];
 if(!empty($_FILES["photo"]["name"])) { 
     // File info 
     $imageFileType = strtolower(pathinfo($_FILES["photo"]["name"], PATHINFO_EXTENSION));
-    $fileName = 'products/'.$name.'.'.$imageFileType;
+    $fileName = 'products/'.$slug.'.'.$imageFileType;
     $imageUploadPath = '../images/' . $fileName; 
     $fileType = pathinfo($imageUploadPath, PATHINFO_EXTENSION); 
      
@@ -53,21 +23,10 @@ if(!empty($_FILES["photo"]["name"])) {
     $allowTypes = array('jpg','png','jpeg','gif'); 
     if(in_array($fileType, $allowTypes)){ 
         // Image temp source and size 
-        $imageTemp = $_FILES["photo"]["tmp_name"]; 
-        $imageSize = convert_filesize($_FILES["photo"]["size"]); 
-         
-        // Compress size and upload image 
-        $compressedImage = compressImage($imageTemp, $imageUploadPath, 75); 
-         
-        if($compressedImage){ 
-            $compressedImageSize = filesize($compressedImage); 
-            $compressedImageSize = convert_filesize($compressedImageSize); 
-             
-            $status = 'success'; 
-            $statusMsg = "Image compressed successfully."; 
-        }else{ 
-            $_SESSION['error'] = "Image compress failed!"; 
-        } 
+        $imageTemp = $_FILES["photo"]["tmp_name"];   
+        $image= new ImageResize($imageTemp);
+        $image->resizeToBestFit(800, 800);
+        $image->save($imageUploadPath);
     }else{ 
         $_SESSION['error'] = 'Sorry, only JPG, JPEG, PNG, & GIF files are allowed to upload.';
         header('location: products.php');

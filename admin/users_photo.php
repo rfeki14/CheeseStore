@@ -1,11 +1,18 @@
 <?php
 	include 'includes/session.php';
+	require_once '../includes/ImageResize.php';
+	use Gumlet\ImageResize;
 
 	if(isset($_POST['upload'])){
 		$id = $_POST['id'];
 		$filename = $_FILES['photo']['name'];
 		if(!empty($filename)){
-			move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$filename);	
+			$ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+            $dest='images/';
+            $filename='users/'.$user['id'].'.'.$ext;
+            $image= new ImageResize($_FILES['photo']['tmp_name']);
+            $image->resizeToBestFit(900, 900);
+            $image->save($dest.$filename);
 		}
 		
 		$conn = $pdo->open();

@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Moutiasaad\\CheeseStore\\' => array($baseDir . '/src'),
+    'Gumlet\\' => array($vendorDir . '/gumlet/php-image-resize/lib'),
 );

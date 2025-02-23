@@ -1,5 +1,7 @@
 <?php
 	include 'includes/session.php';
+	require_once '../includes/ImageResize.php';
+	use Gumlet\ImageResize;
 
 	if(isset($_POST['id'])){
 		$id = $_POST['id'];
@@ -12,9 +14,12 @@
 		$row = $stmt->fetch();
 
 		if(!empty($filename)){
-			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			$new_filename = $row['slug'].'_'.time().'.'.$ext;
-			move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$new_filename);	
+			$ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+            $dest='images/';
+            $new_filename='products/'.$slug.'.'.$ext;
+			$image= new ImageResize($_FILES['photo']['tmp_name']);
+			$image->resizeToBestFit(1000,1000);
+			$image->save($new_filename);	
 		}
 		
 		try{

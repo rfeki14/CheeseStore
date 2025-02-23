@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="dist/css/cart_view.css">
 <?php
 include 'includes/session.php';
+require_once 'includes/ImageResize.php';
+use \Gumlet\ImageResize;
 
 if(isset($_POST['firstname'])) {
     $conn = $pdo->open();
@@ -119,14 +121,18 @@ if(isset($_POST['firstname'])) {
 
         // Traitement de la photo
         if(!empty($_FILES['photo']['name'])){
-            move_uploaded_file($_FILES['photo']['tmp_name'], 'images/'.$_FILES['photo']['name']);
+            $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+            $dest='images/';
+            $tmpname='users/'.$user['id'].'.'.$ext;
+            $image= new ImageResize($_FILES['photo']['tmp_name']);
+            $image->resizeToBestFit(900, 900);
+            $image->save($dest.$tmpname);
             $stmt = $conn->prepare("UPDATE users SET photo = :photo WHERE id = :id");
-            $stmt->execute(['photo' => $_FILES['photo']['name'], 'id' => $user['id']]);
+            $stmt->execute(['photo' => $tmpname, 'id' => $user['id']]);
         }
 
         $conn->commit();
         $_SESSION['success'] = 'Profil mis à jour avec succès';
-        echo 'success';
     }
     catch(Exception $e) {
         $conn->rollBack();
