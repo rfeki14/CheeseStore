@@ -1,45 +1,66 @@
 /* Sidebar Styling */
 .sidebar-card {
-    border-radius: 12px;
+    border-radius: 16px; /* Bords plus arrondis */
     margin-bottom: 25px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    background: #2d363d; /* Darker sidebar background */
-    padding: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+    background: linear-gradient(145deg, #2d363d, #1f262b); /* Dégradé de fond */
+    padding: 25px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Bordure subtile */
 }
 
 .sidebar-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.2); /* Bordure plus visible au survol */
 }
 
-/* Sidebar Header */
 /* Sidebar Title */
 .sidebar-title {
-    color: #e63946 !important; /* Red color */
-    font-size: 20px;
-    font-weight: bold;
+    color: #ff6b6b !important; /* Couleur rouge vif */
+    font-size: 14px; /* Taille de police légèrement augmentée */
+    font-weight: 700; /* Gras */
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    position: relative;
 }
 
+.sidebar-title::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #ff6b6b; /* Ligne décorative sous le titre */
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
 
 /* List Group */
 .list-group-item {
-    font-size: 15px;
+    font-size: 16px;
     padding: 12px 20px;
     border: none;
     background: transparent;
     transition: background 0.3s, color 0.3s;
+    margin: 8px 0; /* Espacement entre les éléments */
+    border-radius: 8px; /* Bords arrondis */
 }
 
 .list-group-item a {
     text-decoration: none;
-    color: #e0e0e0; /* Light text */
+    color: #e0e0e0;
     font-weight: 500;
     transition: color 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacement entre l'icône et le texte */
+}
+
+.list-group-item a i {
+    font-size: 18px; /* Taille des icônes */
 }
 
 .list-group-item:hover {
@@ -59,44 +80,49 @@
 
 .form-control {
     border-radius: 30px;
-    padding: 10px 15px;
-    border: 1px solid #555; /* Darker border */
-    background: #2d363d; /* Dark input background */
+    padding: 12px 20px; /* Padding plus généreux */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure subtile */
+    background: rgba(255, 255, 255, 0.05); /* Fond légèrement transparent */
     color: white;
     transition: 0.3s;
+    font-size: 14px;
 }
 
 .form-control::placeholder {
-    color: #b0b0b0; /* Light placeholder text */
+    color: #b0b0b0;
 }
 
 .form-control:focus {
     border-color: #3caef8;
-    box-shadow: 0 0 5px rgba(60, 174, 248, 0.5);
+    box-shadow: 0 0 8px rgba(60, 174, 248, 0.6); /* Ombre plus visible */
+    background: rgba(255, 255, 255, 0.1); /* Fond plus clair au focus */
 }
 
 /* Social Media Buttons */
 .social-container {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 15px; /* Espacement entre les boutons */
+    margin-top: 20px;
 }
 
 .social-btn {
-    width: 45px;
-    height: 45px;
+    width: 50px; /* Taille légèrement augmentée */
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 20px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background: rgba(255, 255, 255, 0.1); /* Fond légèrement transparent */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure subtile */
 }
 
 .social-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.2); /* Fond plus clair au survol */
 }
 
 /* Social Media Colors */
@@ -105,3 +131,56 @@
 .btn-instagram { background-color: #e4405f; color: white; }
 .btn-google { background-color: #db4437; color: white; }
 .btn-linkedin { background-color: #0077b5; color: white; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar-card {
+        padding: 20px; /* Padding réduit pour les petits écrans */
+    }
+
+    .sidebar-title {
+        font-size: 12px; /* Taille de police réduite */
+    }
+
+    .list-group-item {
+        font-size: 10px; /* Taille de police réduite */
+        padding: 10px 15px; /* Padding ajusté */
+    }
+
+    .form-control {
+        padding: 10px 15px; /* Padding ajusté */
+        font-size: 13px; /* Taille de police réduite */
+    }
+
+    .social-btn {
+        width: 45px; /* Taille réduite pour les petits écrans */
+        height: 45px;
+        font-size: 18px; /* Taille de police réduite */
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-card {
+        margin-bottom: 20px; /* Espacement réduit */
+    }
+
+    .sidebar-title {
+        font-size: 12px; /* Taille de police réduite */
+    }
+
+    .list-group-item {
+        font-size: 10px; /* Taille de police réduite */
+        padding: 8px 12px; /* Padding ajusté */
+    }
+
+    .form-control {
+        padding: 8px 12px; /* Padding ajusté */
+        font-size: 12px; /* Taille de police réduite */
+    }
+
+    .social-btn {
+        width: 40px; /* Taille réduite pour les très petits écrans */
+        height: 40px;
+        font-size: 16px; /* Taille de police réduite */
+    }
+}
