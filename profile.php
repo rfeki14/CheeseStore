@@ -1,48 +1,114 @@
 <?php include 'includes/session.php'; ?>
 <?php
-	if(!isset($_SESSION['user'])){
-		header('location: index.php');
-	}
+    if(!isset($_SESSION['user'])){
+        header('location: index.php');
+    }
 ?>
 <?php include 'includes/header.php'; ?>
 <link rel="stylesheet" href="dist/css/cart_view.css">
 <style>
+/* Styles généraux */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1d232a;
+}
+
+/* Styles pour la carte de profil */
 .profile-card {
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     margin-bottom: 30px;
+    padding: 20px;
 }
 
 .profile-header {
-    padding: 30px;
     display: flex;
-    align-items: start;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .profile-image {
     border-radius: 50%;
     border: 4px solid #fff;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
+    margin-bottom: 20px;
 }
 
 .profile-info {
-    padding-left: 30px;
+    text-align: center;
 }
 
 .profile-info h4 {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: #333;
+    font-size: 16px;
 }
 
+.profile-info .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-info .col-sm-3,
+.profile-info .col-sm-9 {
+    width: 100%;
+    text-align: center;
+}
+
+.profile-info .col-sm-3 h4 {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.profile-info .col-sm-9 h4 {
+    margin-bottom: 15px;
+}
+
+.addresses-list {
+    margin-top: 10px;
+}
+
+.address-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.address-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.btn-success.btn-flat {
+    background: #28a745;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+.btn-success.btn-flat:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+/* Styles pour la carte des transactions */
 .transaction-card {
     background: #fff;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
 }
 
 .transaction-header {
@@ -127,163 +193,207 @@
     border: none;
 }
 
-/* Amélioration du tableau */
-#example1_wrapper .row:first-child {
-    margin-bottom: 20px;
-}
+/* Responsive Design pour les écrans mobiles */
+@media (max-width: 768px) {
+    .profile-header {
+        padding: 15px;
+    }
 
-#example1_filter input {
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    padding: 5px 15px;
-    margin-left: 10px;
-}
+    .profile-image {
+        width: 100px;
+        height: 100px;
+    }
 
-#example1_length select {
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    padding: 5px 30px 5px 15px;
+    .profile-info h4 {
+        font-size: 14px;
+    }
+
+    .address-item p {
+        font-size: 12px;
+    }
+
+    .btn-success.btn-flat {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    #example1 {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .transaction-card, .profile-card {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .modal-dialog {
+        margin: 10px;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    h4 {
+        font-size: 16px;
+    }
+
+    .btn, .btn-flat {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}.text-black {
+    color: black; /* Ou utilisez #000000 pour le noir */
 }
 </style>
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
 
-	<?php include 'includes/navbar.php'; ?>
-	 
-	  <div class="content-wrapper">
-	    <div class="container">
+    <?php include 'includes/navbar.php'; ?>
+     
+    <div class="content-wrapper">
+        <div class="container">
 
-	      <!-- Contenu principal -->
-	      <section class="content">
-	        <div class="row">
-	        	<div class="col-sm-9">
-	        		<?php
-	        			if(isset($_SESSION['error'])){
-	        				echo "
-	        					<div class='callout callout-danger'>
-	        						".$_SESSION['error']."
-	        					</div>
-	        				";
-	        				unset($_SESSION['error']);
-	        			}
+            <!-- Contenu principal -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <?php
+                            if(isset($_SESSION['error'])){
+                                echo "
+                                    <div class='callout callout-danger'>
+                                        ".$_SESSION['error']."
+                                    </div>
+                                ";
+                                unset($_SESSION['error']);
+                            }
 
-	        			if(isset($_SESSION['success'])){
-	        				echo "
-	        					<div class='callout callout-success'>
-	        						".$_SESSION['success']."
-	        					</div>
-	        				";
-	        				unset($_SESSION['success']);
-	        			}
-	        		?>
-	        		<div class="box box-solid profile-card">
-	        			<div class="box-body profile-header">
-	        				<div class="profile-image-container">
-	        					<img src="<?php echo (!empty($user['photo'])) ? 'images/'.$user['photo'] : 'images/profile.jpg'; ?>" class="profile-image">
-	        				</div>
-	        				<div class="col-sm-9 profile-info">
-	        					<div class="row">
-	        						<div class="col-sm-3">
-	        							<h4>Nom :</h4>
-	        							<h4>Email :</h4>
-	        							<h4>Informations de contact :</h4>
-	        							<h4>Adresses :</h4>
-	        						</div>
-	        						<div class="col-sm-9">
-	        							<h4><?php echo $user['firstname'].' '.$user['lastname']; ?>
-	        								<span class="pull-right">
-	        									<a href="edit_profile.php" class="btn btn-success btn-flat btn-sm"><i class="fa fa-edit"></i> Modifier</a>
-	        								</span>
-	        							</h4>
-	        							<h4><?php echo $user['email']; ?></h4>
-	        							<h4><?php echo (!empty($user['contact_info'])) ? $user['contact_info'] : 'N/a'; ?></h4>
-	        							<div class="addresses-list">
-											<?php
-											$conn = $pdo->open();
-											try {
-												$stmt = $conn->prepare("
-													SELECT a.* 
-													FROM address a 
-													JOIN user_addresses ua ON a.id = ua.address_id 
-													WHERE ua.user_id = :user_id
-												");
-												$stmt->execute(['user_id' => $user['id']]);
-												
-												while($row = $stmt->fetch()) {
-													echo '<div class="address-item">';
-													echo '<p>' . $row['street'] . '<br>';
-													echo $row['city'] . ', ' . $row['state'] . ' ' . $row['zip_code'] . '<br>';
-													echo $row['country'] . '</p>';
-													echo '</div>';
-												}
-											}
-											catch(PDOException $e) {
-												echo "Il y a un problème: " . $e->getMessage();
-											}
-											$pdo->close();
-											?>
-										</div>
-	        						</div>
-	        					</div>
-	        				</div>
-	        			</div>
-	        		</div>
-	        		<div class="box box-solid transaction-card">
-	        			<div class="transaction-header">
-	        				<h4 class="box-title"><i class="fa fa-calendar"></i> <b>Historique des transactions</b></h4>
-	        			</div>
-	        			<div class="box-body">
-	        				<table class="table table-bordered" id="example1">
-	        					<thead>
-	        						<th class="hidden"></th>
-	        						<th>Date</th>
-	        						<th>Transaction#</th>
-	        						<th>Montant</th>
-	        						<th>Détails complets</th>
-	        					</thead>
-	        					<tbody>
-	        					<?php
-	        						$conn = $pdo->open();
+                            if(isset($_SESSION['success'])){
+                                echo "
+                                    <div class='callout callout-success'>
+                                        ".$_SESSION['success']."
+                                    </div>
+                                ";
+                                unset($_SESSION['success']);
+                            }
+                        ?>
+                       <div class="box box-solid profile-card">
+    <div class="box-body profile-header">
+        <div class="profile-image-container">
+            <img src="<?php echo (!empty($user['photo'])) ? 'images/'.$user['photo'] : 'images/profile.jpg'; ?>" class="profile-image">
+        </div>
+        <div class="profile-info">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>
+                        <?php echo $user['firstname'].' '.$user['lastname']; ?>
+                        <span class="pull-right">
+                            <a href="edit_profile.php" class="btn btn-success btn-flat btn-sm"><i class="fa fa-edit"></i> Modifier</a>
+                        </span>
+                    </h4>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Nom</th>
+                            <td><?php echo $user['firstname'].' '.$user['lastname']; ?></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td><?php echo $user['email']; ?></td>
+                        </tr>
+                        <tr>
+                            <th>Informations de contact</th>
+                            <td><?php echo (!empty($user['contact_info'])) ? $user['contact_info'] : 'N/a'; ?></td>
+                        </tr>
+                        <tr>
+                            <th>Adresses</th>
+                            <td>
+                                <div class="addresses-list">
+                                    <?php
+                                    $conn = $pdo->open();
+                                    try {
+                                        $stmt = $conn->prepare("
+                                            SELECT a.* 
+                                            FROM address a 
+                                            JOIN user_addresses ua ON a.id = ua.address_id 
+                                            WHERE ua.user_id = :user_id
+                                        ");
+                                        $stmt->execute(['user_id' => $user['id']]);
+                                        
+                                        while($row = $stmt->fetch()) {
+                                            echo '<div class="address-item">';
+                                            echo '<p>' . $row['street'] . '<br>';
+                                            echo $row['city'] . ', ' . $row['state'] . ' ' . $row['zip_code'] . '<br>';
+                                            echo $row['country'] . '</p>';
+                                            echo '</div>';
+                                        }
+                                    }
+                                    catch(PDOException $e) {
+                                        echo "Il y a un problème: " . $e->getMessage();
+                                    }
+                                    $pdo->close();
+                                    ?>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                        <div class="box box-solid transaction-card">
+                            <div class="transaction-header">
+                            <h4 class="box-title text-black"><i class="fa fa-calendar"></i> <b>Historique des transactions</b></h4> </div>
+                            <div class="box-body">
+                                <table class="table table-bordered" id="example1">
+                                    <thead>
+                                        <th class="hidden"></th>
+                                        <th>Date</th>
+                                        <th>Transaction#</th>
+                                        <th>Montant</th>
+                                        <th>Détails complets</th>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                        $conn = $pdo->open();
 
-	        						try{
-	        							$stmt = $conn->prepare("SELECT * FROM sales WHERE user_id=:user_id ORDER BY id DESC");
-	        							$stmt->execute(['user_id'=>$user['id']]);
-	        							foreach($stmt as $row){
+                                        try{
+                                            $stmt = $conn->prepare("SELECT * FROM sales WHERE user_id=:user_id ORDER BY id DESC");
+                                            $stmt->execute(['user_id'=>$user['id']]);
+                                            foreach($stmt as $row){
                                                 $total = $row['total'];
-	        								echo "
-	        									<tr>
-	        										<td class='hidden'></td>
-	        										<td>".date('M d, Y', strtotime($row['sales_date']))."</td>
-	        										<td>".$row['id']."</td>
-	        										<td>&#36; ".number_format($total, 2)."</td>
-	        										<td><button class='btn btn-sm btn-flat btn-info transact' data-id='".$row['id']."'><i class='fa fa-search'></i> Voir</button></td>
-	        									</tr>
-	        								";
-	        							}
+                                                echo "
+                                                    <tr>
+                                                        <td class='hidden'></td>
+                                                        <td>".date('M d, Y', strtotime($row['sales_date']))."</td>
+                                                        <td>".$row['id']."</td>
+                                                        <td>&#36; ".number_format($total, 2)."</td>
+                                                        <td><button class='btn btn-sm btn-flat btn-info transact' data-id='".$row['id']."'><i class='fa fa-search'></i> Voir</button></td>
+                                                    </tr>
+                                                ";
+                                            }
 
-	        						}
-        							catch(PDOException $e){
-										echo "Il y a un problème de connexion : " . $e->getMessage();
-									}
+                                        }
+                                        catch(PDOException $e){
+                                            echo "Il y a un problème de connexion : " . $e->getMessage();
+                                        }
 
-	        						$pdo->close();
-	        					?>
-	        					</tbody>
-	        				</table>
-	        			</div>
-	        		</div>
-	        	</div>
-	        	<div class="col-sm-3">
-	        		<?php include 'includes/sidebar.php'; ?>
-	        	</div>
-	        </div>
-	      </section>
-	     
-	    </div>
-	  </div>
-  
-  	<?php include 'includes/footer.php'; ?>
-  	<?php include 'includes/profile_modal.php'; ?>
+                                        $pdo->close();
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <?php include 'includes/footer.php'; ?>
+    <?php include 'includes/profile_modal.php'; ?>
 </div>
 
 <?php include 'includes/scripts.php'; ?>
@@ -374,9 +484,6 @@ $(function(){
         });
         return false;
     });
-
-    // Gestionnaire pour les transactions
-    // ...existing code...
 });
 </script>
 </body>
