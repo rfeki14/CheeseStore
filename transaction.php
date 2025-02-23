@@ -51,7 +51,7 @@ if ($row['delivery_method'] == 'pickup') {
     $output['address'] = $address['street'].' '.$address['city'].' '.$address['state'].' '.$address['zip_code'];
 }
 
-$stmt = $conn->prepare("SELECT p.name, e.price, d.quantity FROM details d LEFT JOIN edition e on d.product_id=e.id LEFT JOIN products p ON p.id = e.product_id WHERE d.sales_id = :id");
+$stmt = $conn->prepare("SELECT p.name, e.price, e.weight, d.quantity FROM details d LEFT JOIN edition e on d.product_id=e.id LEFT JOIN products p ON p.id = e.product_id WHERE d.sales_id = :id");
 $stmt->execute(['id'=>$id]);
 
 $total = 0;
@@ -60,7 +60,7 @@ foreach ($stmt as $row) {
     $total += $subtotal;
     $output['list'] .= "
         <tr class='prepend_items'>
-            <td>".$row['name']."</td>
+            <td>".$row['name']."-".$row['weight']."g</td>
             <td>&#36; ".number_format($row['price'], 2)."</td>
             <td>".$row['quantity']."</td>
             <td>&#36; ".number_format($subtotal, 2)."</td>

@@ -1,11 +1,6 @@
 <?php include 'includes/session.php'; ?>
 <?php include 'includes/header.php'; ?>
-<?php
-// Debug session
-echo "Session status:<br>";
-$total = (isset($_SESSION['total']) ? $_SESSION['total'] : 0);
-var_dump($_SESSION);
-?>
+
 
 <link rel="stylesheet" href="dist/css/cart_view.css">
 

@@ -1,7 +1,10 @@
 <style>
+
 .modal-content {
-    border-radius: 12px;
+    color: black;
+    border-radius: 6px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    width: 150%;
 }
 
 .modal-header {

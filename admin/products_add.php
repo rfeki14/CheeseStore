@@ -23,7 +23,7 @@
 			if(!empty($filename)){
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
 				$new_filename = $slug.'.'.$ext;
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$new_filename);	
+				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/products/'.$new_filename);	
 			}
 			else{
 				$new_filename = '';
@@ -31,7 +31,7 @@
 
 			try{
 				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, qtty, photo) VALUES (:category, :name, :description, :slug, :qtty, :photo)");
-				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'qtty'=>$qtty, 'photo'=>$new_filename]);
+				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'qtty'=>$qtty, 'photo'=>'products/'.$new_filename]);
 				$_SESSION['success'] = 'Produit ajouté avec succès';
 
 			}

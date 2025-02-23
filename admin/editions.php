@@ -222,6 +222,9 @@ $(function(){
         if(val == 0){
             window.location = 'editions.php?product=' + prod;
         }
+        else if(val==-1){
+            window.location ='editions.php?category='+-1+'&product='+prod;
+        }
         else{
             window.location = 'editions.php?category='+val+'&product=' + prod;
         }

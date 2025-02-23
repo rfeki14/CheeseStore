@@ -43,7 +43,7 @@ if(isset($_POST['id']) && isset($_POST['quantity']) && isset($_POST['edition']))
             foreach($_SESSION['cart'] as $cartitem){
                 echo 'test'.$cartitem['name'].''.$cartitem['quantity']; 
                 if($cartitem['edition_id'] == $edition_id){
-                    $cartitem['quantity'] += $quantity;
+                    $cartitem['quantity'] = $cartitem['quantity'] + $quantity;
                     $output['product'] = [
                         'cartid' => $cartitem['cartid'],
                         'edition_id' => $cartitem['edition_id'],
@@ -56,6 +56,9 @@ if(isset($_POST['id']) && isset($_POST['quantity']) && isset($_POST['edition']))
                         'weight' => $cartitem['weight'],
                         'stock' => $cartitem['stock']
                     ];
+                    $output['message']="cart updated";
+                    echo json_encode($output);
+                    exit;
                 }
             }
                 $output['product'] = [
@@ -70,7 +73,6 @@ if(isset($_POST['id']) && isset($_POST['quantity']) && isset($_POST['edition']))
                     'weight' => $product['weight'],
                     'stock' => $product['stock']
                 ];
-                $_SESSION['cartcount']=$_SESSION['cartcount']+1;
             $output['message'] = 'Produit ajouté au panier';
         }
         else{

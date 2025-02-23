@@ -13,7 +13,7 @@
         $product = $stmt->fetch();
 
         // Récupération des éditions du produit
-        $stmt = $conn->prepare("SELECT * FROM edition WHERE product_id = :prodid");
+        $stmt = $conn->prepare("SELECT * FROM edition WHERE product_id = :prodid order by weight");
         $stmt->execute(['prodid' => $product['prodid']]);
         $editions = $stmt->fetchAll();
     } catch (PDOException $e) {
@@ -58,7 +58,7 @@
                                     <?php
                                     foreach($editions as $edition){
                                         echo "<option value='".$edition['id']."' data-price='".$edition['price']."'>"
-                                            .$edition['weight']."g - $".number_format($edition['price'], 2)
+                                            .$edition['name'].'--'.$edition['weight']."g - $".number_format($edition['price'], 2)
                                             ."</option>";
                                     }
                                     ?>

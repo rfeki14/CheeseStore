@@ -20,6 +20,12 @@
 						}
 						else{
 							$_SESSION['user'] = $row['id'];
+							if(isset($_SESSION['cart'])){
+								foreach($_SESSION['cart'] as $k => $v){
+									$stmt1= $conn->prepare("INSERT INTO cart(user_id, edition_id, quantity, price) VALUES (:user_id,:edition_id,:quantity,:price);");
+									$stmt1->execute(['userid'=>$row['id'],'edition_id'=>(int)$v['edition_id'],'quantity'=>(int)$v['quantity'],'price'=>$v['price']]);
+								}
+							}
 						}
 					}
 					else{
