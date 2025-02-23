@@ -1,7 +1,7 @@
 <?php
 	include 'includes/conn.php';
 	session_start();
-	$total = (isset($_SESSION['total']) ? $_SESSION['total'] : 0);
+	$total = (isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0);
 	if(isset($_SESSION['admin'])){
 		header('location: admin/home.php');
 	}
