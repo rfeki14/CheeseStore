@@ -18,8 +18,11 @@ body {
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
-    padding: 20px;
+    margin-bottom: 20px; /* Réduire la marge en bas */
+    padding: 15px; /* Réduire le padding */
+    max-width: 600px; /* Limiter la largeur maximale */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .profile-header {
@@ -31,12 +34,12 @@ body {
 
 .profile-image {
     border-radius: 50%;
-    border: 4px solid #fff;
+    border: 3px solid #fff; /* Réduire l'épaisseur de la bordure */
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    width: 120px;
-    height: 120px;
+    width: 80px; /* Réduire la largeur de l'image */
+    height: 80px; /* Réduire la hauteur de l'image */
     object-fit: cover;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Réduire la marge en bas */
 }
 
 .profile-info {
@@ -44,9 +47,9 @@ body {
 }
 
 .profile-info h4 {
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Réduire la marge en bas */
     color: #333;
-    font-size: 16px;
+    font-size: 14px; /* Réduire la taille de la police */
 }
 
 .profile-info .row {
@@ -63,35 +66,35 @@ body {
 
 .profile-info .col-sm-3 h4 {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 4px; /* Réduire la marge en bas */
 }
 
 .profile-info .col-sm-9 h4 {
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* Réduire la marge en bas */
 }
 
 .addresses-list {
-    margin-top: 10px;
+    margin-top: 8px; /* Réduire la marge en haut */
 }
 
 .address-item {
-    margin-bottom: 10px;
-    padding: 10px;
+    margin-bottom: 8px; /* Réduire la marge en bas */
+    padding: 8px; /* Réduire le padding */
     background: #f9f9f9;
-    border-radius: 8px;
+    border-radius: 6px; /* Réduire le rayon de la bordure */
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 .address-item p {
     margin: 0;
-    font-size: 14px;
+    font-size: 12px; /* Réduire la taille de la police */
     color: #555;
 }
 
 .btn-success.btn-flat {
     background: #28a745;
     border: none;
-    padding: 8px 15px;
+    padding: 6px 12px; /* Réduire le padding */
     border-radius: 4px;
     color: #fff;
     transition: all 0.3s;
@@ -200,8 +203,8 @@ body {
     }
 
     .profile-image {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
     }
 
     .profile-info h4 {
@@ -244,7 +247,9 @@ body {
         padding: 5px 10px;
         font-size: 12px;
     }
-}.text-black {
+}
+
+.text-black {
     color: black; /* Ou utilisez #000000 pour le noir */
 }
 </style>
