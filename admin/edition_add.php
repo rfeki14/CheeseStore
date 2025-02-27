@@ -10,7 +10,7 @@
 
 		$conn = $pdo->open();
 
-		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM Edition WHERE name=:name");
+		$stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM edition WHERE name=:name");
 		$stmt->execute(['name'=>$name]);
 		$row = $stmt->fetch();
 

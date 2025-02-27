@@ -10,51 +10,51 @@
     <div class="content-wrapper">
         <!-- Full-screen carousel -->
         <div class="container-fluid p-0">
-            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="4"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="5"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="6"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="7"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="images/banner1.jpg" class="d-block w-100" alt="First slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner2.jpg" class="d-block w-100" alt="Second slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner3.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner4.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner5.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner6.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner7.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner8.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
+        <div id="carouselExample" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="4"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="5"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="6"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="7"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="images/banner1.jpg" class="d-block w-100" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img src="images/banner2.jpg" class="d-block w-100" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img src="images/banner3.jpg" class="d-block w-100" alt="Third slide">
+            </div>
+            <div class="carousel-item">
+                <img src="images/banner4.jpg" class="d-block w-100" alt="Fourth slide">
+            </div>
+            <div class="carousel-item">
+                <img src="images/banner5.jpg" class="d-block w-100" alt="Fifth slide">
+            </div>
+            <div class="carousel-item">
+                <img src="images/banner6.jpg" class="d-block w-100" alt="Sixth slide">
+            </div>
+            <div class="carousel-item">
+                <img src="images/banner7.jpg" class="d-block w-100" alt="Seventh slide">
+            </div>
+            <div class="carousel-item">
+                <img src="images/banner8.jpg" class="d-block w-100" alt="Eighth slide">
             </div>
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</div>
 
         <div class="container">
             <section class="content">

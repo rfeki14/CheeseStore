@@ -397,3 +397,35 @@ iframe {
 .section-line {
     background-color: var(--primary-color);
 }
+
+/* Adjust carousel control buttons */
+#productsCarousel .carousel-control-prev, #productsCarousel .carousel-control-next {
+    width: 5%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 0;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+#productsCarousel .carousel-control-prev:hover,
+#productsCarousel .carousel-control-next:hover {
+    opacity: 1;
+}
+
+#productsCarousel .carousel-control-prev-icon,
+#productsCarousel .carousel-control-next-icon {
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 50%;
+    padding: 10px;
+}
+
+/* Ensure product cards are not overlapped by buttons */
+#productsCarousel .carousel-item {
+    padding: 0 5%;
+}

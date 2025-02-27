@@ -94,7 +94,7 @@ try {
 
     // Récupérer les articles du panier avec les informations du produit
     $stmt = $conn->prepare("SELECT *, cart.quantity as cart_quantity, cart.price as cart_price 
-                           FROM cart LEFT JOIN Edition ON Edition.id=cart.edition_id
+                           FROM cart LEFT JOIN edition ON edition.id=cart.edition_id
                            LEFT JOIN products ON products.id=edition.product_id 
                            WHERE user_id=:user_id");
     $stmt->execute(['user_id'=>$user_id]);

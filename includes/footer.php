@@ -15,9 +15,9 @@
             <!-- Informations de Contact -->
             <div class="col-md-4 mb-3">
                 <h5>Contactez-Nous</h5>
-                <p>Email : support@shopmate.com</p>
+                <p>Email : support@Coeurblanc.com</p>
                 <p>Téléphone : +1 (234) 567-890</p>
-                <p>Adresse : 123 Rue Principale, Ville, Pays</p>
+                <p>Adresse : 123 Rue Principale, Cité EL Khadhra, Tunis</p>
             </div>
 
             <!-- Liens des Réseaux Sociaux (ICÔNES FIXES) -->
