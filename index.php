@@ -3,6 +3,62 @@
 
 <body class="hold-transition skin-blue layout-top-nav">
 <link rel="stylesheet" href="dist/css/index.css">
+<style>
+    /* Styles pour les boutons de carrousel */
+    .carousel-control-prev,
+    .carousel-control-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        z-index: 100;
+    }
+
+    .carousel-control-prev {
+        left: 20px;
+    }
+
+    .carousel-control-next {
+        right: 20px;
+    }
+
+    /* Éliminer les espaces entre les images */
+    .carousel-inner {
+        font-size: 0; /* Élimine l'espace blanc entre les images inline-block */
+    }
+
+    .carousel-item {
+        margin: 0;
+        padding: 0;
+        font-size: 16px; /* Rétablir la taille de police normale */
+    }
+
+    .carousel-item img {
+        display: block; /* Élimine l'espace sous l'image */
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Ajustements pour le carrousel de produits */
+    #productsCarousel .carousel-control-prev,
+    #productsCarousel .carousel-control-next {
+        background-color: rgba(0, 0, 0, 0.3);
+        width: 40px;
+        height: 40px;
+    }
+
+    #productsCarousel .carousel-control-prev {
+        left: -50px;
+    }
+
+    #productsCarousel .carousel-control-next {
+        right: -50px;
+    }
+</style>
 
 <div class="wrapper">
     <?php include 'includes/navbar.php'; ?>
