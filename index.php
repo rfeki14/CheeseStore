@@ -3,6 +3,62 @@
 
 <body class="hold-transition skin-blue layout-top-nav">
 <link rel="stylesheet" href="dist/css/index.css">
+<style>
+    /* Styles pour les boutons de carrousel */
+    .carousel-control-prev,
+    .carousel-control-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        z-index: 100;
+    }
+
+    .carousel-control-prev {
+        left: 20px;
+    }
+
+    .carousel-control-next {
+        right: 20px;
+    }
+
+    /* Éliminer les espaces entre les images */
+    .carousel-inner {
+        font-size: 0; /* Élimine l'espace blanc entre les images inline-block */
+    }
+
+    .carousel-item {
+        margin: 0;
+        padding: 0;
+        font-size: 16px; /* Rétablir la taille de police normale */
+    }
+
+    .carousel-item img {
+        display: block; /* Élimine l'espace sous l'image */
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Ajustements pour le carrousel de produits */
+    #productsCarousel .carousel-control-prev,
+    #productsCarousel .carousel-control-next {
+        background-color: rgba(0, 0, 0, 0.3);
+        width: 40px;
+        height: 40px;
+    }
+
+    #productsCarousel .carousel-control-prev {
+        left: -50px;
+    }
+
+    #productsCarousel .carousel-control-next {
+        right: -50px;
+    }
+</style>
 
 <div class="wrapper">
     <?php include 'includes/navbar.php'; ?>
@@ -10,43 +66,15 @@
     <div class="content-wrapper">
         <!-- Full-screen carousel -->
         <div class="container-fluid p-0">
-            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="3"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="4"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="5"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="6"></button>
-                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="7"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="images/banner1.jpg" class="d-block w-100" alt="First slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner2.jpg" class="d-block w-100" alt="Second slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner3.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner4.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner5.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner6.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner7.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/banner8.jpg" class="d-block w-100" alt="Third slide" style="height: 100vh; object-fit: cover;">
-                    </div>
-                </div>
+            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner"><?php 
+                    $banners = array('banner1.jpg', 'banner2.jpg', 'banner3.jpg', 'banner4.jpg', 'banner5.jpg', 'banner6.jpg', 'banner7.jpg', 'banner8.jpg');
+                    foreach($banners as $index => $banner) {
+                        echo '<div class="carousel-item '.($index === 0 ? 'active' : '').'">';
+                        echo '<img src="images/'.$banner.'" class="d-block" alt="Slide '.($index + 1).'">';
+                        echo '</div>';
+                    }
+                ?></div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
                 </button>

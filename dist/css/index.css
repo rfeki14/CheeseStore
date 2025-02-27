@@ -12,7 +12,7 @@ body {
     background: linear-gradient(135deg, #1c252c 0%, #2d363d 100%);
     color: var(--text-light);
 }
-z
+
 /* Navbar Enhancement */
 .navbar {
     background: rgba(28, 37, 44, 0.95);
@@ -43,6 +43,70 @@ z
     background: rgba(0, 0, 0, 0.5);
     padding: 20px;
     border-radius: 10px;
+}
+
+/* Styles de base pour le carrousel */
+.carousel {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    font-size: 0;  /* Remove white space between inline-block elements */
+}
+
+.carousel-item {
+    transition:  ease-in-out;
+    backface-visibility: hidden;
+    display: none;
+    width: 100%;
+    margin-right: -100%;
+}
+
+.carousel-item.active {
+    display: block;
+}
+
+.carousel-item img {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styles responsive pour les contrôles du carrousel */
+@media (max-width: 768px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 35px;
+        height: 35px;
+    }
+
+    .carousel-control-prev {
+        left: 10px;
+    }
+
+    .carousel-control-next {
+        right: 10px;
+    }
+}
+
+/* Styles pour le carrousel de produits */
+#productsCarousel {
+    position: relative;
+    padding: 0 60px;
+}
+
+@media (max-width: 768px) {
+    #productsCarousel {
+        padding: 0 40px;
+    }
 }
 
 /* Monthly Top Sellers Section */
@@ -306,6 +370,8 @@ iframe {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     padding: 10px;
+    width: 20px;
+    height: 20px;
 }
 
 /* Section Headers */
@@ -396,4 +462,34 @@ iframe {
 
 .section-line {
     background-color: var(--primary-color);
+}
+
+/* Position carousel controls */
+.carousel-control-prev,
+.carousel-control-next {
+    position: fixed; /* Change to fixed position */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    width: 44px;
+    height: 44px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-control-prev {
+    left: 15px;
+}
+
+.carousel-control-next {
+    right: 15px;
+}
+
+/* Product carousel specific fixes */
+#productsCarousel .carousel-control-prev,
+#productsCarousel .carousel-control-next {
+    position: absolute;
 }
