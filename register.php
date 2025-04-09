@@ -1,8 +1,7 @@
 <?php
-	require 'vendor/autoload.php';
-	use PHPMailer\PHPMailer\PHPMailer;
-	use PHPMailer\PHPMailer\Exception;
-
+require 'vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 include 'includes/session.php';
 
@@ -69,16 +68,16 @@ if(isset($_POST['signup'])){
         try {
             // SMTP settings
             $mail->isSMTP();
-            $mail->Host = 'smtp.mailersend.net';  
+            $mail->Host = 'mail.coeurblancfromages.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'MS_n1Elf5@trial-jpzkmgqweq1g059v.mlsender.net'; // Your Gmail
-            $mail->Password = 'mssp.KXrfkTC.351ndgwqvkdgzqx8.2NpyiRW'; // **Use App Password**
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use 'PHPMailer::ENCRYPTION_STARTTLS' if using TLS
-            $mail->Port = 587; // **Use 465 for SSL, 587 for TLS**
+            $mail->Username = 'noreply@coeurblancfromages.com';
+            $mail->Password = 'NSPxE;(maa';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // SSL
+            $mail->Port = 465;
 
-            $mail->setFrom('MS_qH6QZS@trial-jpzkmgqweq1g059v.mlsender.net', 'Cheese Store');
+            $mail->setFrom('noreply@coeurblancfromages.com', 'Cheese Store');
             $mail->addAddress($email);
-            $mail->addReplyTo('MS_qH6QZS@trial-jpzkmgqweq1g059v.mlsender.net', 'Cheese Store');
+            $mail->addReplyTo('noreply@coeurblancfromages.com', 'Cheese Store');
 
             // Email content
             $mail->isHTML(true);
@@ -114,5 +113,4 @@ if(isset($_POST['signup'])){
     header('location: signup.php');
     exit();
 }
-
 ?>
